@@ -1,0 +1,62 @@
+﻿@model netcore.Models.ApplicationUser
+@{
+    ViewData["Title"] = "ChangeProfilePicture";
+}
+
+<h2>ChangeProfilePicture</h2>
+@if (Model != null)
+{
+
+    <div>
+        <img id="profilePicture" class="profile-user-img img-responsive img-circle" src="@Model.profilePictureUrl" alt="User profile picture">
+    </div>
+    <div>
+        <span class="btn btn-success fileinput-button">
+            <i class="fa fa-camera bg-green"></i>
+            <span>Select file ...</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files" multiple="">
+        </span>
+    </div>
+    <div>
+        <div id="progress" class="progress">
+            <div class="progress-bar progress-bar-success"></div>
+        </div>
+    </div>
+
+}
+
+@section Styles{
+    <!--blueimp file upload-->
+    <link rel="stylesheet" href="~/lib/jQuery-File-Upload-9.21.0/css/jquery.fileupload.css" />
+}
+
+@section Scripts{
+    <!--blueimp file upload-->
+    <script src="~/lib/jQuery-File-Upload-9.21.0/js/jquery.fileupload.js"></script>
+    <script>
+        $(function () {
+
+            var url = '/api/UploadProfilePicture';
+            $('#fileupload').fileupload({
+                url: url,
+                dataType: 'json',
+                done: function (e, data) {
+                    $('#profilePicture').attr('src', '../uploads/' + data.result);
+                },
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('#progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+
+        });
+    </script>
+}
+
+

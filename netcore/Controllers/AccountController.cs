@@ -230,9 +230,10 @@ namespace netcore.Controllers
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    //diallowed signin for self registration, email should be confirmed first
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToConfirmEmailNotification();
                 }
                 AddErrors(result);
             }
@@ -437,6 +438,13 @@ namespace netcore.Controllers
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ConfirmEmailNotification()
+        {
+            return View();
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -457,6 +465,11 @@ namespace netcore.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        private IActionResult RedirectToConfirmEmailNotification()
+        {
+            return Redirect("/Account/ConfirmEmailNotification");
         }
 
         #endregion
