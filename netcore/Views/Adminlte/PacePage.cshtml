@@ -1,8 +1,8 @@
 ﻿
 @{
-    ViewData["Title"] = "Home Index";
-    Layout = "_AdminlteNetcore";
+    ViewData["Title"] = "PacePage";
 }
+
 
 
 
@@ -11,13 +11,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Blank page
-            <small>it all starts here</small>
+            Pace page
+            <small>Loading example</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li><a href="#">Examples</a></li>
-            <li class="active">Blank page</li>
+            <li class="active">Pace page</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -37,7 +37,18 @@
                 </div>
             </div>
             <div class="box-body">
-                Start creating your amazing application!
+                Pace loading works automatically on page. You can still implement it with ajax requests by adding this js:
+                <br /><code>$(document).ajaxStart(function() { Pace.restart(); });</code>
+                <br />
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <button type="button" class="btn btn-default btn-lrg ajax" title="Ajax Request">
+                            <i class="fa fa-spin fa-refresh"></i>&nbsp; Get External Content
+                        </button>
+                    </div>
+                </div>
+                <div class="ajax-content">
+                </div>
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
@@ -64,6 +75,8 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/adminlte/dist/css/skins/_all-skins.min.css">
+    <!-- Pace style -->
+    <link rel="stylesheet" href="~/adminlte/plugins/pace/pace.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -80,6 +93,8 @@
     <script src="~/adminlte/components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
     <script src="~/adminlte/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- PACE -->
+    <script src="~/adminlte/components/PACE/pace.min.js"></script>
     <!-- Slimscroll -->
     <script src="~/adminlte/components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
@@ -88,6 +103,19 @@
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/adminlte/dist/js/demo.js"></script>
+    <!-- page script -->
+    <script type="text/javascript">
+// To make Pace works on Ajax calls
+  $(document).ajaxStart(function () {
+    Pace.restart()
+  })
+  $('.ajax').click(function () {
+    $.ajax({
+      url: '#', success: function (result) {
+        $('.ajax-content').html('<hr>Ajax Request Completed !')
+      }
+    })
+  })</script>
 }
 
 
