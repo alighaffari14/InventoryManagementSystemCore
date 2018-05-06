@@ -96,7 +96,7 @@ namespace netcore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("isSuperAdmin,isInRoleHomeIndex,isInRoleHomeAbout,isInRoleHomeContact,isInRoleApplicationUser,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("isSuperAdmin,isInRoleHomeIndex,isInRoleHomeAbout,isInRoleHomeContact,isInRoleApplicationUser,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,profilePictureUrl")] ApplicationUser applicationUser)
         {
             if (id != applicationUser.Id)
             {
@@ -107,6 +107,8 @@ namespace netcore.Controllers
             {
                 try
                 {
+                    applicationUser.isInRoleApplicationUser = applicationUser.isSuperAdmin ? true : applicationUser.isInRoleApplicationUser;
+
                     _context.Update(applicationUser);
                     await _context.SaveChangesAsync();
 
