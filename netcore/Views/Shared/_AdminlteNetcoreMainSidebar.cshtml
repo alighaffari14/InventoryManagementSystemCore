@@ -4,39 +4,61 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <img src="~/adminlte/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        @if (Model != null)
+        {
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="@Model.profilePictureUrl" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>@Model.Email</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
             </div>
-            <div class="pull-left info">
-                <p>Alexander Pierce</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
-        </div>
+
+        }
+
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
+
             @if (Model != null)
             {
                 <li class="header">MAIN</li>
                 if (Model.isInRoleHomeIndex)
                 {
 
-                    <li class="@Html.IsSelected(controller: "Home", action: "Index")"><a href="@netcore.MVC.Pages.HomeIndex.Url"><i class="fa fa-circle-o"></i> Home</a></li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "Index")">
+                        <a href="@netcore.MVC.Pages.HomeIndex.Url">
+                            <i class="fa fa-circle-o"></i> <span>Home</span>
+                        </a>
+                    </li>
                 }
                 if (Model.isInRoleHomeAbout)
                 {
 
-                    <li class="@Html.IsSelected(controller: "Home", action: "About")"><a href="@netcore.MVC.Pages.HomeAbout.Url"><i class="fa fa-circle-o"></i> About</a></li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "About")">
+                        <a href="@netcore.MVC.Pages.HomeAbout.Url">
+                            <i class="fa fa-circle-o"></i> <span>About</span>
+                        </a>
+                    </li>
                 }
                 if (Model.isInRoleHomeContact)
                 {
-                    <li class="@Html.IsSelected(controller: "Home", action: "Contact")"><a href="@netcore.MVC.Pages.HomeContact.Url"><i class="fa fa-circle-o"></i> Contact</a></li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "Contact")">
+                        <a href="@netcore.MVC.Pages.HomeContact.Url">
+                            <i class="fa fa-circle-o"></i> <span>Contact</span>
+                        </a>
+                    </li>
 
                 }
                 if (Model.isInRoleApplicationUser)
                 {
-                    <li class="@Html.IsSelected(controller: "ApplicationUser", action: "Index")"><a href="@netcore.MVC.Pages.ApplicationUser.Url"><i class="fa fa-circle-o"></i> Application User</a></li>
+                    <li class="@Html.IsSelected(controller: "ApplicationUser", action: "Index")">
+                        <a href="@netcore.MVC.Pages.ApplicationUser.Url">
+                            <i class="fa fa-circle-o"></i> <span>Application User</span>
+                        </a>
+                    </li>
 
                 }
 
@@ -47,7 +69,11 @@
             }
 
             <li class="header">ADMINLTE</li>
-            <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")"><a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank"><i class="fa fa-circle-o"></i> Demo</a></li>
+            <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">
+                <a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank">
+                    <i class="fa fa-circle-o"></i> <span>Demo</span>
+                </a>
+            </li>
         </ul>
     </section>
     <!-- /.sidebar -->
