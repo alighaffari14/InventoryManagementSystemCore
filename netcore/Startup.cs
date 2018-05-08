@@ -65,8 +65,11 @@ namespace netcore
                 options.SlidingExpiration = true;
             });
 
-            // Add application services.
+            // Add email services.
             services.AddTransient<IEmailSender, EmailSender>();
+
+            // Add custom role services
+            services.AddTransient<IRoles, Roles>();
 
             // Add DI for Dotnetdesk
             services.AddTransient<INetcoreService, NetcoreService>();
@@ -76,6 +79,9 @@ namespace netcore
 
             // Get SMTP configuration options
             services.Configure<SmtpOptions>(Configuration.GetSection("SmtpOptions"));
+
+            // Get Super Admin Default options
+            services.Configure<SuperAdminDefaultOptions>(Configuration.GetSection("SuperAdminDefaultOptions"));
 
             services.AddMvc();
         }

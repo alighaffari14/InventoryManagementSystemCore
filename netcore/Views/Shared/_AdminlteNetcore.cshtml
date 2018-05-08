@@ -16,6 +16,7 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
+    @Html.Partial("_AdminlteNetcoreBasicStyles")
 
     @RenderSection("Styles", required: false)
 
@@ -28,11 +29,12 @@
         <!-- Content Wrapper. Contains page content -->
         @RenderBody()
         <!-- /.content-wrapper -->
-        @Html.Partial("_AdminlteFooter")
+        @Html.Partial("_AdminlteNetcoreFooter")
 
     </div>
     <!-- ./wrapper -->
 
+    @Html.Partial("_AdminlteNetcoreBasicScripts")
 
     @RenderSection("Scripts", required: false)
 

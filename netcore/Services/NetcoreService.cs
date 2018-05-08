@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using netcore.Data;
 using netcore.Models;
 using SendGrid;
@@ -21,16 +22,22 @@ namespace netcore.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IRoles _roles;
+        private readonly SuperAdminDefaultOptions _superAdminDefaultOptions;
 
         public NetcoreService(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ApplicationDbContext context,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IRoles roles,
+            IOptions<SuperAdminDefaultOptions> superAdminDefaultOptions)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _context = context;
             _signInManager = signInManager;
+            _roles = roles;
+            _superAdminDefaultOptions = superAdminDefaultOptions.Value;
         }
 
         public async Task SendEmailBySendGridAsync(string apiKey, string fromEmail, string fromFullName, string subject, string message, string email)
@@ -147,45 +154,14 @@ namespace netcore.Services
         {
             try
             {
-                IList<string> roles = await _userManager.GetRolesAsync(appUser);
-                foreach (var item in roles)
-                {
-                    await _userManager.RemoveFromRoleAsync(appUser, item);
-                }
+                await _roles.UpdateRoles(appUser, currentLoginUser);
 
-                if (appUser.isInRoleApplicationUser)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.ApplicationUser.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.ApplicationUser.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.ApplicationUser.Role);
-                }
-
-                if (appUser.isInRoleHomeAbout)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeAbout.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeAbout.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeAbout.Role);
-                }
-
-                if (appUser.isInRoleHomeContact)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeContact.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeContact.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeContact.Role);
-                }
-
-                if (appUser.isInRoleHomeIndex)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeIndex.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeIndex.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeIndex.Role);
-                }
-
+                //so no need to manually re-signIn to make roles changes effective
                 if (currentLoginUser.Id == appUser.Id)
                 {
                     await _signInManager.SignInAsync(appUser, false);
                 }
-                
+
             }
             catch (Exception)
             {
@@ -193,5 +169,39 @@ namespace netcore.Services
                 throw;
             }
         }
+
+        public async Task CreateDefaultSuperAdmin()
+        {
+            try
+            {
+                ApplicationUser superAdmin = new ApplicationUser();
+                superAdmin.Email = _superAdminDefaultOptions.Email;
+                superAdmin.UserName = superAdmin.Email;
+                superAdmin.EmailConfirmed = true;
+                superAdmin.isSuperAdmin = true;
+                superAdmin.isInRoleApplicationUser = true;
+                superAdmin.isInRoleHomeAbout = true;
+                superAdmin.isInRoleHomeContact = true;
+                superAdmin.isInRoleHomeIndex = true;
+
+                await _userManager.CreateAsync(superAdmin, _superAdminDefaultOptions.Password);
+
+                //loop all the roles and then fill to SuperAdmin so he become powerfull
+                foreach (var item in typeof(netcore.MVC.Pages).GetNestedTypes())
+                {
+                    var roleName = item.Name;
+                    if (!await _roleManager.RoleExistsAsync(roleName)) { await _roleManager.CreateAsync(new IdentityRole(roleName)); }
+
+                    await _userManager.AddToRoleAsync(superAdmin, roleName);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
     }
 }

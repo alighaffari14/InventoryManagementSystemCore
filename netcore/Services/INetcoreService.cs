@@ -30,5 +30,7 @@ namespace netcore.Services
         Task<string> UploadFile(List<IFormFile> files, IHostingEnvironment env);
 
         Task UpdateRoles(ApplicationUser appUser, ApplicationUser currentUserLogin);
+
+        Task CreateDefaultSuperAdmin();
     }
 }

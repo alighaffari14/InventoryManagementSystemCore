@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using netcore.Data;
 using netcore.Models;
+using netcore.Services;
 
 namespace netcore
 {
@@ -28,7 +30,8 @@ namespace netcore
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    DbInitializer.Initialize(context, userManager, roleManager).Wait();
+                    var netcoreService = services.GetRequiredService<INetcoreService>();
+                    DbInitializer.Initialize(context, userManager, roleManager, netcoreService).Wait();
                 }
                 catch (Exception ex)
                 {

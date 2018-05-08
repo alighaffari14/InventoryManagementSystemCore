@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using netcore.Models;
+using netcore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace netcore.Data
     {
         public static async Task Initialize(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            INetcoreService netcoreService)
         {
             context.Database.EnsureCreated();
 
@@ -23,25 +25,7 @@ namespace netcore.Data
             }
 
             //init app with super admin user
-            ApplicationUser superAdmin = new ApplicationUser();
-            superAdmin.Email = "super@admin.com";
-            superAdmin.UserName = superAdmin.Email;
-            superAdmin.EmailConfirmed = true;
-            superAdmin.isSuperAdmin = true;
-            superAdmin.isInRoleApplicationUser = true;
-            superAdmin.isInRoleHomeAbout = true;
-            superAdmin.isInRoleHomeContact = true;
-            superAdmin.isInRoleHomeIndex = true;
-
-            await userManager.CreateAsync(superAdmin, "123456");
-
-            foreach (var item in typeof(netcore.MVC.Pages).GetNestedTypes())
-            {
-                var roleName = item.Name;
-                if (!await roleManager.RoleExistsAsync(roleName)) { await roleManager.CreateAsync(new IdentityRole(roleName)); }
-                
-                await userManager.AddToRoleAsync(superAdmin, roleName);
-            }
+            await netcoreService.CreateDefaultSuperAdmin();
             
         }
     }
