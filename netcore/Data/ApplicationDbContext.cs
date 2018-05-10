@@ -24,5 +24,7 @@ namespace netcore.Data
         }
 
         public DbSet<netcore.Models.ApplicationUser> ApplicationUser { get; set; }
+
+        public DbSet<netcore.Models.Todo> Todo { get; set; }
     }
 }
