@@ -10,22 +10,23 @@ using netcore.Models;
 
 namespace netcore.Controllers
 {
-    public class TodoController : Controller
+    public class TodoLineController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TodoController(ApplicationDbContext context)
+        public TodoLineController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Todo
+        // GET: TodoLine
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Todo.ToListAsync());
+            var applicationDbContext = _context.TodoLine.Include(t => t.todo);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Todo/Details/5
+        // GET: TodoLine/Details/5
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace netcore.Controllers
                 return NotFound();
             }
 
-            var todo = await _context.Todo
-                .SingleOrDefaultAsync(m => m.todoId == id);
-            if (todo == null)
+            var todoLine = await _context.TodoLine
+                .Include(t => t.todo)
+                .SingleOrDefaultAsync(m => m.todoLineId == id);
+            if (todoLine == null)
             {
                 return NotFound();
             }
 
-            return View(todo);
+            return View(todoLine);
         }
 
-        // GET: Todo/Create
+        // GET: TodoLine/Create
         public IActionResult Create()
         {
+            ViewData["todoId"] = new SelectList(_context.Todo, "todoId", "todoId");
             return View();
         }
 
-        // POST: Todo/Create
+        // POST: TodoLine/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("todoId,todoName,description")] Todo todo)
+        public async Task<IActionResult> Create([Bind("todoLineId,todoLineName,description,todoId,createdAt")] TodoLine todoLine)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(todo);
+                _context.Add(todoLine);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(todo);
+            ViewData["todoId"] = new SelectList(_context.Todo, "todoId", "todoId", todoLine.todoId);
+            return View(todoLine);
         }
 
-        // GET: Todo/Edit/5
+        // GET: TodoLine/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace netcore.Controllers
                 return NotFound();
             }
 
-            var todo = await _context.Todo.SingleOrDefaultAsync(m => m.todoId == id);
-            if (todo == null)
+            var todoLine = await _context.TodoLine.SingleOrDefaultAsync(m => m.todoLineId == id);
+            if (todoLine == null)
             {
                 return NotFound();
             }
-            return View(todo);
+            ViewData["todoId"] = new SelectList(_context.Todo, "todoId", "todoId", todoLine.todoId);
+            return View(todoLine);
         }
 
-        // POST: Todo/Edit/5
+        // POST: TodoLine/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("todoId,todoName,description,HasChild,createdAt")] Todo todo)
+        public async Task<IActionResult> Edit(string id, [Bind("todoLineId,todoLineName,description,todoId,createdAt")] TodoLine todoLine)
         {
-            if (id != todo.todoId)
+            if (id != todoLine.todoLineId)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace netcore.Controllers
             {
                 try
                 {
-                    _context.Update(todo);
+                    _context.Update(todoLine);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TodoExists(todo.todoId))
+                    if (!TodoLineExists(todoLine.todoLineId))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace netcore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(todo);
+            ViewData["todoId"] = new SelectList(_context.Todo, "todoId", "todoId", todoLine.todoId);
+            return View(todoLine);
         }
 
-        // GET: Todo/Delete/5
+        // GET: TodoLine/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -124,30 +130,31 @@ namespace netcore.Controllers
                 return NotFound();
             }
 
-            var todo = await _context.Todo
-                .SingleOrDefaultAsync(m => m.todoId == id);
-            if (todo == null)
+            var todoLine = await _context.TodoLine
+                .Include(t => t.todo)
+                .SingleOrDefaultAsync(m => m.todoLineId == id);
+            if (todoLine == null)
             {
                 return NotFound();
             }
 
-            return View(todo);
+            return View(todoLine);
         }
 
-        // POST: Todo/Delete/5
+        // POST: TodoLine/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var todo = await _context.Todo.SingleOrDefaultAsync(m => m.todoId == id);
-            _context.Todo.Remove(todo);
+            var todoLine = await _context.TodoLine.SingleOrDefaultAsync(m => m.todoLineId == id);
+            _context.TodoLine.Remove(todoLine);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TodoExists(string id)
+        private bool TodoLineExists(string id)
         {
-            return _context.Todo.Any(e => e.todoId == id);
+            return _context.TodoLine.Any(e => e.todoLineId == id);
         }
     }
 }

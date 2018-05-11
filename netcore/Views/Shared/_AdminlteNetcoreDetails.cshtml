@@ -37,30 +37,7 @@
             </section>
             <!-- Main content -->
             <section class="content">
-                <div class="row">
-                    <div class="col-md-9">
-                        <!-- Default box -->
-                        <div class="box box-primary">
-
-                            <div class="box-body">
-                                @RenderBody()
-                            </div>
-                            <!-- /.box-body -->
-                            <div class="box-footer">
-                                <div class="form-group">
-                                    <a asp-action="Edit" asp-route-id="@id" class="btn btn-primary">Edit</a>
-                                    <a asp-action="Index" class="btn btn-default">Back to List</a>
-                                </div>
-                            </div>
-                            <!-- /.box-footer-->
-                        </div>
-                        <!-- /.box -->
-                    </div>
-                    <div class="col-md-3">
-
-                    </div>
-                </div>
-               
+                @RenderBody()
             </section>
             <!-- /.content -->
         </div>
@@ -70,9 +47,12 @@
     </div>
     <!-- ./wrapper -->
 
+
     @Html.Partial("_AdminlteNetcoreBasicScripts")
 
     @RenderSection("Scripts", required: false)
+
+    
 
 </body>
 </html>

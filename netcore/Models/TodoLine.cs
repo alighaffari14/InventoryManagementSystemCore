@@ -6,18 +6,26 @@ using System.Threading.Tasks;
 
 namespace netcore.Models
 {
-    public class TodoTask
+    public class TodoLine : INetcoreBasic
     {
-        public Guid todoTaskId { get; set; }
+        public TodoLine()
+        {
+            this.todoLineId = Guid.NewGuid().ToString();
+            this.createdAt = DateTime.UtcNow;
+        }
+
+        [StringLength(38)]
+        public string todoLineId { get; set; }
         [StringLength(50)]
-        [Display(Name = "Task Name")]
-        public string todoTaskName { get; set; }
+        [Display(Name = "Todo Line Name")]
+        public string todoLineName { get; set; }
         [StringLength(100)]
         [Display(Name = "Description")]
         public string description { get; set; }
 
         [Display(Name = "Todo")]
-        public Guid todoId { get; set; }
+        [StringLength(38)]
+        public string todoId { get; set; }
         [Display(Name = "Todo")]
         public Todo todo { get; set; }
     }
