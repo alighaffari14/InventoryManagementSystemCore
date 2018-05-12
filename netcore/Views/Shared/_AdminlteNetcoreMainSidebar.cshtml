@@ -22,51 +22,28 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
 
-            @if (Model != null)
-            {
-                <li class="header">MAIN</li>
-                if (Model.isInRoleHomeIndex)
+            @{ 
+                <li class="header">Module</li>
+                Type pages = typeof(netcore.MVC.Pages);
+                foreach (Type item in pages.GetNestedTypes())
                 {
+                    string Url = item.GetField("Url").GetValue(item).ToString();
+                    string Controller = item.GetField("Controller").GetValue(item).ToString();
+                    string Name = item.GetField("Name").GetValue(item).ToString();
+                    if (!Controller.Contains("Line"))
+                    {
 
-                    <li class="@Html.IsSelected(controller: "Home", action: "Index")">
-                        <a href="@netcore.MVC.Pages.HomeIndex.Url">
-                            <i class="fa fa-circle-o"></i> <span>Home</span>
-                        </a>
-                    </li>
-                }
-                if (Model.isInRoleHomeAbout)
-                {
-
-                    <li class="@Html.IsSelected(controller: "Home", action: "About")">
-                        <a href="@netcore.MVC.Pages.HomeAbout.Url">
-                            <i class="fa fa-circle-o"></i> <span>About</span>
-                        </a>
-                    </li>
-                }
-                if (Model.isInRoleHomeContact)
-                {
-                    <li class="@Html.IsSelected(controller: "Home", action: "Contact")">
-                        <a href="@netcore.MVC.Pages.HomeContact.Url">
-                            <i class="fa fa-circle-o"></i> <span>Contact</span>
-                        </a>
-                    </li>
+                        <li class="@Html.IsSelected(controller: Controller, action: "Index")">
+                            <a href="@Url">
+                                <i class="fa fa-circle-o"></i> <span>@Name</span>
+                            </a>
+                        </li>
+                    }
 
                 }
-                if (Model.isInRoleApplicationUser)
-                {
-                    <li class="@Html.IsSelected(controller: "ApplicationUser")">
-                        <a href="@netcore.MVC.Pages.ApplicationUser.Url">
-                            <i class="fa fa-circle-o"></i> <span>Edit Roles</span>
-                        </a>
-                    </li>
-
-                }
-
-
-
-
-
             }
+
+
 
             <li class="header">ADMINLTE</li>
             <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">

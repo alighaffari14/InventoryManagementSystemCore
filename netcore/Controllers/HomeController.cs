@@ -19,7 +19,7 @@ namespace netcore.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = netcore.MVC.Pages.HomeIndex.Role)]
+        [Authorize]
         public IActionResult Index()
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing Home Index");
@@ -27,7 +27,7 @@ namespace netcore.Controllers
             return View();
         }
 
-        [Authorize(Roles = netcore.MVC.Pages.HomeAbout.Role)]
+        [Authorize]
         public IActionResult About()
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing Home About");
@@ -37,7 +37,7 @@ namespace netcore.Controllers
             return View();
         }
 
-        [Authorize(Roles = netcore.MVC.Pages.HomeContact.Role)]
+        [Authorize]
         public IActionResult Contact()
         {
             _logger.LogInformation(LoggingEvents.ListItems, "Listing Home Contact");

@@ -179,10 +179,15 @@ namespace netcore.Services
                 superAdmin.UserName = superAdmin.Email;
                 superAdmin.EmailConfirmed = true;
                 superAdmin.isSuperAdmin = true;
-                superAdmin.isInRoleApplicationUser = true;
-                superAdmin.isInRoleHomeAbout = true;
-                superAdmin.isInRoleHomeContact = true;
-                superAdmin.isInRoleHomeIndex = true;
+
+                Type t = superAdmin.GetType();
+                foreach (System.Reflection.PropertyInfo item in t.GetProperties())
+                {
+                    if (item.Name.Contains("Role"))
+                    {
+                        item.SetValue(superAdmin, true);
+                    }
+                }
 
                 await _userManager.CreateAsync(superAdmin, _superAdminDefaultOptions.Password);
 

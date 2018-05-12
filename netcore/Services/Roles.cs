@@ -29,6 +29,7 @@ namespace netcore.Services
                 {
                     await _userManager.RemoveFromRoleAsync(appUser, item);
                 }
+                /*
 
                 if (appUser.isInRoleApplicationUser)
                 {
@@ -57,6 +58,7 @@ namespace netcore.Services
                         await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeIndex.Role));
                     await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeIndex.Role);
                 }
+                */
                 
 
             }

@@ -143,7 +143,7 @@ namespace netcore.Controllers
                 try
                 {
                     //super admin should always have access to Roles
-                    applicationUser.isInRoleApplicationUser = applicationUser.isSuperAdmin ? true : applicationUser.isInRoleApplicationUser;
+                    //applicationUser.isInRoleApplicationUser = applicationUser.isSuperAdmin ? true : applicationUser.isInRoleApplicationUser;
 
                     _context.Update(applicationUser);
                     await _context.SaveChangesAsync();

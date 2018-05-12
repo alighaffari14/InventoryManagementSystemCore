@@ -5,30 +5,16 @@ using System.Threading.Tasks;
 
 namespace netcore.MVC
 {
-    public static class Pages
+    public static partial class Pages
     {
+
         public static class HomeIndex
         {
             public const string Controller = "Home";
             public const string Action = "Index";
             public const string Role = "HomeIndex";
             public const string Url = "/Home/Index";
-        }
-
-        public static class HomeAbout
-        {
-            public const string Controller = "Home";
-            public const string Action = "About";
-            public const string Role = "HomeAbout";
-            public const string Url = "/Home/About";
-        }
-
-        public static class HomeContact
-        {
-            public const string Controller = "Home";
-            public const string Action = "Contact";
-            public const string Role = "HomeContact";
-            public const string Url = "/Home/Contact";
+            public const string Name = "Home";
         }
 
         public static class ApplicationUser
@@ -37,6 +23,8 @@ namespace netcore.MVC
             public const string Action = "Index";
             public const string Role = "ApplicationUser";
             public const string Url = "/ApplicationUser/Index";
+            public const string Name = "User Role";
         }
+
     }
 }

@@ -28,5 +28,9 @@ namespace netcore.Data
         public DbSet<netcore.Models.Todo> Todo { get; set; }
 
         public DbSet<netcore.Models.TodoLine> TodoLine { get; set; }
+
+        public DbSet<netcore.Models.SalesOrderLine> SalesOrderLine { get; set; }
+
+        public DbSet<netcore.Models.SalesOrder> SalesOrder { get; set; }
     }
 }
