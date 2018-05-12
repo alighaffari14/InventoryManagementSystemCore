@@ -109,6 +109,8 @@
 @{ 
     bool HasChild = false;
     string entityName = Model.ModelMetadata.EntitySetName + "Line";
+    string entityNameId = entityName + "Id";
+    entityNameId = Char.ToLowerInvariant(entityNameId[0]) + entityNameId.Substring(1);
 
     foreach (var property in Model.ModelMetadata.Properties)
     {
@@ -148,7 +150,7 @@
 @:                <div class="form-group">
 @:                    <div class="row">
 @:                        <div class="col-md-12">
-@:                            <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@@Url.Action("Create","@entityName")')"><i class="fa fa-plus"></i> Add New @entityName</a>
+@:                            <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@@Url.Action("Create","@entityName", new { masterid = Model.@primaryKeyName })')"><i class="fa fa-plus"></i> Add New @entityName</a>
 @:                        </div>
 @:                    </div>
 @:                </div>
@@ -176,22 +178,22 @@
 @:@@section Scripts{
       <script>
         var popup, dataTable;
-        var entity = '@Model.ModelMetadata.EntitySetName' + 'Line';
+        var entity = '@entityName';
         var apiurl = '/api/' + entity;
 
         $(document).ready(function () {
             dataTable = $('#grid').DataTable({
                 "ajax": {
-                    "url": apiurl,
+                    "url": apiurl + '?masterid=@@Model.@primaryKeyName',
                     "type": 'GET',
                     "datatype": 'json'
                 },
                 "columns": [
                     { "data": "description" },
                     {
-                        "data": "@Model.ModelMetadata.EntitySetName" + "LineId",
+                        "data": "@entityNameId",
                         "render": function (data) {
-                            var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/AddEdit/" + data + "')><i class='fa fa-pencil'></i></a>";
+                            var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
                             var btnDelete = "<a class='btn btn-danger btn-xs' style='margin-left:2px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i></a>";
                             return btnEdit + btnDelete;
                         }

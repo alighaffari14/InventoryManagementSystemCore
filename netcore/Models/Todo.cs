@@ -10,7 +10,6 @@ namespace netcore.Models
     {
         public Todo()
         {
-            this.todoId = Guid.NewGuid().ToString();
             this.createdAt = DateTime.UtcNow;
         }
 
