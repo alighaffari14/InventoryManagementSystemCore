@@ -1,0 +1,27 @@
+﻿@model netcore.Models.SalesOrderLine
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminlteNetcoreDelete.cshtml";
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.salesOrderLineName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.salesOrderLineName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.salesOrder)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.salesOrder.salesOrderId)
+        </dd>
+    </dl>
+    
+</div>

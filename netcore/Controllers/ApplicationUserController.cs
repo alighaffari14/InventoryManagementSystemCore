@@ -77,7 +77,7 @@ namespace netcore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("isSuperAdmin,isInRoleHomeIndex,isInRoleHomeAbout,isInRoleHomeContact,isInRoleApplicationUser,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Create([FromForm] ApplicationUser applicationUser)
         {
             _logger.LogInformation(LoggingEvents.InsertItem, "Post Create ApplicationUser");
 
@@ -127,7 +127,7 @@ namespace netcore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("isSuperAdmin,isInRoleHomeIndex,isInRoleHomeAbout,isInRoleHomeContact,isInRoleApplicationUser,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount,profilePictureUrl")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [FromForm] ApplicationUser applicationUser)
         {
             _logger.LogInformation(LoggingEvents.UpdateItem, "Update ApplicationUser: {id}", id);
 
@@ -143,7 +143,7 @@ namespace netcore.Controllers
                 try
                 {
                     //super admin should always have access to Roles
-                    //applicationUser.isInRoleApplicationUser = applicationUser.isSuperAdmin ? true : applicationUser.isInRoleApplicationUser;
+                    applicationUser.ApplicationUserRole = applicationUser.isSuperAdmin ? true : applicationUser.ApplicationUserRole;
 
                     _context.Update(applicationUser);
                     await _context.SaveChangesAsync();

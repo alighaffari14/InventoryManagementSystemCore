@@ -27,38 +27,30 @@ namespace netcore.Services
                 IList<string> roles = await _userManager.GetRolesAsync(appUser);
                 foreach (var item in roles)
                 {
-                    await _userManager.RemoveFromRoleAsync(appUser, item);
-                }
-                /*
-
-                if (appUser.isInRoleApplicationUser)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.ApplicationUser.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.ApplicationUser.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.ApplicationUser.Role);
+                    if (!item.Contains("Line"))
+                    {
+                        await _userManager.RemoveFromRoleAsync(appUser, item);
+                    }
+                    
                 }
 
-                if (appUser.isInRoleHomeAbout)
+                Type t = appUser.GetType();
+                foreach (System.Reflection.PropertyInfo item in t.GetProperties())
                 {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeAbout.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeAbout.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeAbout.Role);
+                    if (item.Name.Contains("Role"))
+                    {
+                        bool vlue = (bool)item.GetValue(appUser, null);
+                        if (vlue)
+                        {
+                            string roleName = item.Name.Replace("Role", "");
+                            if (!await _roleManager.RoleExistsAsync(roleName))
+                                await _roleManager.CreateAsync(new IdentityRole(roleName));
+                            await _userManager.AddToRoleAsync(appUser, roleName);
+                        }
+                    }
                 }
 
-                if (appUser.isInRoleHomeContact)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeContact.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeContact.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeContact.Role);
-                }
-
-                if (appUser.isInRoleHomeIndex)
-                {
-                    if (!await _roleManager.RoleExistsAsync(netcore.MVC.Pages.HomeIndex.Role))
-                        await _roleManager.CreateAsync(new IdentityRole(netcore.MVC.Pages.HomeIndex.Role));
-                    await _userManager.AddToRoleAsync(appUser, netcore.MVC.Pages.HomeIndex.Role);
-                }
-                */
+                
                 
 
             }

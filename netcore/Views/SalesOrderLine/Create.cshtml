@@ -1,0 +1,31 @@
+﻿@model netcore.Models.SalesOrderLine
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminlteNetcorePopup.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="salesOrderLineId" />
+            <div class="form-group">
+                <label asp-for="salesOrderLineName" class="control-label"></label>
+                <input asp-for="salesOrderLineName" class="form-control" />
+                <span asp-validation-for="salesOrderLineName" class="text-danger"></span>
+            </div>
+            <div class="form-group hidden">
+                <label asp-for="salesOrderId" class="control-label"></label>
+                <select asp-for="salesOrderId" class ="form-control" asp-items="ViewBag.salesOrderId"></select>
+            </div>
+           
+        
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

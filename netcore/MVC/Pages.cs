@@ -12,7 +12,7 @@ namespace netcore.MVC
         {
             public const string Controller = "Home";
             public const string Action = "Index";
-            public const string Role = "HomeIndex";
+            public const string Role = "Home";
             public const string Url = "/Home/Index";
             public const string Name = "Home";
         }

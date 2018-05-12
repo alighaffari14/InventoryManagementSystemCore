@@ -14,12 +14,17 @@ namespace netcore.Models
         public bool isSuperAdmin { get; set; } = false;
 
         //roles
+        /*
         [Display(Name = "Index")]
         public bool isInRoleHomeIndex { get; set; } = false;
         [Display(Name = "About")]
         public bool isInRoleHomeAbout { get; set; } = false;
         [Display(Name = "Contact")]
         public bool isInRoleHomeContact { get; set; } = false;
+        */
+
+        [Display(Name = "Home Roles")]
+        public bool HomeRole { get; set; } = false;
 
         [Display(Name = "Roles")]
         public bool ApplicationUserRole { get; set; } = false;

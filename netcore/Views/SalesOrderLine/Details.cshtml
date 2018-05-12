@@ -1,0 +1,48 @@
+﻿@model netcore.Models.SalesOrderLine
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminlteNetcoreDetails.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-9">
+        <!-- Default box -->
+        <div class="box box-primary">
+            <div class="box-body">
+                <div>
+                      <dl class="dl-horizontal">
+                          <dt>
+                              @Html.DisplayNameFor(model => model.salesOrderLineName)
+                          </dt>
+                          <dd>
+                              @Html.DisplayFor(model => model.salesOrderLineName)
+                          </dd>
+                          <dt>
+                              @Html.DisplayNameFor(model => model.salesOrder)
+                          </dt>
+                          <dd>
+                              @Html.DisplayFor(model => model.salesOrder.salesOrderId)
+                          </dd>
+                      </dl>                                   
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <div class="form-group">
+                    <a asp-action="Edit" asp-route-id="@Model.salesOrderLineId" class="btn btn-primary">Edit</a>
+                    <a asp-action="Index" class="btn btn-default">Back to List</a>
+                </div>
+            </div>
+            <!-- /.box-footer-->
+        </div>
+        <!-- /.box -->
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
+
+
+

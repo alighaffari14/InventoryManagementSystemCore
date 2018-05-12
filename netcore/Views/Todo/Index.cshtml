@@ -1,0 +1,44 @@
+﻿@model IEnumerable<netcore.Models.Todo>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminlteNetcoreIndex.cshtml";
+}
+
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.todoName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.createdAt)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.todoName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.createdAt)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.todoId"><i class="fa fa-pencil"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.todoId"><i class="fa fa-list"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.todoId"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@model netcore.Models.SalesOrder
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="salesOrderId" />
+            <div class="form-group">
+                <label asp-for="salesOrderName" class="control-label"></label>
+                <input asp-for="salesOrderName" class="form-control" />
+                <span asp-validation-for="salesOrderName" class="text-danger"></span>
+            </div>
+           
+        
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
