@@ -20,22 +20,3 @@
                 <input asp-for="description" class="form-control" />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="HasChild" class="control-label"></label>
-                <input asp-for="HasChild" class="form-control" />
-                <span asp-validation-for="HasChild" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="createdAt" class="control-label"></label>
-                <input asp-for="createdAt" class="form-control" />
-                <span asp-validation-for="createdAt" class="text-danger"></span>
-            </div>
-            
-    </div>
-</div>
-
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

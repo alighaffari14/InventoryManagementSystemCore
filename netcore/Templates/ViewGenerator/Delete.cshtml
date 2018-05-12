@@ -47,7 +47,7 @@
 @{
     foreach (var property in Model.ModelMetadata.Properties)
     {
-        if (property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+        if (property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey && !property.PropertyName.Equals("HasChild"))
         {
         <dt>
             @@Html.DisplayNameFor(model => model.@GetValueExpression(property))

@@ -27,12 +27,6 @@
                               @Html.DisplayFor(model => model.description)
                           </dd>
                           <dt>
-                              @Html.DisplayNameFor(model => model.HasChild)
-                          </dt>
-                          <dd>
-                              @Html.DisplayFor(model => model.HasChild)
-                          </dd>
-                          <dt>
                               @Html.DisplayNameFor(model => model.createdAt)
                           </dt>
                           <dd>
@@ -81,7 +75,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","TodoLine")')"><i class="fa fa-plus"></i> Add New TodoLine</a>
+                            <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","TodoLine", new { masterid = Model.todoId })')"><i class="fa fa-plus"></i> Add New TodoLine</a>
                         </div>
                     </div>
                 </div>
@@ -108,8 +102,8 @@
       <script>
         var popup, dataTable;
         var entity = 'Todo' + 'Line';
-        var apiurl = '/api/' + entity;
-
+        var apiurl = '/api/' + entity + '?masterid=@Model.todoId';
+        
         $(document).ready(function () {
             dataTable = $('#grid').DataTable({
                 "ajax": {
@@ -122,7 +116,7 @@
                     {
                         "data": "Todo" + "LineId",
                         "render": function (data) {
-                            var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/AddEdit/" + data + "')><i class='fa fa-pencil'></i></a>";
+                            var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
                             var btnDelete = "<a class='btn btn-danger btn-xs' style='margin-left:2px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i></a>";
                             return btnEdit + btnDelete;
                         }
@@ -205,6 +199,5 @@
         }
 
       </script>
-
 }
 

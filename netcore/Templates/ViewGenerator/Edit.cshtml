@@ -46,6 +46,13 @@
             @:<div asp-validation-summary="ModelOnly" class="text-danger"></div>
         foreach (PropertyMetadata property in Model.ModelMetadata.Properties)
         {
+            string name = property.PropertyName;
+
+            if (name.Equals("HasChild") || name.Equals("createdAt"))
+            {
+                return;
+            }
+
             if (property.IsPrimaryKey)
             {
             @:<input type="hidden" asp-for="@property.PropertyName" />

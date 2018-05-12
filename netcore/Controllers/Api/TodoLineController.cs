@@ -11,6 +11,7 @@ using netcore.Models;
 
 namespace netcore.Controllers.Api
 {
+
     [Produces("application/json")]
     [Route("api/TodoLine")]
     public class TodoLineController : Controller
@@ -25,43 +26,22 @@ namespace netcore.Controllers.Api
         // GET: api/TodoLine
         [HttpGet]
         [Authorize]
-        public IActionResult
-        GetTodoLine()
+        public IActionResult GetTodoLine(string masterid)
         {
-            return Json(new { data = _context.TodoLine });
+            return Json(new { data = _context.TodoLine.Where(x => x.todoId.Equals(masterid)).ToList() });
         }
-
-        // GET: api/TodoLine/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult>
-            GetTodoLine([FromRoute] string id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var todoLine = await _context.TodoLine.SingleOrDefaultAsync(m => m.todoLineId == id);
-
-            if (todoLine == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(todoLine);
-        }
-
-
 
         // POST: api/TodoLine
         [HttpPost]
-        public async Task<IActionResult>
-            PostTodoLine([FromBody] TodoLine todoLine)
+        [Authorize]
+        public async Task<IActionResult> PostTodoLine([FromBody] TodoLine todoLine)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            _context.TodoLine.Add(todoLine);
 
             TodoLine check = _context.TodoLine.Where(x => x.todoLineId.Equals(todoLine.todoLineId)).FirstOrDefault();
             if (check == null)
@@ -76,13 +56,13 @@ namespace netcore.Controllers.Api
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Edit data success." });
             }
-            
+
         }
 
         // DELETE: api/TodoLine/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult>
-            DeleteTodoLine([FromRoute] string id)
+        [Authorize]
+        public async Task<IActionResult>  DeleteTodoLine([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
@@ -101,9 +81,13 @@ namespace netcore.Controllers.Api
             return Json(new { success = true, message = "Delete success." });
         }
 
+
         private bool TodoLineExists(string id)
         {
             return _context.TodoLine.Any(e => e.todoLineId == id);
         }
+
+
     }
+
 }

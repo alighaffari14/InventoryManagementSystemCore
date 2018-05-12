@@ -26,128 +26,138 @@ namespace netcore.Controllers
         }
 
         // GET: Todo/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
+        public async Task<IActionResult>
+    Details(string id)
+    {
+    if (id == null)
+    {
+    return NotFound();
+    }
+
+    var todo = await _context.Todo
+    .SingleOrDefaultAsync(m => m.todoId == id);
+    if (todo == null)
+    {
+    return NotFound();
+    }
+
+    return View(todo);
+    }
+
+
+            // GET: Todo/Create
+            public IActionResult Create()
             {
-                return NotFound();
-            }
-
-            var todo = await _context.Todo
-                .SingleOrDefaultAsync(m => m.todoId == id);
-            if (todo == null)
-            {
-                return NotFound();
-            }
-
-            return View(todo);
-        }
-
-        // GET: Todo/Create
-        public IActionResult Create()
-        {
             return View();
-        }
-
-        // POST: Todo/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("todoId,todoName,description")] Todo todo)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(todo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(todo);
+
+
+
+
+    // POST: Todo/Create
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult>
+        Create([Bind("todoId,todoName,description,HasChild,createdAt")] Todo todo)
+        {
+        if (ModelState.IsValid)
+        {
+            _context.Add(todo);
+            await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+        }
+        return View(todo);
         }
 
         // GET: Todo/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
+        public async Task<IActionResult>
+            Edit(string id)
+            {
             if (id == null)
             {
-                return NotFound();
+            return NotFound();
             }
 
             var todo = await _context.Todo.SingleOrDefaultAsync(m => m.todoId == id);
             if (todo == null)
             {
-                return NotFound();
+            return NotFound();
             }
             return View(todo);
-        }
-
-        // POST: Todo/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("todoId,todoName,description,HasChild,createdAt")] Todo todo)
-        {
-            if (id != todo.todoId)
-            {
-                return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+            // POST: Todo/Edit/5
+            // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+            // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult>
+                Edit(string id, [Bind("todoId,todoName,description,HasChild,createdAt")] Todo todo)
+                {
+                if (id != todo.todoId)
+                {
+                return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
                 try
                 {
-                    _context.Update(todo);
-                    await _context.SaveChangesAsync();
+                _context.Update(todo);
+                await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TodoExists(todo.todoId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                if (!TodoExists(todo.todoId))
+                {
+                return NotFound();
+                }
+                else
+                {
+                throw;
+                }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            return View(todo);
-        }
+                }
+                return View(todo);
+                }
 
-        // GET: Todo/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+                // GET: Todo/Delete/5
+                public async Task<IActionResult>
+                    Delete(string id)
+                    {
+                    if (id == null)
+                    {
+                    return NotFound();
+                    }
 
-            var todo = await _context.Todo
-                .SingleOrDefaultAsync(m => m.todoId == id);
-            if (todo == null)
-            {
-                return NotFound();
-            }
+                    var todo = await _context.Todo
+                    .SingleOrDefaultAsync(m => m.todoId == id);
+                    if (todo == null)
+                    {
+                    return NotFound();
+                    }
 
-            return View(todo);
-        }
+                    return View(todo);
+                    }
 
-        // POST: Todo/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var todo = await _context.Todo.SingleOrDefaultAsync(m => m.todoId == id);
-            _context.Todo.Remove(todo);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                    // POST: Todo/Delete/5
+                    [HttpPost, ActionName("Delete")]
+                    [ValidateAntiForgeryToken]
+                    public async Task<IActionResult>
+                        DeleteConfirmed(string id)
+                        {
+                        var todo = await _context.Todo.SingleOrDefaultAsync(m => m.todoId == id);
+                        _context.Todo.Remove(todo);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                        }
 
-        private bool TodoExists(string id)
-        {
-            return _context.Todo.Any(e => e.todoId == id);
-        }
-    }
-}
+                        private bool TodoExists(string id)
+                        {
+                        return _context.Todo.Any(e => e.todoId == id);
+                        }
+                        }
+                        }
