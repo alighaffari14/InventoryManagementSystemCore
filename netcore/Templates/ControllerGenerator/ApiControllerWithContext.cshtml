@@ -56,9 +56,9 @@ namespace @Model.ControllerNamespace
                 return BadRequest(ModelState);
             }
 
-            if (@Model.ModelTypeName @Model.ModelVariable.@primaryKeyName == string.Empty)
+            if (@(Model.ModelVariable).@primaryKeyName == string.Empty)
             {
-                @Model.ModelTypeName @Model.ModelVariable.@primaryKeyName = Guid.NewGuid().ToString();
+                @Model.ModelVariable.@primaryKeyName = Guid.NewGuid().ToString();
                 _context.@(entitySetName).Add(@Model.ModelVariable);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Add new data success." });
