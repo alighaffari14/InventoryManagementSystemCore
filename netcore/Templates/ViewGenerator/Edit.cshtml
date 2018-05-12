@@ -40,6 +40,11 @@
         //    PushIndent("    ");
     }
 
+
+
+
+
+
 @:<div class="row">
     @:<div class="col-md-12">
             @:<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -49,7 +54,7 @@
 
             if (name.Equals("HasChild") || name.Equals("createdAt"))
             {
-                return;
+                continue;
             }
 
             if (property.IsPrimaryKey)
@@ -112,12 +117,15 @@
         }
 
     
-    
+
     @:</div>
 @:</div>
 
-
 }
+
+
+
+
 
 
 
