@@ -6,6 +6,9 @@
 
 @{
     string entitySetName = Model.ModelMetadata.EntitySetName;
+    string masterEntity = entitySetName.Replace("Line", "");
+    string masterEntityCamelCase = Char.ToLowerInvariant(masterEntity[0]) + masterEntity.Substring(1);
+    string masterFKId = masterEntityCamelCase + "Id";
 
     if (Model.IsPartialView)
     {
@@ -72,7 +75,7 @@
                     continue;
                 }
 
-                if (property.IsForeignKey && entitySetName.Contains("Line"))
+                if (property.IsForeignKey && entitySetName.Contains("Line") && masterFKId.Equals(property.PropertyName))
                 {
                     @:<div class="form-group hidden">
                         @:<label asp-for="@property.PropertyName" class="control-label"></label>
@@ -82,7 +85,7 @@
                     continue;
                 }
 
-                if (property.IsForeignKey && !entitySetName.Contains("Line"))
+                if (property.IsForeignKey && !masterFKId.Equals(property.PropertyName))
                 {
                     @:<div class="form-group">
                         @:<label asp-for="@property.PropertyName" class="control-label"></label>
