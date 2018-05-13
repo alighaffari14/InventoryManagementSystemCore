@@ -46,7 +46,11 @@
         var properties = Model.ModelMetadata.Properties;
         foreach (var property in properties)
         {
-            if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey && !property.PropertyName.Equals("HasChild"))
+            if (property.Scaffold 
+            && !property.IsPrimaryKey 
+            && !property.IsForeignKey 
+            && !property.PropertyName.Equals("HasChild")
+            && !property.PropertyName.Equals("createdAt"))
             {
                 <th>
                     @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
@@ -67,7 +71,11 @@
         @:<tr>
         foreach (PropertyMetadata property in properties)
         {
-            if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey && !property.PropertyName.Equals("HasChild"))
+            if (property.Scaffold 
+            && !property.IsPrimaryKey 
+            && !property.IsForeignKey 
+            && !property.PropertyName.Equals("HasChild")
+            && !property.PropertyName.Equals("createdAt"))
             {
             <td>
                 @@Html.DisplayFor(modelItem => item.@GetValueExpression(property))
