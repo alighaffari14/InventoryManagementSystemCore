@@ -13,15 +13,7 @@ namespace netcore.Models
         public string profilePictureUrl { get; set; } = "/images/empty_profile.png";
         public bool isSuperAdmin { get; set; } = false;
 
-        //roles
-        /*
-        [Display(Name = "Index")]
-        public bool isInRoleHomeIndex { get; set; } = false;
-        [Display(Name = "About")]
-        public bool isInRoleHomeAbout { get; set; } = false;
-        [Display(Name = "Contact")]
-        public bool isInRoleHomeContact { get; set; } = false;
-        */
+      
 
         [Display(Name = "Home Roles")]
         public bool HomeRole { get; set; } = false;

@@ -5,6 +5,8 @@
 @@model @Model.ViewDataTypeName
 
 @{
+    string entitySetName = Model.ModelMetadata.EntitySetName;
+
     if (Model.IsPartialView)
     {
     }
@@ -70,9 +72,19 @@
                     continue;
                 }
 
-                if (property.IsForeignKey)
+                if (property.IsForeignKey && entitySetName.Contains("Line"))
                 {
                     @:<div class="form-group hidden">
+                        @:<label asp-for="@property.PropertyName" class="control-label"></label>
+                        @:<select asp-for="@property.PropertyName" class="form-control" asp-items="ViewBag.@property.PropertyName"></select>
+                        @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
+                    @:</div>
+                    continue;
+                }
+
+                if (property.IsForeignKey && !entitySetName.Contains("Line"))
+                {
+                    @:<div class="form-group">
                         @:<label asp-for="@property.PropertyName" class="control-label"></label>
                         @:<select asp-for="@property.PropertyName" class="form-control" asp-items="ViewBag.@property.PropertyName"></select>
                         @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
@@ -95,7 +107,7 @@
                 {
                     @:<div class="form-group">
                         @:<label asp-for="@property.PropertyName" class="control-label"></label>
-                        @:<select asp-for="@property.PropertyName" class="form-control"></select>
+                        @:<select asp-for="@property.PropertyName" class="form-control" asp-items="Html.GetEnumSelectList<@GetEnumType(property.PropertyName)>()"></select>
                         @:<span asp-validation-for="@property.PropertyName" class="text-danger"></span>
                     @:</div>
                 }
@@ -158,5 +170,11 @@
     string GetValueExpression(IPropertyMetadata property)
     {
         return property.PropertyName;
+    }
+
+    string GetEnumType(string propertyName)
+    {
+        return Char.ToUpperInvariant(propertyName[0]) + propertyName.Substring(1);
+
     }
 }

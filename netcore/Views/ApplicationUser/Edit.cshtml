@@ -37,34 +37,28 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input asp-for="SalesOrderRole" /> @Html.DisplayNameFor(model => model.SalesOrderRole)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input asp-for="TodoRole" /> @Html.DisplayNameFor(model => model.TodoRole)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input asp-for="HomeRole" /> @Html.DisplayNameFor(model => model.HomeRole)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <label>
-                                        <input asp-for="ApplicationUserRole" /> @Html.DisplayNameFor(model => model.ApplicationUserRole)
-                                    </label>
-                                </div>
-                            </div>
+                            @{ 
+                                Type t = Model.GetType();
+                                foreach (System.Reflection.PropertyInfo item in t.GetProperties())
+                                {
+                                    if (item.Name.Contains("Role") && !item.Name.Contains("Line"))
+                                    {
+                                        bool vlue = false;
+                                        vlue = (bool)item.GetValue(Model, null);
+
+                                         <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    @Html.CheckBox(item.Name, vlue) @item.Name
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                            
+                          
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group hidden">
                                 <label asp-for="UserName" class="control-label"></label>

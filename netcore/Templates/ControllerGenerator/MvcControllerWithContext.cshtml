@@ -129,42 +129,43 @@ namespace @Model.ControllerNamespace
         string masterFKId = masterFK + "Id";
         if (name.Contains("Line"))
         {
-            @:// GET: @routePrefix/Create
-            @:public IActionResult Create(string masterid, string id)
-            @:{
-                @:var check = _context.@(entitySetName).SingleOrDefault(m => m.@primaryKeyName == id);
-                @:var selected = _context.@(masterEntity).SingleOrDefault(m => m.@masterFKId == masterid);
-                foreach (var property in relatedProperties.Values)
-            {
-                    @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
-                }
-                @:if (check == null)
-                @:{
-                    @:@(entitySetName) objline = new @(entitySetName)();
-                    @:objline.@masterFK = selected;
-                    @:objline.@masterFKId = masterid;
-                    @:return View(objline);
-                @:}
-                @:else
-                @:{
-                    @:return View(check);
-                @:}
-            @:}
+    @:// GET: @routePrefix/Create
+    @:public IActionResult Create(string masterid, string id)
+    @:{
+        @:var check = _context.@(entitySetName).SingleOrDefault(m => m.@primaryKeyName == id);
+        @:var selected = _context.@(masterEntity).SingleOrDefault(m => m.@masterFKId == masterid);
+        foreach (var property in relatedProperties.Values)
+    {
+            @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+        }
+        @:if (check == null)
+        @:{
+            @:@(entitySetName) objline = new @(entitySetName)();
+            @:objline.@masterFK = selected;
+            @:objline.@masterFKId = masterid;
+            @:return View(objline);
+        @:}
+        @:else
+        @:{
+            @:return View(check);
+        @:}
+    @:}
 
         }
         else
         {
 
-            @:// GET: @routePrefix/Create
-            @:public IActionResult Create()
-            @:{
-            foreach (var property in relatedProperties.Values)
-            {
-                @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
-            }
-            @:return View();
-            @:}
+    @:// GET: @routePrefix/Create
+    @:public IActionResult Create()
+    @:{
+    foreach (var property in relatedProperties.Values)
+    {
+        @:ViewData["@(property.ForeignKeyPropertyNames[0])"] = new SelectList(_context.@property.EntitySetName, "@property.PrimaryKeyNames[0]", "@property.DisplayPropertyName");
+    }
+    @:return View();
+    @:}
         }
+
     }
 
 
