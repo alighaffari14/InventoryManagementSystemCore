@@ -146,6 +146,8 @@ namespace netcore.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            
+
             var hasPassword = await _userManager.HasPasswordAsync(user);
             if (!hasPassword)
             {
@@ -170,6 +172,14 @@ namespace netcore.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+            //live demo, can not change password for superadmin
+            if (user.isSuperAdmin)
+            {
+                model.StatusMessage = "Live demo, can not change superadmin password";
+                return View(model);
+            }
+            //live demo, can not change password for superadmin
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (!changePasswordResult.Succeeded)

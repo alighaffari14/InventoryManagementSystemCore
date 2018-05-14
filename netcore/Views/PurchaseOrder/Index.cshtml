@@ -1,0 +1,116 @@
+﻿@model IEnumerable<netcore.Models.Invent.PurchaseOrder>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminlteNetcoreIndex.cshtml";
+}
+
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.purchaseOrderNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.top)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.poDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.deliveryDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.deliveryAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.referenceNumberInternal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.referenceNumberExternal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.picInternal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.picVendor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.purchaseOrderStatus)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.totalDiscountAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.totalOrderAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.purchaseReceiveNumber)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.vendor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.purchaseOrderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.top)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.poDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.deliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.deliveryAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.referenceNumberInternal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.referenceNumberExternal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.picInternal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.picVendor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.purchaseOrderStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.totalDiscountAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.totalOrderAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.purchaseReceiveNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.vendor.vendorId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.purchaseOrderId"><i class="fa fa-pencil"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.purchaseOrderId"><i class="fa fa-list"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.purchaseOrderId"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

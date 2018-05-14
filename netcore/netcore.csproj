@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Demo\" />
-    <Folder Include="Models\Demo\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

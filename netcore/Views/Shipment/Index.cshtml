@@ -1,0 +1,86 @@
+﻿@model IEnumerable<netcore.Models.Invent.Shipment>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminlteNetcoreIndex.cshtml";
+}
+
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.shipmentNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.shipmentDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.customerPO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.invoice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.expeditionType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.expeditionMode)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.branch)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.salesOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.warehouse)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.shipmentNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.shipmentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.customerPO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.invoice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.expeditionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.expeditionMode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.branch.branchId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.customer.customerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.salesOrder.salesOrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.warehouse.warehouseId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.shipmentId"><i class="fa fa-pencil"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.shipmentId"><i class="fa fa-list"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.shipmentId"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

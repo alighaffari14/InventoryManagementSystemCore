@@ -20,46 +20,106 @@
 
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
-        <ul class="sidebar-menu" data-widget="tree">
+            <ul class="sidebar-menu" data-widget="tree">
 
-            @{ 
-                <li class="header">MODULE</li>
-                Type pages = typeof(netcore.MVC.Pages);
-                Type tRole = Model.GetType();
-                foreach (Type item in pages.GetNestedTypes())
+                @*@{
+            <li class="header">MODULE</li>
+            Type pages = typeof(netcore.MVC.Pages);
+            Type tRole = Model.GetType();
+            foreach (Type item in pages.GetNestedTypes())
+            {
+                string Url = item.GetField("Url").GetValue(item).ToString();
+                string Controller = item.GetField("Controller").GetValue(item).ToString();
+                string Name = item.GetField("Name").GetValue(item).ToString();
+                string Role = item.GetField("Role").GetValue(item).ToString();
+                if (!Controller.Contains("Line"))
                 {
-                    string Url = item.GetField("Url").GetValue(item).ToString();
-                    string Controller = item.GetField("Controller").GetValue(item).ToString();
-                    string Name = item.GetField("Name").GetValue(item).ToString();
-                    string Role = item.GetField("Role").GetValue(item).ToString();
-                    if (!Controller.Contains("Line"))
+                    System.Reflection.PropertyInfo pi = tRole.GetProperty(Role + "Role");
+                    if (pi == null) { continue; }
+                    bool vlue = (bool)pi.GetValue(Model, null);
+                    if (vlue)
                     {
-                        System.Reflection.PropertyInfo pi = tRole.GetProperty(Role + "Role");
-                        if (pi == null) { continue; }
-                        bool vlue = (bool)pi.GetValue(Model, null);
-                        if (vlue)
-                        {
-                            <li class="@Html.IsSelected(controller: Controller)">
-                                <a href="@Url">
-                                    <i class="fa fa-circle-o"></i> <span>@Name</span>
-                                </a>
-                            </li>
-                        }
-
+                        <li class="@Html.IsSelected(controller: Controller)">
+                            <a href="@Url">
+                                <i class="fa fa-circle-o"></i> <span>@Name</span>
+                            </a>
+                        </li>
                     }
 
                 }
+
             }
+        }*@
 
+                <li class="header">INVENTORY MANAGEMENT</li>
+                <li class="@Html.IsSelected(controller: "Branch")">
+                    <a href="@Url.Action("Index", "Branch")">
+                        <i class="fa fa-circle-o"></i> <span>Branch</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Warehouse")">
+                    <a href="@Url.Action("Index", "Warehouse")">
+                        <i class="fa fa-circle-o"></i> <span>Warehouse</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Product")">
+                    <a href="@Url.Action("Index", "Product")">
+                        <i class="fa fa-circle-o"></i> <span>Product</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Vendor")">
+                    <a href="@Url.Action("Index", "Vendor")">
+                        <i class="fa fa-circle-o"></i> <span>Vendor</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "PurchaseOrder")">
+                    <a href="@Url.Action("Index", "PurchaseOrder")">
+                        <i class="fa fa-circle-o"></i> <span>Purchase Order</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Receiving")">
+                    <a href="@Url.Action("Index", "Receiving")">
+                        <i class="fa fa-circle-o"></i> <span>Receiving</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Customer")">
+                    <a href="@Url.Action("Index", "Customer")">
+                        <i class="fa fa-circle-o"></i> <span>Customer</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "SalesOrder")">
+                    <a href="@Url.Action("Index", "SalesOrder")">
+                        <i class="fa fa-circle-o"></i> <span>Sales Order</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "Shipment")">
+                    <a href="@Url.Action("Index", "Shipment")">
+                        <i class="fa fa-circle-o"></i> <span>Shipment</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "TransferOrder")">
+                    <a href="@Url.Action("Index", "TransferOrder")">
+                        <i class="fa fa-circle-o"></i> <span>Transfer Order</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "TransferOut")">
+                    <a href="@Url.Action("Index", "TransferOut")">
+                        <i class="fa fa-circle-o"></i> <span>Goods Issue</span>
+                    </a>
+                </li>
+                <li class="@Html.IsSelected(controller: "TransferIn")">
+                    <a href="@Url.Action("Index", "TransferIn")">
+                        <i class="fa fa-circle-o"></i> <span>Goods Receive</span>
+                    </a>
+                </li>
 
-
-            <li class="header">ADMINLTE</li>
-            <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">
-                <a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank">
-                    <i class="fa fa-circle-o"></i> <span>Demo</span>
-                </a>
-            </li>
-        </ul>
+                <li class="header">ADMINLTE</li>
+                <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">
+                    <a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank">
+                        <i class="fa fa-circle-o"></i> <span>Demo</span>
+                    </a>
+                </li>
+            </ul>
     </section>
     <!-- /.sidebar -->
 </aside>

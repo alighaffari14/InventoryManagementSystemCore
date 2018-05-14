@@ -1,0 +1,69 @@
+﻿@model netcore.Models.Invent.Receiving
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminlteNetcoreDelete.cshtml";
+}
+
+
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.receivingNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.receivingNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.receivingDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.receivingDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.vendorDO)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vendorDO)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.vendorInvoice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vendorInvoice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.createdAt)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.createdAt)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.branch.branchId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.purchaseOrder)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.purchaseOrder.purchaseOrderId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.vendor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.vendor.vendorId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.warehouse)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.warehouse.warehouseId)
+        </dd>
+    </dl>
+    
+</div>

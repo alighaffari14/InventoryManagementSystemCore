@@ -1,0 +1,74 @@
+﻿@model IEnumerable<netcore.Models.Invent.TransferOut>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminlteNetcoreIndex.cshtml";
+}
+
+
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.transferOutNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.transferOutDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.branchIdFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.warehouseIdFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.branchIdTo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.warehouseIdTo)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.transferOrder)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.transferOutNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.transferOutDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.branchIdFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.warehouseIdFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.branchIdTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.warehouseIdTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.transferOrder.transferOrderId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.transferOutId"><i class="fa fa-pencil"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.transferOutId"><i class="fa fa-list"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.transferOutId"><i class="fa fa-trash"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
