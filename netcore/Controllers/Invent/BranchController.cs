@@ -13,7 +13,7 @@ using netcore.Models.Invent;
 
 namespace netcore.Controllers.Invent
 {
-
+    //test
 
     [Authorize(Roles = "Branch")]
     public class BranchController : Controller
