@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetReceivingLine(string masterid)
         {
-            return Json(new { data = _context.ReceivingLine.Where(x => x.receivingId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.ReceivingLine.Include(x => x.product).Where(x => x.receivingId.Equals(masterid)).ToList() });
         }
 
         // POST: api/ReceivingLine
