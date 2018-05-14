@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_AdminlteNetcoreDelete.cshtml";
+
+    string StatusMessage = ViewBag.StatusMessage;
 }
 
 
-
+@Html.Partial("_StatusMessage", StatusMessage)
 <div>
-    
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.branchName)
@@ -59,5 +61,5 @@
             @Html.DisplayFor(model => model.createdAt)
         </dd>
     </dl>
-    
+
 </div>

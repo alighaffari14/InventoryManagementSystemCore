@@ -28,149 +28,157 @@ namespace netcore.Controllers.Invent
         // GET: TransferOut
         public async Task<IActionResult> Index()
         {
-                    var applicationDbContext = _context.TransferOut.Include(t => t.transferOrder);
-                    return View(await applicationDbContext.ToListAsync());
-        }        
-
-    // GET: TransferOut/Details/5
-    public async Task<IActionResult> Details(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            var applicationDbContext = _context.TransferOut.Include(t => t.transferOrder);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        var transferOut = await _context.TransferOut
-                .Include(t => t.transferOrder)
-                    .SingleOrDefaultAsync(m => m.transferOutId == id);
-        if (transferOut == null)
+        // GET: TransferOut/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            return NotFound();
-        }
-
-        return View(transferOut);
-    }
-
-
-    // GET: TransferOut/Create
-    public IActionResult Create()
-    {
-        ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId");
-    return View();
-    }
-
-
-
-
-    // POST: TransferOut/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("transferOutId,transferOrderId,transferOutNumber,transferOutDate,description,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOut transferOut)
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Add(transferOut);
-            await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-        }
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
-        return View(transferOut);
-    }
-
-    // GET: TransferOut/Edit/5
-    public async Task<IActionResult> Edit(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
-        if (transferOut == null)
-        {
-            return NotFound();
-        }
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
-        return View(transferOut);
-    }
-
-    // POST: TransferOut/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, [Bind("transferOutId,transferOrderId,transferOutNumber,transferOutDate,description,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOut transferOut)
-    {
-        if (id != transferOut.transferOutId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            if (id == null)
             {
-                _context.Update(transferOut);
+                return NotFound();
+            }
+
+            var transferOut = await _context.TransferOut
+                    .Include(t => t.transferOrder)
+                        .SingleOrDefaultAsync(m => m.transferOutId == id);
+            if (transferOut == null)
+            {
+                return NotFound();
+            }
+
+            return View(transferOut);
+        }
+
+
+        // GET: TransferOut/Create
+        public IActionResult Create()
+        {
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId");
+            ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            return View();
+        }
+
+
+
+
+        // POST: TransferOut/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("transferOutId,transferOrderId,transferOutNumber,transferOutDate,description,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOut transferOut)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(transferOut);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            return View(transferOut);
+        }
+
+        // GET: TransferOut/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
             {
-                if (!TransferOutExists(transferOut.transferOutId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-        return RedirectToAction(nameof(Index));
-        }
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
-        return View(transferOut);
-    }
 
-    // GET: TransferOut/Delete/5
-    public async Task<IActionResult> Delete(string id)
-    {
-        if (id == null)
+            var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
+            if (transferOut == null)
+            {
+                return NotFound();
+            }
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            return View(transferOut);
+        }
+
+        // POST: TransferOut/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("transferOutId,transferOrderId,transferOutNumber,transferOutDate,description,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOut transferOut)
         {
-            return NotFound();
+            if (id != transferOut.transferOutId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(transferOut);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TransferOutExists(transferOut.transferOutId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            return View(transferOut);
         }
 
-        var transferOut = await _context.TransferOut
-                .Include(t => t.transferOrder)
-                .SingleOrDefaultAsync(m => m.transferOutId == id);
-        if (transferOut == null)
+        // GET: TransferOut/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var transferOut = await _context.TransferOut
+                    .Include(t => t.transferOrder)
+                    .SingleOrDefaultAsync(m => m.transferOutId == id);
+            if (transferOut == null)
+            {
+                return NotFound();
+            }
+
+            return View(transferOut);
         }
 
-        return View(transferOut);
-    }
 
 
 
-
-    // POST: TransferOut/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
+        // POST: TransferOut/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
             _context.TransferOut.Remove(transferOut);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-    private bool TransferOutExists(string id)
-    {
-        return _context.TransferOut.Any(e => e.transferOutId == id);
-    }
+        private bool TransferOutExists(string id)
+        {
+            return _context.TransferOut.Any(e => e.transferOutId == id);
+        }
 
-  }
+    }
 }
 
 
@@ -179,25 +187,25 @@ namespace netcore.Controllers.Invent
 
 namespace netcore.MVC
 {
-  public static partial class Pages
-  {
-      public static class TransferOut
-      {
-          public const string Controller = "TransferOut";
-          public const string Action = "Index";
-          public const string Role = "TransferOut";
-          public const string Url = "/TransferOut/Index";
-          public const string Name = "TransferOut";
-      }
-  }
+    public static partial class Pages
+    {
+        public static class TransferOut
+        {
+            public const string Controller = "TransferOut";
+            public const string Action = "Index";
+            public const string Role = "TransferOut";
+            public const string Url = "/TransferOut/Index";
+            public const string Name = "TransferOut";
+        }
+    }
 }
 namespace netcore.Models
 {
-  public partial class ApplicationUser
-  {
-      [Display(Name = "TransferOut")]
-      public bool TransferOutRole { get; set; } = false;
-  }
+    public partial class ApplicationUser
+    {
+        [Display(Name = "TransferOut")]
+        public bool TransferOutRole { get; set; } = false;
+    }
 }
 
 

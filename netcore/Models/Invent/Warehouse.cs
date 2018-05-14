@@ -26,6 +26,13 @@ namespace netcore.Models.Invent
         [Display(Name = "Warehouse Description")]
         public string description { get; set; }
 
+        [StringLength(38)]
+        [Display(Name = "Branch Id")]
+        public string branchId { get; set; }
+        
+        [Display(Name = "Branch")]
+        public Branch branch { get; set; }
+
         //IBaseAddress
         [Display(Name = "Street Address 1")]
         [Required]

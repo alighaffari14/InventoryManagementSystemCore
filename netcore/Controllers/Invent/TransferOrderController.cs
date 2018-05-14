@@ -92,6 +92,10 @@ namespace netcore.Controllers.Invent
             {
                 return NotFound();
             }
+            ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
+            ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             return View(transferOrder);
         }
 
