@@ -9,66 +9,69 @@
 <table class="table table-hover table-striped" style="width:100%">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.transferInNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.transferInDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.branchIdFrom)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.warehouseIdFrom)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.branchIdTo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.warehouseIdTo)
-                </th>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.transferInNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.transferInDate)
+            </th>
+            <th class="hidden">
+                @Html.DisplayNameFor(model => model.description)
+            </th>
+            <th class="hidden">
+                @Html.DisplayNameFor(model => model.branchIdFrom)
+            </th>
+            <th class="hidden">
+                @Html.DisplayNameFor(model => model.warehouseIdFrom)
+            </th>
+            <th class="hidden">
+                @Html.DisplayNameFor(model => model.branchIdTo)
+            </th>
+            <th class="hidden">
+                @Html.DisplayNameFor(model => model.warehouseIdTo)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.transferOrder)
             </th>
-            <th></th>
+
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.transferInId"><i class="fa fa-pencil"></i></a> |
+                <a asp-action="Details" asp-route-id="@item.transferInId"><i class="fa fa-list"></i></a> |
+                <a asp-action="Delete" asp-route-id="@item.transferInId"><i class="fa fa-trash"></i></a>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.transferInNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.transferInDate)
             </td>
-            <td>
+            <td class="hidden">
                 @Html.DisplayFor(modelItem => item.description)
             </td>
-            <td>
+            <td class="hidden">
                 @Html.DisplayFor(modelItem => item.branchIdFrom)
             </td>
-            <td>
+            <td class="hidden">
                 @Html.DisplayFor(modelItem => item.warehouseIdFrom)
             </td>
-            <td>
+            <td class="hidden">
                 @Html.DisplayFor(modelItem => item.branchIdTo)
             </td>
-            <td>
+            <td class="hidden">
                 @Html.DisplayFor(modelItem => item.warehouseIdTo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.transferOrder.transferOrderId)
+                @Html.DisplayFor(modelItem => item.transferOrder.transferOrderNumber)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.transferInId"><i class="fa fa-pencil"></i></a> |
-                <a asp-action="Details" asp-route-id="@item.transferInId"><i class="fa fa-list"></i></a> |
-                <a asp-action="Delete" asp-route-id="@item.transferInId"><i class="fa fa-trash"></i></a>
-            </td>
+
         </tr>
-}
+        }
     </tbody>
 </table>

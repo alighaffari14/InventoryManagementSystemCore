@@ -39,28 +39,28 @@ namespace netcore.Models.Invent
         public string picName { get; set; }
 
         [StringLength(38)]
-        [Display(Name = "From Branch Id")]
+        [Display(Name = "From Branch")]
         public string branchIdFrom { get; set; }
 
         [Display(Name = "From Branch")]
         public Branch branchFrom { get; set; }
 
         [StringLength(38)]
-        [Display(Name = "From Warehouse Id")]
+        [Display(Name = "From Warehouse")]
         public string warehouseIdFrom { get; set; }
 
         [Display(Name = "From Warehouse")]
         public Warehouse warehouseFrom { get; set; }
 
         [StringLength(38)]
-        [Display(Name = "To Branch Id")]
+        [Display(Name = "To Branch")]
         public string branchIdTo { get; set; }
 
         [Display(Name = "To Branch")]
         public Branch branchTo { get; set; }
 
         [StringLength(38)]
-        [Display(Name = "To Warehouse Id")]
+        [Display(Name = "To Warehouse")]
         public string warehouseIdTo { get; set; }
 
         [Display(Name = "To Warehouse")]
