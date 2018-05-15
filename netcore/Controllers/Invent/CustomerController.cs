@@ -70,7 +70,7 @@ namespace netcore.Controllers.Invent
             {
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = customer.customerId });
             }
             return View(customer);
         }

@@ -80,7 +80,7 @@ namespace netcore.Controllers.Invent
             {
                 _context.Add(transferOrder);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = transferOrder.transferOrderId });
             }
             return View(transferOrder);
         }

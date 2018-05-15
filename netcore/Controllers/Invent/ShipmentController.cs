@@ -80,7 +80,7 @@ namespace netcore.Controllers.Invent
             {
                 _context.Add(shipment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = shipment.shipmentId });
             }
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", shipment.branchId);
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", shipment.customerId);

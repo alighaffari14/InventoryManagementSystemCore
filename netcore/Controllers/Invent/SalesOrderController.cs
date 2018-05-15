@@ -74,7 +74,7 @@ namespace netcore.Controllers.Invent
             {
                 _context.Add(salesOrder);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = salesOrder.salesOrderId });
             }
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
             return View(salesOrder);
