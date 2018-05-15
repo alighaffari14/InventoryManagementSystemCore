@@ -78,8 +78,30 @@ namespace netcore.Controllers.Invent
         {
             if (ModelState.IsValid)
             {
+                receiving.warehouse = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(receiving.warehouseId));
+                receiving.branch = receiving.warehouse.branch;
+                receiving.purchaseOrder = await _context.PurchaseOrder.Include(x => x.vendor).SingleOrDefaultAsync(x => x.purchaseOrderId.Equals(receiving.purchaseOrderId));
+                receiving.vendor = receiving.purchaseOrder.vendor;
+
                 _context.Add(receiving);
                 await _context.SaveChangesAsync();
+
+                //auto create receiving line, full receive
+                List<PurchaseOrderLine> polines = new List<PurchaseOrderLine>();
+                polines = _context.PurchaseOrderLine.Include(x => x.product).Where(x => x.purchaseOrderId.Equals(receiving.purchaseOrderId)).ToList();
+                foreach (var item in polines)
+                {
+                    ReceivingLine line = new ReceivingLine();
+                    line.receiving = receiving;
+                    line.product = item.product;
+                    line.qty = item.qty;
+                    line.qtyReceive = item.qty;
+                    line.qtyInventory = line.qtyReceive * 1;
+
+                    _context.ReceivingLine.Add(line);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Details), new { id = receiving.receivingId });
             }
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", receiving.branchId);
@@ -178,7 +200,7 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var receiving = await _context.Receiving.SingleOrDefaultAsync(m => m.receivingId == id);
+            var receiving = await _context.Receiving.Include(x => x.receivingLine).SingleOrDefaultAsync(m => m.receivingId == id);
             try
             {
                 _context.Receiving.Remove(receiving);

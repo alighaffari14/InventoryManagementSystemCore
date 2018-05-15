@@ -45,7 +45,7 @@ namespace netcore.Models.Invent
         [Display(Name = "Product")]
         public Product product { get; set; }
 
-        [Display(Name = "Qty")]
+        [Display(Name = "Qty Order")]
         public float qty { get; set; }
 
         [Display(Name = "Qty Receive")]

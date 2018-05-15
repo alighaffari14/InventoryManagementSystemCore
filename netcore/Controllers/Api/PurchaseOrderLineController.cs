@@ -41,6 +41,8 @@ namespace netcore.Controllers.Api
                 return BadRequest(ModelState);
             }
 
+            purchaseOrderLine.totalAmount = (decimal)purchaseOrderLine.qty * purchaseOrderLine.price;
+
             if (purchaseOrderLine.purchaseOrderLineId == string.Empty)
             {
                 purchaseOrderLine.purchaseOrderLineId = Guid.NewGuid().ToString();

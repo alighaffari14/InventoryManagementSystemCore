@@ -41,12 +41,18 @@ namespace netcore.Controllers.Invent
             }
 
             var purchaseOrder = await _context.PurchaseOrder
+                    .Include(x => x.purchaseOrderLine)
                     .Include(p => p.vendor)
                         .SingleOrDefaultAsync(m => m.purchaseOrderId == id);
             if (purchaseOrder == null)
             {
                 return NotFound();
             }
+
+            purchaseOrder.totalOrderAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.totalAmount);
+            purchaseOrder.totalDiscountAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.discountAmount);
+            _context.Update(purchaseOrder);
+            await _context.SaveChangesAsync();
 
             return View(purchaseOrder);
         }
@@ -76,7 +82,7 @@ namespace netcore.Controllers.Invent
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = purchaseOrder.purchaseOrderId });
             }
-            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorId", purchaseOrder.vendorId);
+            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }
 
@@ -93,7 +99,13 @@ namespace netcore.Controllers.Invent
             {
                 return NotFound();
             }
-            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorId", purchaseOrder.vendorId);
+
+            purchaseOrder.totalOrderAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.totalAmount);
+            purchaseOrder.totalDiscountAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.discountAmount);
+            _context.Update(purchaseOrder);
+            await _context.SaveChangesAsync();
+
+            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }
 
@@ -129,7 +141,7 @@ namespace netcore.Controllers.Invent
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorId", purchaseOrder.vendorId);
+            ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }
 
@@ -142,12 +154,18 @@ namespace netcore.Controllers.Invent
             }
 
             var purchaseOrder = await _context.PurchaseOrder
+                    .Include(x => x.purchaseOrderLine)
                     .Include(p => p.vendor)
                     .SingleOrDefaultAsync(m => m.purchaseOrderId == id);
             if (purchaseOrder == null)
             {
                 return NotFound();
             }
+
+            purchaseOrder.totalOrderAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.totalAmount);
+            purchaseOrder.totalDiscountAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.discountAmount);
+            _context.Update(purchaseOrder);
+            await _context.SaveChangesAsync();
 
             return View(purchaseOrder);
         }
