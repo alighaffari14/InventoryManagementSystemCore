@@ -152,19 +152,21 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var warehouse = await _context.Warehouse.SingleOrDefaultAsync(x => x.branchId.Equals(id));
             var branch = await _context.Branch.SingleOrDefaultAsync(m => m.branchId == id);
-            if (warehouse == null)
+            try
             {
                 _context.Branch.Remove(branch);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            else
+            catch (Exception ex)
             {
-                ViewData["StatusMessage"] = "Error: Can not delete, have dependency data.";
+
+                ViewData["StatusMessage"] = "Error. Calm Down ^_^ and please contact your SysAdmin with this message: " + ex;
                 return View(branch);
             }
+            
+            
 
         }
 

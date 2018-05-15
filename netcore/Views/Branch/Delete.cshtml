@@ -3,12 +3,11 @@
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_AdminlteNetcoreDelete.cshtml";
-
-    string StatusMessage = ViewBag.StatusMessage;
+    
 }
 
 
-@Html.Partial("_StatusMessage", StatusMessage)
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div>
 
     <dl class="dl-horizontal">

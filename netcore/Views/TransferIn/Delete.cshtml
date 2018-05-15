@@ -6,9 +6,9 @@
 }
 
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div>
-    
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.transferInNumber)
@@ -65,5 +65,5 @@
             @Html.DisplayFor(model => model.transferOrder.transferOrderId)
         </dd>
     </dl>
-    
+
 </div>

@@ -157,9 +157,19 @@ namespace netcore.Controllers.Invent
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var warehouse = await _context.Warehouse.SingleOrDefaultAsync(m => m.warehouseId == id);
-            _context.Warehouse.Remove(warehouse);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Warehouse.Remove(warehouse);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+
+                ViewData["StatusMessage"] = "Error. Calm Down ^_^ and please contact your SysAdmin with this message: " + ex;
+                return View(warehouse);
+            }
+            
         }
 
         private bool WarehouseExists(string id)

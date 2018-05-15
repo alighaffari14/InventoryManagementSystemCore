@@ -161,9 +161,19 @@ namespace netcore.Controllers.Invent
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var purchaseOrder = await _context.PurchaseOrder.SingleOrDefaultAsync(m => m.purchaseOrderId == id);
-            _context.PurchaseOrder.Remove(purchaseOrder);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.PurchaseOrder.Remove(purchaseOrder);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+
+                ViewData["StatusMessage"] = "Error. Calm Down ^_^ and please contact your SysAdmin with this message: " + ex;
+                return View(purchaseOrder);
+            }
+            
         }
 
         private bool PurchaseOrderExists(string id)

@@ -6,9 +6,9 @@
 }
 
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div>
-    
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.salesOrderNumber)
@@ -107,5 +107,5 @@
             @Html.DisplayFor(model => model.customer.customerId)
         </dd>
     </dl>
-    
+
 </div>

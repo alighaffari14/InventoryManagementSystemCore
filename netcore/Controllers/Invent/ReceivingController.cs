@@ -179,9 +179,19 @@ namespace netcore.Controllers.Invent
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var receiving = await _context.Receiving.SingleOrDefaultAsync(m => m.receivingId == id);
-            _context.Receiving.Remove(receiving);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Receiving.Remove(receiving);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+
+                ViewData["StatusMessage"] = "Error. Calm Down ^_^ and please contact your SysAdmin with this message: " + ex;
+                return View(receiving);
+            }
+            
         }
 
         private bool ReceivingExists(string id)
