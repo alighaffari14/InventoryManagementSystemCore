@@ -1,5 +1,12 @@
 ﻿@model netcore.Models.ApplicationUser
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject netcore.Data.ApplicationDbContext Context
+@{
 
+    ApplicationUser appUser = await UserManager.GetUserAsync(User);
+
+}
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -20,83 +27,145 @@
 
 
         <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu" data-widget="tree">
+        <ul class="sidebar-menu" data-widget="tree">
 
 
-                <li class="header">INVENTORY MANAGEMENT</li>
+            <li class="header">INVENTORY MANAGEMENT</li>
+            @if (appUser.HomeRole)
+            {
                 <li class="@Html.IsSelected(controller: "Home")">
                     <a href="@Url.Action("Index", "Home")">
                         <i class="fa fa-circle-o"></i> <span>Home</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.BranchRole)
+            {
                 <li class="@Html.IsSelected(controller: "Branch")">
                     <a href="@Url.Action("Index", "Branch")">
                         <i class="fa fa-circle-o"></i> <span>Branch</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.WarehouseRole)
+            {
                 <li class="@Html.IsSelected(controller: "Warehouse")">
                     <a href="@Url.Action("Index", "Warehouse")">
                         <i class="fa fa-circle-o"></i> <span>Warehouse</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.ProductRole)
+            {
                 <li class="@Html.IsSelected(controller: "Product")">
                     <a href="@Url.Action("Index", "Product")">
                         <i class="fa fa-circle-o"></i> <span>Product</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.VendorRole)
+            {
                 <li class="@Html.IsSelected(controller: "Vendor")">
                     <a href="@Url.Action("Index", "Vendor")">
                         <i class="fa fa-circle-o"></i> <span>Vendor</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.PurchaseOrderRole)
+            {
                 <li class="@Html.IsSelected(controller: "PurchaseOrder")">
                     <a href="@Url.Action("Index", "PurchaseOrder")">
                         <i class="fa fa-circle-o"></i> <span>Purchase Order</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.ReceivingRole)
+            {
                 <li class="@Html.IsSelected(controller: "Receiving")">
                     <a href="@Url.Action("Index", "Receiving")">
                         <i class="fa fa-circle-o"></i> <span>Receiving</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.CustomerRole)
+            {
                 <li class="@Html.IsSelected(controller: "Customer")">
                     <a href="@Url.Action("Index", "Customer")">
                         <i class="fa fa-circle-o"></i> <span>Customer</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.SalesOrderRole)
+            {
                 <li class="@Html.IsSelected(controller: "SalesOrder")">
                     <a href="@Url.Action("Index", "SalesOrder")">
                         <i class="fa fa-circle-o"></i> <span>Sales Order</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.ShipmentRole)
+            {
                 <li class="@Html.IsSelected(controller: "Shipment")">
                     <a href="@Url.Action("Index", "Shipment")">
                         <i class="fa fa-circle-o"></i> <span>Shipment</span>
                     </a>
                 </li>
+            }
+            
+            @if (appUser.TransferOrderRole)
+            {
                 <li class="@Html.IsSelected(controller: "TransferOrder")">
                     <a href="@Url.Action("Index", "TransferOrder")">
                         <i class="fa fa-circle-o"></i> <span>Transfer Order</span>
                     </a>
                 </li>
+            }
+      
+            @if (appUser.TransferOutRole)
+            {
                 <li class="@Html.IsSelected(controller: "TransferOut")">
                     <a href="@Url.Action("Index", "TransferOut")">
                         <i class="fa fa-circle-o"></i> <span>Goods Issue</span>
                     </a>
                 </li>
-                <li class="@Html.IsSelected(controller: "TransferIn")">
+            }
+            
+            @if (appUser.TransferInRole)
+            {
+                 <li class="@Html.IsSelected(controller: "TransferIn")">
                     <a href="@Url.Action("Index", "TransferIn")">
                         <i class="fa fa-circle-o"></i> <span>Goods Receive</span>
                     </a>
                 </li>
-
-                <li class="header">BONUS TEMPLATE</li>
-                <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">
-                    <a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank">
-                        <i class="fa fa-circle-o"></i> <span>Demo</span>
+            }
+           
+            @if (appUser.ApplicationUserRole)
+            {
+                <li class="header">CONFIG</li>
+                <li class="@Html.IsSelected(controller: "ApplicationUser")">
+                    <a href="@Url.Action("Index", "ApplicationUser")">
+                        <i class="fa fa-circle-o"></i> <span>User Roles</span>
                     </a>
                 </li>
-            </ul>
+
+            }
+            
+            <li class="header">BONUS TEMPLATE</li>
+            <li class="@Html.IsSelected(controller: "Adminlte", action: "Dashboardv1")">
+                <a href="@lte.MVC.Pages.Dashbaordv1.Url" target="_blank">
+                    <i class="fa fa-circle-o"></i> <span>Demo</span>
+                </a>
+            </li>
+        </ul>
     </section>
     <!-- /.sidebar -->
 </aside>
