@@ -28,7 +28,12 @@ namespace netcore.Controllers.Invent
         // GET: TransferOrder
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TransferOrder.ToListAsync());
+            return View(await _context.TransferOrder
+                .Include(x => x.branchFrom)
+                .Include(x => x.branchTo)
+                .Include(x => x.warehouseFrom)
+                .Include(x => x.warehouseTo)
+                .ToListAsync());
         }
 
         // GET: TransferOrder/Details/5
@@ -57,7 +62,8 @@ namespace netcore.Controllers.Invent
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
-            return View();
+            TransferOrder obj = new TransferOrder();
+            return View(obj);
         }
 
 

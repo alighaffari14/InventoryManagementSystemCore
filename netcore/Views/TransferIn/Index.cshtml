@@ -50,7 +50,7 @@
                 @Html.DisplayFor(modelItem => item.transferInNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.transferInDate)
+                @item.transferInDate.Date.ToString("dd-MMM-yyyy")
             </td>
             <td class="hidden">
                 @Html.DisplayFor(modelItem => item.description)

@@ -55,12 +55,13 @@ namespace netcore.Controllers.Invent
         // GET: TransferIn/Create
         public IActionResult Create()
         {
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId");
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
-            return View();
+            TransferIn obj = new TransferIn();
+            return View(obj);
         }
 
 
@@ -79,7 +80,7 @@ namespace netcore.Controllers.Invent
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferIn.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferIn.transferOrderId);
             return View(transferIn);
         }
 
@@ -96,7 +97,7 @@ namespace netcore.Controllers.Invent
             {
                 return NotFound();
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferIn.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferIn.transferOrderId);
             return View(transferIn);
         }
 
@@ -132,7 +133,7 @@ namespace netcore.Controllers.Invent
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferIn.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferIn.transferOrderId);
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");

@@ -16,16 +16,16 @@ namespace netcore.Models.Invent
         }
 
         [StringLength(38)]
-        [Display(Name = "Transfer Order Id")]
+        [Display(Name = "Transfer Id")]
         public string transferOrderId { get; set; }
 
         [StringLength(20)]
         [Required]
-        [Display(Name = "Transfer Order Number")]
+        [Display(Name = "Transfer Number")]
         public string transferOrderNumber { get; set; }
 
         [Required]
-        [Display(Name = "Transfer Order Date")]
+        [Display(Name = "Transfer Date")]
         public DateTime transferOrderDate { get; set; }
 
         [StringLength(100)]
