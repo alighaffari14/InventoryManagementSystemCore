@@ -1,4 +1,5 @@
-﻿@inject netcore.Data.ApplicationDbContext Context
+﻿@using netcore.Models.Invent
+@inject netcore.Data.ApplicationDbContext Context
 @{
     ViewData["Title"] = "Home Index";
     Layout = "_AdminlteNetcore";
@@ -7,6 +8,22 @@
     int so = Context.SalesOrder.Count();
     int shipment = Context.Shipment.Count();
     int receive = Context.Receiving.Count();
+
+    List<VMStock> stocks = new List<VMStock>();
+    List<Product> products = new List<Product>();
+    products = Context.Product.ToList();
+    foreach (var item in products)
+    {
+        VMStock stock = new VMStock();
+        stock.Product = item.productCode;
+        stock.QtyPO = Context.PurchaseOrderLine.Where(x => x.productId.Equals(item.productId)).Sum(x => x.qty);
+        stock.QtyReceiving = Context.ReceivingLine.Where(x => x.productId.Equals(item.productId)).Sum(x => x.qtyReceive);
+        stock.QtySO = Context.SalesOrderLine.Where(x => x.productId.Equals(item.productId)).Sum(x => x.qty);
+        stock.QtyShipment = Context.ShipmentLine.Where(x => x.productId.Equals(item.productId)).Sum(x => x.qtyShipment);
+        stock.QtyOnhand = stock.QtyReceiving - stock.QtyShipment;
+
+        stocks.Add(stock);
+    }
 }
 
 
@@ -84,6 +101,55 @@
             <!-- ./col -->
         </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box box-warning">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Stocks Realtime</h3>
+                        <div class="box-tools pull-right">
+                            <div class="has-feedback">
+                                <input type="text" id="mainSearch" class="form-control input-sm" placeholder="Search...">
+                                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                            </div>
+                        </div>
+                        <!-- /.box-tools -->
+                    </div>
+                    <div class="box-body no-padding">
+                        <div class="table-responsive mailbox-messages">
+                            <table class="table table-hover table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Qty PO</th>
+                                        <th>Qty Receiving</th>
+                                        <th>Qty SO</th>
+                                        <th>Qty Shipment</th>
+                                        <th>Qty On Hand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in stocks)
+                                    {
+                                        <tr>
+
+                                            <td>@item.Product</td>
+                                            <td>@item.QtyPO</td>
+                                            <td>@item.QtyReceiving</td>
+                                            <td>@item.QtySO</td>
+                                            <td>@item.QtyShipment</td>
+                                            <td>@item.QtyOnhand</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </section>
     <!-- /.content -->
 </div>
@@ -96,7 +162,26 @@
 
 
 @section Scripts{
+    <script>
+        $(document).ready(function () {
+            var mainTable;
 
+            mainTable = $('.table').DataTable({
+                "lengthChange": false,
+                "info": false,
+                "searching": true,
+                "dom": 'lrtip',
+                "scrollX": false
+            });
+
+            $('#mainSearch').keyup(function () {
+                mainTable.search($(this).val()).draw();
+            })
+
+        });
+
+
+    </script>
 }
 
 
