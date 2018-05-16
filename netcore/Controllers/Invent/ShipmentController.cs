@@ -25,6 +25,26 @@ namespace netcore.Controllers.Invent
             _context = context;
         }
 
+        public async Task<IActionResult> ShowDeliveryOrder(string id)
+        {
+            Shipment obj = await _context.Shipment
+                .Include(x => x.customer)
+                .Include(x => x.salesOrder)
+                .Include(x => x.shipmentLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.shipmentId.Equals(id));
+            return View(obj);
+        }
+
+        public async Task<IActionResult> PrintDeliveryOrder(string id)
+        {
+            Shipment obj = await _context.Shipment
+                .Include(x => x.customer)
+                .Include(x => x.salesOrder)
+                .Include(x => x.shipmentLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.shipmentId.Equals(id));
+            return View(obj);
+        }
+
         // GET: Shipment
         public async Task<IActionResult> Index()
         {
