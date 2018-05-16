@@ -36,25 +36,25 @@
                               @Html.DisplayNameFor(model => model.branchIdFrom)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.branchIdFrom)
+                              @Html.DisplayFor(model => model.branchFrom.branchName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.warehouseIdFrom)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.warehouseIdFrom)
+                              @Html.DisplayFor(model => model.warehouseFrom.warehouseName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.branchIdTo)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.branchIdTo)
+                              @Html.DisplayFor(model => model.branchTo.branchName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.warehouseIdTo)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.warehouseIdTo)
+                              @Html.DisplayFor(model => model.warehouseTo.warehouseName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.createdAt)
@@ -66,7 +66,7 @@
                               @Html.DisplayNameFor(model => model.transferOrder)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.transferOrder.transferOrderId)
+                              @Html.DisplayFor(model => model.transferOrder.transferOrderNumber)
                           </dd>
                       </dl>                                   
                 </div>
@@ -74,7 +74,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <div class="form-group">
-                    <a asp-action="Edit" asp-route-id="@Model.transferOutId" class="btn btn-primary">Edit</a>
+                    
                     <a asp-action="Index" class="btn btn-default">Back to List</a>
                 </div>
             </div>
@@ -98,7 +98,8 @@
                         <table id="grid" name="grid" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-11">transferOutId</th>
+                                    <th class="col-lg-6">Product</th>
+                                    <th class="col-lg-5">Qty</th>
                                     <th class="col-lg-1"></th>
                                 </tr>
                             </thead>
@@ -108,7 +109,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <div class="form-group">
+                <div class="form-group hidden">
                     <div class="row">
                         <div class="col-md-12">
                             <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","TransferOutLine", new { masterid = Model.transferOutId })')"><i class="fa fa-plus"></i> Add New TransferOutLine</a>
@@ -148,13 +149,14 @@
                     "datatype": 'json'
                 },
                 "columns": [
-                    { "data": "transferOutLineId" },
+                    { "data": "product.productCode" },
+                    { "data": "qty" },
                     {
                         "data": "transferOutLineId",
                         "render": function (data) {
                             var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
                             var btnDelete = "<a class='btn btn-danger btn-xs' style='margin-left:2px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i></a>";
-                            return btnEdit + btnDelete;
+                            return ""; //btnEdit + btnDelete;
                         }
                     }
                 ],

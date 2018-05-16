@@ -41,6 +41,10 @@ namespace netcore.Controllers.Invent
             }
 
             var transferOut = await _context.TransferOut
+                    .Include(x => x.branchFrom)
+                    .Include(x => x.branchTo)
+                    .Include(x => x.warehouseFrom)
+                    .Include(x => x.warehouseTo)
                     .Include(t => t.transferOrder)
                         .SingleOrDefaultAsync(m => m.transferOutId == id);
             if (transferOut == null)
@@ -55,12 +59,13 @@ namespace netcore.Controllers.Invent
         // GET: TransferOut/Create
         public IActionResult Create()
         {
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId");
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
-            return View();
+            TransferOut to = new TransferOut();
+            return View(to);
         }
 
 
@@ -75,11 +80,50 @@ namespace netcore.Controllers.Invent
         {
             if (ModelState.IsValid)
             {
+
+                //check transfer order
+                TransferOut check = await _context.TransferOut.SingleOrDefaultAsync(x => x.transferOrderId.Equals(transferOut.transferOrderId));
+                if (check != null)
+                {
+                    ViewData["StatusMessage"] = "Error. Transfer order already issued. " + check.transferOutNumber;
+
+                    ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
+                    ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
+                    ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+                    ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
+                    ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+                    
+
+                    return View(transferOut);
+                }
+
+                transferOut.warehouseFrom = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOut.warehouseIdFrom));
+                transferOut.branchFrom = transferOut.warehouseFrom.branch;
+                transferOut.warehouseTo = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOut.warehouseIdTo));
+                transferOut.branchTo = transferOut.warehouseTo.branch;
+                
                 _context.Add(transferOut);
                 await _context.SaveChangesAsync();
+
+
+                //auto create transfer out line, full shipment
+                List<TransferOrderLine> lines = new List<TransferOrderLine>();
+                lines = _context.TransferOrderLine.Include(x => x.product).Where(x => x.transferOrderId.Equals(transferOut.transferOrderId)).ToList();
+                foreach (var item in lines)
+                {
+                    TransferOutLine line = new TransferOutLine();
+                    line.transferOut = transferOut;
+                    line.product = item.product;
+                    line.qty = item.qty;
+                    line.qtyInventory = line.qty * -1;
+
+                    _context.TransferOutLine.Add(line);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Details), new { id = transferOut.transferOutId });
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOut.transferOrderId);
             return View(transferOut);
         }
 
@@ -91,12 +135,17 @@ namespace netcore.Controllers.Invent
                 return NotFound();
             }
 
-            var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
+            var transferOut = await _context.TransferOut
+                .Include(x => x.branchFrom)
+                .Include(x => x.branchTo)
+                .Include(x => x.warehouseFrom)
+                .Include(x => x.warehouseTo)
+                .SingleOrDefaultAsync(m => m.transferOutId == id);
             if (transferOut == null)
             {
                 return NotFound();
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOut.transferOrderId);
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
@@ -136,7 +185,7 @@ namespace netcore.Controllers.Invent
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOut.transferOrderId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOut.transferOrderId);
             return View(transferOut);
         }
 
@@ -149,6 +198,10 @@ namespace netcore.Controllers.Invent
             }
 
             var transferOut = await _context.TransferOut
+                    .Include(x => x.branchFrom)
+                    .Include(x => x.branchTo)
+                    .Include(x => x.warehouseFrom)
+                    .Include(x => x.warehouseTo)
                     .Include(t => t.transferOrder)
                     .SingleOrDefaultAsync(m => m.transferOutId == id);
             if (transferOut == null)
@@ -167,7 +220,7 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var transferOut = await _context.TransferOut.SingleOrDefaultAsync(m => m.transferOutId == id);
+            var transferOut = await _context.TransferOut.Include(x => x.transferOutLine).SingleOrDefaultAsync(m => m.transferOutId == id);
             try
             {
                 _context.TransferOut.Remove(transferOut);

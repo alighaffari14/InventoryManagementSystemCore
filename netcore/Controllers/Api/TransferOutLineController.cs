@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetTransferOutLine(string masterid)
         {
-            return Json(new { data = _context.TransferOutLine.Where(x => x.transferOutId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.TransferOutLine.Include(x => x.product).Where(x => x.transferOutId.Equals(masterid)).ToList() });
         }
 
         // POST: api/TransferOutLine

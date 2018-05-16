@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
 }
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div class="row">
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -43,7 +43,7 @@
             <input asp-for="description" class="form-control" />
             <span asp-validation-for="description" class="text-danger"></span>
         </div>
-        <div class="row">
+        <div class="row hidden">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="branchIdFrom" class="control-label"></label>
