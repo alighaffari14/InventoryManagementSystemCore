@@ -28,12 +28,14 @@ namespace netcore.Controllers.Invent
         // GET: TransferOrder
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TransferOrder
+            List<TransferOrder> lists = new List<TransferOrder>();
+            lists = await _context.TransferOrder
                 .Include(x => x.branchFrom)
                 .Include(x => x.branchTo)
                 .Include(x => x.warehouseFrom)
                 .Include(x => x.warehouseTo)
-                .ToListAsync());
+                .ToListAsync();
+            return View(lists);
         }
 
         // GET: TransferOrder/Details/5
@@ -45,6 +47,10 @@ namespace netcore.Controllers.Invent
             }
 
             var transferOrder = await _context.TransferOrder
+                        .Include(x => x.branchFrom)
+                        .Include(x => x.branchTo)
+                        .Include(x => x.warehouseFrom)
+                        .Include(x => x.warehouseTo)
                         .SingleOrDefaultAsync(m => m.transferOrderId == id);
             if (transferOrder == null)
             {
@@ -78,6 +84,13 @@ namespace netcore.Controllers.Invent
         {
             if (ModelState.IsValid)
             {
+                transferOrder.warehouseFrom = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOrder.warehouseIdFrom));
+                transferOrder.branchFrom = transferOrder.warehouseFrom.branch;
+
+                transferOrder.warehouseTo = await _context.Warehouse.SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOrder.warehouseIdTo));
+                transferOrder.branchTo = transferOrder.warehouseTo.branch;
+                
+
                 _context.Add(transferOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = transferOrder.transferOrderId });
@@ -121,6 +134,12 @@ namespace netcore.Controllers.Invent
             {
                 try
                 {
+                    transferOrder.warehouseFrom = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOrder.warehouseIdFrom));
+                    transferOrder.branchFrom = transferOrder.warehouseFrom.branch;
+
+                    transferOrder.warehouseTo = await _context.Warehouse.SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOrder.warehouseIdTo));
+                    transferOrder.branchTo = transferOrder.warehouseTo.branch;
+
                     _context.Update(transferOrder);
                     await _context.SaveChangesAsync();
                 }
@@ -149,6 +168,10 @@ namespace netcore.Controllers.Invent
             }
 
             var transferOrder = await _context.TransferOrder
+                    .Include(x => x.branchFrom)
+                    .Include(x => x.branchTo)
+                    .Include(x => x.warehouseFrom)
+                    .Include(x => x.warehouseTo)
                     .SingleOrDefaultAsync(m => m.transferOrderId == id);
             if (transferOrder == null)
             {

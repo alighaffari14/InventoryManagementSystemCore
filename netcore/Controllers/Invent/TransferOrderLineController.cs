@@ -28,167 +28,167 @@ namespace netcore.Controllers.Invent
         // GET: TransferOrderLine
         public async Task<IActionResult> Index()
         {
-                    var applicationDbContext = _context.TransferOrderLine.Include(t => t.product).Include(t => t.transferOrder);
-                    return View(await applicationDbContext.ToListAsync());
-        }        
-
-    // GET: TransferOrderLine/Details/5
-    public async Task<IActionResult> Details(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            var applicationDbContext = _context.TransferOrderLine.Include(t => t.product).Include(t => t.transferOrder);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        var transferOrderLine = await _context.TransferOrderLine
-                .Include(t => t.product)
-                .Include(t => t.transferOrder)
-                    .SingleOrDefaultAsync(m => m.transferOrderLineId == id);
-        if (transferOrderLine == null)
+        // GET: TransferOrderLine/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            return NotFound();
-        }
-
-        return View(transferOrderLine);
-    }
-
-
-    // GET: TransferOrderLine/Create
-    public IActionResult Create(string masterid, string id)
-    {
-        var check = _context.TransferOrderLine.SingleOrDefault(m => m.transferOrderLineId == id);
-        var selected = _context.TransferOrder.SingleOrDefault(m => m.transferOrderId == masterid);
-            ViewData["productId"] = new SelectList(_context.Product, "productId", "productId");
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId");
-        if (check == null)
-        {
-            TransferOrderLine objline = new TransferOrderLine();
-            objline.transferOrder = selected;
-            objline.transferOrderId = masterid;
-            return View(objline);
-        }
-        else
-        {
-            return View(check);
-        }
-    }
-
-
-
-
-    // POST: TransferOrderLine/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("transferOrderLineId,transferOrderId,productId,qty,createdAt")] TransferOrderLine transferOrderLine)
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Add(transferOrderLine);
-            await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-        }
-                ViewData["productId"] = new SelectList(_context.Product, "productId", "productId", transferOrderLine.productId);
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOrderLine.transferOrderId);
-        return View(transferOrderLine);
-    }
-
-    // GET: TransferOrderLine/Edit/5
-    public async Task<IActionResult> Edit(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var transferOrderLine = await _context.TransferOrderLine.SingleOrDefaultAsync(m => m.transferOrderLineId == id);
-        if (transferOrderLine == null)
-        {
-            return NotFound();
-        }
-                ViewData["productId"] = new SelectList(_context.Product, "productId", "productId", transferOrderLine.productId);
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOrderLine.transferOrderId);
-        return View(transferOrderLine);
-    }
-
-    // POST: TransferOrderLine/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, [Bind("transferOrderLineId,transferOrderId,productId,qty,createdAt")] TransferOrderLine transferOrderLine)
-    {
-        if (id != transferOrderLine.transferOrderLineId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            if (id == null)
             {
-                _context.Update(transferOrderLine);
+                return NotFound();
+            }
+
+            var transferOrderLine = await _context.TransferOrderLine
+                    .Include(t => t.product)
+                    .Include(t => t.transferOrder)
+                        .SingleOrDefaultAsync(m => m.transferOrderLineId == id);
+            if (transferOrderLine == null)
+            {
+                return NotFound();
+            }
+
+            return View(transferOrderLine);
+        }
+
+
+        // GET: TransferOrderLine/Create
+        public IActionResult Create(string masterid, string id)
+        {
+            var check = _context.TransferOrderLine.SingleOrDefault(m => m.transferOrderLineId == id);
+            var selected = _context.TransferOrder.SingleOrDefault(m => m.transferOrderId == masterid);
+            ViewData["productId"] = new SelectList(_context.Product, "productId", "productCode");
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
+            if (check == null)
+            {
+                TransferOrderLine objline = new TransferOrderLine();
+                objline.transferOrder = selected;
+                objline.transferOrderId = masterid;
+                return View(objline);
+            }
+            else
+            {
+                return View(check);
+            }
+        }
+
+
+
+
+        // POST: TransferOrderLine/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("transferOrderLineId,transferOrderId,productId,qty,createdAt")] TransferOrderLine transferOrderLine)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(transferOrderLine);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
+            ViewData["productId"] = new SelectList(_context.Product, "productId", "productCode", transferOrderLine.productId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOrderLine.transferOrderId);
+            return View(transferOrderLine);
+        }
+
+        // GET: TransferOrderLine/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
             {
-                if (!TransferOrderLineExists(transferOrderLine.transferOrderLineId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-        return RedirectToAction(nameof(Index));
-        }
-                ViewData["productId"] = new SelectList(_context.Product, "productId", "productId", transferOrderLine.productId);
-                ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderId", transferOrderLine.transferOrderId);
-        return View(transferOrderLine);
-    }
 
-    // GET: TransferOrderLine/Delete/5
-    public async Task<IActionResult> Delete(string id)
-    {
-        if (id == null)
+            var transferOrderLine = await _context.TransferOrderLine.SingleOrDefaultAsync(m => m.transferOrderLineId == id);
+            if (transferOrderLine == null)
+            {
+                return NotFound();
+            }
+            ViewData["productId"] = new SelectList(_context.Product, "productId", "productCode", transferOrderLine.productId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOrderLine.transferOrderId);
+            return View(transferOrderLine);
+        }
+
+        // POST: TransferOrderLine/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("transferOrderLineId,transferOrderId,productId,qty,createdAt")] TransferOrderLine transferOrderLine)
         {
-            return NotFound();
+            if (id != transferOrderLine.transferOrderLineId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(transferOrderLine);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TransferOrderLineExists(transferOrderLine.transferOrderLineId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["productId"] = new SelectList(_context.Product, "productId", "productCode", transferOrderLine.productId);
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber", transferOrderLine.transferOrderId);
+            return View(transferOrderLine);
         }
 
-        var transferOrderLine = await _context.TransferOrderLine
-                .Include(t => t.product)
-                .Include(t => t.transferOrder)
-                .SingleOrDefaultAsync(m => m.transferOrderLineId == id);
-        if (transferOrderLine == null)
+        // GET: TransferOrderLine/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var transferOrderLine = await _context.TransferOrderLine
+                    .Include(t => t.product)
+                    .Include(t => t.transferOrder)
+                    .SingleOrDefaultAsync(m => m.transferOrderLineId == id);
+            if (transferOrderLine == null)
+            {
+                return NotFound();
+            }
+
+            return View(transferOrderLine);
         }
 
-        return View(transferOrderLine);
-    }
 
 
 
-
-    // POST: TransferOrderLine/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        var transferOrderLine = await _context.TransferOrderLine.SingleOrDefaultAsync(m => m.transferOrderLineId == id);
+        // POST: TransferOrderLine/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var transferOrderLine = await _context.TransferOrderLine.SingleOrDefaultAsync(m => m.transferOrderLineId == id);
             _context.TransferOrderLine.Remove(transferOrderLine);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-    private bool TransferOrderLineExists(string id)
-    {
-        return _context.TransferOrderLine.Any(e => e.transferOrderLineId == id);
-    }
+        private bool TransferOrderLineExists(string id)
+        {
+            return _context.TransferOrderLine.Any(e => e.transferOrderLineId == id);
+        }
 
-  }
+    }
 }
 
 
@@ -197,25 +197,25 @@ namespace netcore.Controllers.Invent
 
 namespace netcore.MVC
 {
-  public static partial class Pages
-  {
-      public static class TransferOrderLine
-      {
-          public const string Controller = "TransferOrderLine";
-          public const string Action = "Index";
-          public const string Role = "TransferOrderLine";
-          public const string Url = "/TransferOrderLine/Index";
-          public const string Name = "TransferOrderLine";
-      }
-  }
+    public static partial class Pages
+    {
+        public static class TransferOrderLine
+        {
+            public const string Controller = "TransferOrderLine";
+            public const string Action = "Index";
+            public const string Role = "TransferOrderLine";
+            public const string Url = "/TransferOrderLine/Index";
+            public const string Name = "TransferOrderLine";
+        }
+    }
 }
 namespace netcore.Models
 {
-  public partial class ApplicationUser
-  {
-      [Display(Name = "TransferOrderLine")]
-      public bool TransferOrderLineRole { get; set; } = false;
-  }
+    public partial class ApplicationUser
+    {
+        [Display(Name = "TransferOrderLine")]
+        public bool TransferOrderLineRole { get; set; } = false;
+    }
 }
 
 

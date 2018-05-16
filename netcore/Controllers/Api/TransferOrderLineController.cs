@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetTransferOrderLine(string masterid)
         {
-            return Json(new { data = _context.TransferOrderLine.Where(x => x.transferOrderId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.TransferOrderLine.Include(x => x.product).Where(x => x.transferOrderId.Equals(masterid)).ToList() });
         }
 
         // POST: api/TransferOrderLine
