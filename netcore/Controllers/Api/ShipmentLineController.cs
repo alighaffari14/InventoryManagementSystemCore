@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetShipmentLine(string masterid)
         {
-            return Json(new { data = _context.ShipmentLine.Where(x => x.shipmentId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.ShipmentLine.Include(x => x.product).Where(x => x.shipmentId.Equals(masterid)).ToList() });
         }
 
         // POST: api/ShipmentLine

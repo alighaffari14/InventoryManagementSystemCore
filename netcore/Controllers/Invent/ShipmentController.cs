@@ -78,8 +78,43 @@ namespace netcore.Controllers.Invent
         {
             if (ModelState.IsValid)
             {
+                //check sales order
+                Shipment check = await _context.Shipment.SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
+                if (check != null)
+                {
+                    ViewData["StatusMessage"] = "Error. Sales order already shipped. " + check.shipmentNumber;
+
+                    ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
+                    ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName");
+                    ViewData["salesOrderId"] = new SelectList(_context.SalesOrder, "salesOrderId", "salesOrderNumber");
+                    ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+
+                    return View(shipment);
+                }
+                shipment.warehouse = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(shipment.warehouseId));
+                shipment.branch = shipment.warehouse.branch;
+                shipment.salesOrder = await _context.SalesOrder.Include(x => x.customer).SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
+                shipment.customer = shipment.salesOrder.customer;
+
                 _context.Add(shipment);
                 await _context.SaveChangesAsync();
+
+                //auto create shipment line, full shipment
+                List<SalesOrderLine> solines = new List<SalesOrderLine>();
+                solines = _context.SalesOrderLine.Include(x => x.product).Where(x => x.salesOrderId.Equals(shipment.salesOrderId)).ToList();
+                foreach (var item in solines)
+                {
+                    ShipmentLine line = new ShipmentLine();
+                    line.shipment = shipment;
+                    line.product = item.product;
+                    line.qty = item.qty;
+                    line.qtyShipment = item.qty;
+                    line.qtyInventory = line.qtyShipment * -1;
+
+                    _context.ShipmentLine.Add(line);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Details), new { id = shipment.shipmentId });
             }
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", shipment.branchId);
@@ -178,7 +213,7 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var shipment = await _context.Shipment.SingleOrDefaultAsync(m => m.shipmentId == id);
+            var shipment = await _context.Shipment.Include(x => x.shipmentLine).SingleOrDefaultAsync(m => m.shipmentId == id);
             try
             {
                 _context.Shipment.Remove(shipment);

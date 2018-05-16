@@ -60,25 +60,25 @@
                               @Html.DisplayNameFor(model => model.branch)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.branch.branchId)
+                              @Html.DisplayFor(model => model.branch.branchName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.customer)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.customer.customerId)
+                              @Html.DisplayFor(model => model.customer.customerName)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.salesOrder)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.salesOrder.salesOrderId)
+                              @Html.DisplayFor(model => model.salesOrder.salesOrderNumber)
                           </dd>
                           <dt>
                               @Html.DisplayNameFor(model => model.warehouse)
                           </dt>
                           <dd>
-                              @Html.DisplayFor(model => model.warehouse.warehouseId)
+                              @Html.DisplayFor(model => model.warehouse.warehouseName)
                           </dd>
                       </dl>                                   
                 </div>
@@ -86,7 +86,6 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <div class="form-group">
-                    <a asp-action="Edit" asp-route-id="@Model.shipmentId" class="btn btn-primary">Edit</a>
                     <a asp-action="Index" class="btn btn-default">Back to List</a>
                 </div>
             </div>
@@ -110,7 +109,9 @@
                         <table id="grid" name="grid" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-lg-11">shipmentId</th>
+                                    <th class="col-lg-5">Product</th>
+                                    <th class="col-lg-3">Qty Order</th>
+                                    <th class="col-lg-3">Qty Shipment</th>
                                     <th class="col-lg-1"></th>
                                 </tr>
                             </thead>
@@ -120,7 +121,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-                <div class="form-group">
+                <div class="form-group hidden">
                     <div class="row">
                         <div class="col-md-12">
                             <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","ShipmentLine", new { masterid = Model.shipmentId })')"><i class="fa fa-plus"></i> Add New ShipmentLine</a>
@@ -160,13 +161,15 @@
                     "datatype": 'json'
                 },
                 "columns": [
-                    { "data": "shipmentLineId" },
+                    { "data": "product.productCode" },
+                    { "data": "qty" },
+                    { "data": "qtyShipment" },
                     {
                         "data": "shipmentLineId",
                         "render": function (data) {
                             var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
                             var btnDelete = "<a class='btn btn-danger btn-xs' style='margin-left:2px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i></a>";
-                            return btnEdit + btnDelete;
+                            return ""; //btnEdit + btnDelete;
                         }
                     }
                 ],

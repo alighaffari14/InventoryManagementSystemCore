@@ -83,6 +83,12 @@ namespace netcore.Controllers.Invent
                 if (check != null)
                 {
                     ViewData["StatusMessage"] = "Error. Purchase order already received. " + check.receivingNumber;
+
+                    ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
+                    ViewData["purchaseOrderId"] = new SelectList(_context.PurchaseOrder, "purchaseOrderId", "purchaseOrderNumber");
+                    ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName");
+                    ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+
                     return View(receiving);
                 }
                 receiving.warehouse = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(receiving.warehouseId));

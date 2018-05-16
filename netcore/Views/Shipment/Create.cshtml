@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
 }
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div class="row">
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group hidden">
                     <label asp-for="customerId" class="control-label"></label>
                     <select asp-for="customerId" class="form-control select2" asp-items="ViewBag.customerId"></select>
                 </div>
