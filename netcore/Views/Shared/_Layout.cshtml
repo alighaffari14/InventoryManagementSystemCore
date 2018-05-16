@@ -39,25 +39,7 @@
                 @if (signedUser != null)
                 {
                     <ul class="nav navbar-nav">
-                        @if (signedUser.isInRoleHomeIndex)
-                        {
-                            <li class="@Html.IsSelected(controller: "Home", action: "Index")"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        }
-                        @if (signedUser.isInRoleHomeAbout)
-                        {
-                            <li class="@Html.IsSelected(controller: "Home", action: "About")"><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-
-                        }
-                        @if (signedUser.isInRoleHomeContact)
-                        {
-                            <li class="@Html.IsSelected(controller: "Home", action: "Contact")"><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                        }
-                        @if (signedUser.isInRoleApplicationUser)
-                        {
-
-                            <li class="@Html.IsSelected(controller: "ApplicationUser", action: "Index")"><a asp-area="" asp-controller="ApplicationUser" asp-action="Index">Application User</a></li>
-                        }
+                       
 
                     </ul>
 

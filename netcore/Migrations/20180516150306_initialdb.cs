@@ -154,25 +154,6 @@ namespace netcore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Warehouse",
-                columns: table => new
-                {
-                    warehouseId = table.Column<string>(maxLength: 38, nullable: false),
-                    city = table.Column<string>(maxLength: 30, nullable: true),
-                    country = table.Column<string>(maxLength: 30, nullable: true),
-                    createdAt = table.Column<DateTime>(nullable: false),
-                    description = table.Column<string>(maxLength: 50, nullable: true),
-                    province = table.Column<string>(maxLength: 30, nullable: true),
-                    street1 = table.Column<string>(maxLength: 50, nullable: false),
-                    street2 = table.Column<string>(maxLength: 50, nullable: true),
-                    warehouseName = table.Column<string>(maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Warehouse", x => x.warehouseId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -276,6 +257,32 @@ namespace netcore.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warehouse",
+                columns: table => new
+                {
+                    warehouseId = table.Column<string>(maxLength: 38, nullable: false),
+                    branchId = table.Column<string>(maxLength: 38, nullable: true),
+                    city = table.Column<string>(maxLength: 30, nullable: true),
+                    country = table.Column<string>(maxLength: 30, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    province = table.Column<string>(maxLength: 30, nullable: true),
+                    street1 = table.Column<string>(maxLength: 50, nullable: false),
+                    street2 = table.Column<string>(maxLength: 50, nullable: true),
+                    warehouseName = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouse", x => x.warehouseId);
+                    table.ForeignKey(
+                        name: "FK_Warehouse_Branch_branchId",
+                        column: x => x.branchId,
+                        principalTable: "Branch",
+                        principalColumn: "branchId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1146,6 +1153,11 @@ namespace netcore.Migrations
                 name: "IX_VendorLine_vendorId",
                 table: "VendorLine",
                 column: "vendorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Warehouse_branchId",
+                table: "Warehouse",
+                column: "branchId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1229,10 +1241,10 @@ namespace netcore.Migrations
                 name: "Customer");
 
             migrationBuilder.DropTable(
-                name: "Branch");
+                name: "Warehouse");
 
             migrationBuilder.DropTable(
-                name: "Warehouse");
+                name: "Branch");
         }
     }
 }
