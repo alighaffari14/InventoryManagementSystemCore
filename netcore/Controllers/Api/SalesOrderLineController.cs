@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetSalesOrderLine(string masterid)
         {
-            return Json(new { data = _context.SalesOrderLine.Where(x => x.salesOrderId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.SalesOrderLine.Include(x => x.product).Where(x => x.salesOrderId.Equals(masterid)).ToList() });
         }
 
         // POST: api/SalesOrderLine

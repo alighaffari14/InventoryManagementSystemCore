@@ -41,12 +41,18 @@ namespace netcore.Controllers.Invent
             }
 
             var salesOrder = await _context.SalesOrder
+                    .Include(x => x.salesOrderLine)
                     .Include(s => s.customer)
                         .SingleOrDefaultAsync(m => m.salesOrderId == id);
             if (salesOrder == null)
             {
                 return NotFound();
             }
+
+            salesOrder.totalOrderAmount = salesOrder.salesOrderLine.Sum(x => x.totalAmount);
+            salesOrder.totalDiscountAmount = salesOrder.salesOrderLine.Sum(x => x.discountAmount);
+            _context.Update(salesOrder);
+            await _context.SaveChangesAsync();
 
             return View(salesOrder);
         }
@@ -59,8 +65,6 @@ namespace netcore.Controllers.Invent
             SalesOrder so = new SalesOrder();
             return View(so);
         }
-
-
 
 
         // POST: SalesOrder/Create
@@ -88,11 +92,17 @@ namespace netcore.Controllers.Invent
                 return NotFound();
             }
 
-            var salesOrder = await _context.SalesOrder.SingleOrDefaultAsync(m => m.salesOrderId == id);
+            var salesOrder = await _context.SalesOrder.Include(x => x.salesOrderLine).SingleOrDefaultAsync(m => m.salesOrderId == id);
             if (salesOrder == null)
             {
                 return NotFound();
             }
+
+            salesOrder.totalOrderAmount = salesOrder.salesOrderLine.Sum(x => x.totalAmount);
+            salesOrder.totalDiscountAmount = salesOrder.salesOrderLine.Sum(x => x.discountAmount);
+            _context.Update(salesOrder);
+            await _context.SaveChangesAsync();
+
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
             return View(salesOrder);
         }
@@ -142,12 +152,18 @@ namespace netcore.Controllers.Invent
             }
 
             var salesOrder = await _context.SalesOrder
+                    .Include(x => x.salesOrderLine)
                     .Include(s => s.customer)
                     .SingleOrDefaultAsync(m => m.salesOrderId == id);
             if (salesOrder == null)
             {
                 return NotFound();
             }
+
+            salesOrder.totalOrderAmount = salesOrder.salesOrderLine.Sum(x => x.totalAmount);
+            salesOrder.totalDiscountAmount = salesOrder.salesOrderLine.Sum(x => x.discountAmount);
+            _context.Update(salesOrder);
+            await _context.SaveChangesAsync();
 
             return View(salesOrder);
         }
