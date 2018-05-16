@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetTransferInLine(string masterid)
         {
-            return Json(new { data = _context.TransferInLine.Where(x => x.transferInId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.TransferInLine.Include(x => x.product).Where(x => x.transferInId.Equals(masterid)).ToList() });
         }
 
         // POST: api/TransferInLine
