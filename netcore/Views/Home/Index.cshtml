@@ -43,7 +43,7 @@
                         <p>Purchase Orders</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-file-text"></i>
                     </div>
                     <a href="@Url.Action("Index", "PurchaseOrder")" class="small-box-footer">
                         More info <i class="fa fa-arrow-circle-right"></i>
@@ -59,7 +59,7 @@
                         <p>Sales Orders</p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-cart-plus"></i>
                     </div>
                     <a href="@Url.Action("Index", "SalesOrder")" class="small-box-footer">
                         More info <i class="fa fa-arrow-circle-right"></i>
@@ -75,7 +75,7 @@
                         <p>Receiving</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                        <i class="fa fa-truck"></i>
                     </div>
                     <a href="@Url.Action("Index", "Receiving")" class="small-box-footer">
                         More info <i class="fa fa-arrow-circle-right"></i>
@@ -91,7 +91,7 @@
                         <p>Shipment</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-pie-graph"></i>
+                        <i class="fa fa-plane"></i>
                     </div>
                     <a href="@Url.Action("Index", "Shipment")" class="small-box-footer">
                         More info <i class="fa fa-arrow-circle-right"></i>
@@ -119,12 +119,12 @@
                             <table class="table table-hover table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Qty PO</th>
-                                        <th>Qty Receiving</th>
-                                        <th>Qty SO</th>
-                                        <th>Qty Shipment</th>
-                                        <th>Qty On Hand</th>
+                                        <th><i class="fa fa-tags"></i> Product</th>
+                                        <th><i class="fa fa-file-text"></i> Qty Purchase</th>
+                                        <th><i class="fa fa-truck"></i> Qty Receiving</th>
+                                        <th><i class="fa fa-cart-plus"></i> Qty Sales</th>
+                                        <th><i class="fa fa-plane"></i> Qty Shipment</th>
+                                        <th class="text-aqua"><i class="fa fa-check-circle"></i> Qty On Hand</th>
                                     </tr>
                                 </thead>
                                 <tbody>
