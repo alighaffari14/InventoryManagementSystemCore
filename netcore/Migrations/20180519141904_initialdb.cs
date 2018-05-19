@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace netcore.Migrations
 {
-    public partial class inventoryinitialdb : Migration
+    public partial class initialdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -323,8 +323,9 @@ namespace netcore.Migrations
                 {
                     salesOrderId = table.Column<string>(maxLength: 38, nullable: false),
                     HasChild = table.Column<string>(nullable: true),
+                    branchId = table.Column<string>(maxLength: 38, nullable: false),
                     createdAt = table.Column<DateTime>(nullable: false),
-                    customerId = table.Column<string>(maxLength: 38, nullable: true),
+                    customerId = table.Column<string>(maxLength: 38, nullable: false),
                     deliveryAddress = table.Column<string>(maxLength: 50, nullable: true),
                     deliveryDate = table.Column<DateTime>(nullable: false),
                     description = table.Column<string>(maxLength: 100, nullable: true),
@@ -344,11 +345,17 @@ namespace netcore.Migrations
                 {
                     table.PrimaryKey("PK_SalesOrder", x => x.salesOrderId);
                     table.ForeignKey(
+                        name: "FK_SalesOrder_Branch_branchId",
+                        column: x => x.branchId,
+                        principalTable: "Branch",
+                        principalColumn: "branchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_SalesOrder_Customer_customerId",
                         column: x => x.customerId,
                         principalTable: "Customer",
                         principalColumn: "customerId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -357,6 +364,7 @@ namespace netcore.Migrations
                 {
                     purchaseOrderId = table.Column<string>(maxLength: 38, nullable: false),
                     HasChild = table.Column<string>(nullable: true),
+                    branchId = table.Column<string>(maxLength: 38, nullable: false),
                     createdAt = table.Column<DateTime>(nullable: false),
                     deliveryAddress = table.Column<string>(maxLength: 50, nullable: true),
                     deliveryDate = table.Column<DateTime>(nullable: false),
@@ -372,17 +380,23 @@ namespace netcore.Migrations
                     top = table.Column<int>(nullable: false),
                     totalDiscountAmount = table.Column<decimal>(nullable: false),
                     totalOrderAmount = table.Column<decimal>(nullable: false),
-                    vendorId = table.Column<string>(maxLength: 38, nullable: true)
+                    vendorId = table.Column<string>(maxLength: 38, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PurchaseOrder", x => x.purchaseOrderId);
                     table.ForeignKey(
+                        name: "FK_PurchaseOrder_Branch_branchId",
+                        column: x => x.branchId,
+                        principalTable: "Branch",
+                        principalColumn: "branchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_PurchaseOrder_Vendor_vendorId",
                         column: x => x.vendorId,
                         principalTable: "Vendor",
                         principalColumn: "vendorId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -511,7 +525,7 @@ namespace netcore.Migrations
                     salesOrderId = table.Column<string>(maxLength: 38, nullable: false),
                     shipmentDate = table.Column<DateTime>(nullable: false),
                     shipmentNumber = table.Column<string>(maxLength: 20, nullable: false),
-                    warehouseId = table.Column<string>(maxLength: 38, nullable: true)
+                    warehouseId = table.Column<string>(maxLength: 38, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -539,7 +553,7 @@ namespace netcore.Migrations
                         column: x => x.warehouseId,
                         principalTable: "Warehouse",
                         principalColumn: "warehouseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -586,7 +600,7 @@ namespace netcore.Migrations
                     vendorDO = table.Column<string>(maxLength: 50, nullable: false),
                     vendorId = table.Column<string>(maxLength: 38, nullable: true),
                     vendorInvoice = table.Column<string>(maxLength: 50, nullable: true),
-                    warehouseId = table.Column<string>(maxLength: 38, nullable: true)
+                    warehouseId = table.Column<string>(maxLength: 38, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -614,7 +628,7 @@ namespace netcore.Migrations
                         column: x => x.warehouseId,
                         principalTable: "Warehouse",
                         principalColumn: "warehouseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -941,6 +955,11 @@ namespace netcore.Migrations
                 column: "customerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrder_branchId",
+                table: "PurchaseOrder",
+                column: "branchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrder_vendorId",
                 table: "PurchaseOrder",
                 column: "vendorId");
@@ -994,6 +1013,11 @@ namespace netcore.Migrations
                 name: "IX_ReceivingLine_warehouseId",
                 table: "ReceivingLine",
                 column: "warehouseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SalesOrder_branchId",
+                table: "SalesOrder",
+                column: "branchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SalesOrder_customerId",

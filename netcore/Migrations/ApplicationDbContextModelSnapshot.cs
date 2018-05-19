@@ -527,6 +527,7 @@ namespace netcore.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("warehouseId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.HasKey("receivingId");
@@ -714,6 +715,7 @@ namespace netcore.Migrations
                         .HasMaxLength(20);
 
                     b.Property<string>("warehouseId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.HasKey("shipmentId");
@@ -1251,7 +1253,8 @@ namespace netcore.Migrations
 
                     b.HasOne("netcore.Models.Invent.Warehouse", "warehouse")
                         .WithMany()
-                        .HasForeignKey("warehouseId");
+                        .HasForeignKey("warehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.ReceivingLine", b =>
@@ -1314,7 +1317,8 @@ namespace netcore.Migrations
 
                     b.HasOne("netcore.Models.Invent.Warehouse", "warehouse")
                         .WithMany()
-                        .HasForeignKey("warehouseId");
+                        .HasForeignKey("warehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.ShipmentLine", b =>

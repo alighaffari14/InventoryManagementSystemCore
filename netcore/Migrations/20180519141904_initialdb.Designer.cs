@@ -12,8 +12,8 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180519120202_inventoryinitialdb")]
-    partial class inventoryinitialdb
+    [Migration("20180519141904_initialdb")]
+    partial class initialdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -406,6 +406,10 @@ namespace netcore.Migrations
 
                     b.Property<string>("HasChild");
 
+                    b.Property<string>("branchId")
+                        .IsRequired()
+                        .HasMaxLength(38);
+
                     b.Property<DateTime>("createdAt");
 
                     b.Property<string>("deliveryAddress")
@@ -447,9 +451,12 @@ namespace netcore.Migrations
                     b.Property<decimal>("totalOrderAmount");
 
                     b.Property<string>("vendorId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.HasKey("purchaseOrderId");
+
+                    b.HasIndex("branchId");
 
                     b.HasIndex("vendorId");
 
@@ -521,6 +528,7 @@ namespace netcore.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("warehouseId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.HasKey("receivingId");
@@ -583,9 +591,14 @@ namespace netcore.Migrations
 
                     b.Property<string>("HasChild");
 
+                    b.Property<string>("branchId")
+                        .IsRequired()
+                        .HasMaxLength(38);
+
                     b.Property<DateTime>("createdAt");
 
                     b.Property<string>("customerId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.Property<string>("deliveryAddress")
@@ -627,6 +640,8 @@ namespace netcore.Migrations
                     b.Property<decimal>("totalOrderAmount");
 
                     b.HasKey("salesOrderId");
+
+                    b.HasIndex("branchId");
 
                     b.HasIndex("customerId");
 
@@ -701,6 +716,7 @@ namespace netcore.Migrations
                         .HasMaxLength(20);
 
                     b.Property<string>("warehouseId")
+                        .IsRequired()
                         .HasMaxLength(38);
 
                     b.HasKey("shipmentId");
@@ -1199,9 +1215,15 @@ namespace netcore.Migrations
 
             modelBuilder.Entity("netcore.Models.Invent.PurchaseOrder", b =>
                 {
+                    b.HasOne("netcore.Models.Invent.Branch", "branch")
+                        .WithMany()
+                        .HasForeignKey("branchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("netcore.Models.Invent.Vendor", "vendor")
                         .WithMany()
-                        .HasForeignKey("vendorId");
+                        .HasForeignKey("vendorId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.PurchaseOrderLine", b =>
@@ -1232,7 +1254,8 @@ namespace netcore.Migrations
 
                     b.HasOne("netcore.Models.Invent.Warehouse", "warehouse")
                         .WithMany()
-                        .HasForeignKey("warehouseId");
+                        .HasForeignKey("warehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.ReceivingLine", b =>
@@ -1256,9 +1279,15 @@ namespace netcore.Migrations
 
             modelBuilder.Entity("netcore.Models.Invent.SalesOrder", b =>
                 {
+                    b.HasOne("netcore.Models.Invent.Branch", "branch")
+                        .WithMany()
+                        .HasForeignKey("branchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("netcore.Models.Invent.Customer", "customer")
                         .WithMany()
-                        .HasForeignKey("customerId");
+                        .HasForeignKey("customerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.SalesOrderLine", b =>
@@ -1289,7 +1318,8 @@ namespace netcore.Migrations
 
                     b.HasOne("netcore.Models.Invent.Warehouse", "warehouse")
                         .WithMany()
-                        .HasForeignKey("warehouseId");
+                        .HasForeignKey("warehouseId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.ShipmentLine", b =>
