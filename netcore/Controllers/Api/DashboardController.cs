@@ -49,41 +49,51 @@ namespace netcore.Controllers.Api
         [HttpGet("GetBarData")]
         public IActionResult GetBarData()
         {
-
-            List<string> labels = new List<string>()
+            List<string> labels = new List<string>();
+            DateTime from = DateTime.UtcNow.AddMonths(-6);
+            DateTime to = DateTime.UtcNow;
+            for (DateTime i = from.Date; i < to.Date; i = i.AddMonths(1))
             {
-                "January", "February", "March", "April", "May", "June", "July"
-            };
+                labels.Add(i.ToString("MMMM-yy"));
+            }
 
-            List<BarDataItem> datasets = new List<BarDataItem>()
+            BarDataItem po = new BarDataItem();
+            po.label = "Purchase Order";
+            po.fillColor = "rgba(210, 214, 222, 1)";
+            po.strokeColor = "rgba(210, 214, 222, 1)";
+            po.pointColor = "rgba(210, 214, 222, 1)";
+            po.pointStrokeColor = "#c1c7d1";
+            po.pointHighlightFill = "#fff";
+            po.pointHighlightStroke = "rgba(220,220,220,1)";
+            List<int> poCounts = new List<int>();
+            for (DateTime i = from.Date; i < to.Date; i = i.AddMonths(1))
             {
-                new BarDataItem{
-                    label = "Electronics",
-                    fillColor = "rgba(210, 214, 222, 1)",
-                    strokeColor = "rgba(210, 214, 222, 1)",
-                    pointColor = "rgba(210, 214, 222, 1)",
-                    pointStrokeColor = "#c1c7d1",
-                    pointHighlightFill = "#fff",
-                    pointHighlightStroke = "rgba(220,220,220,1)",
-                    data = new List<int>()
-                    {
-                        65, 59, 80, 81, 56, 55, 40
-                    }
-                },
-                 new BarDataItem{
-                    label = "Digital Goods",
-                    fillColor = "rgba(60,141,188,0.9)",
-                    strokeColor = "rgba(60,141,188,0.8)",
-                    pointColor = "#3b8bba",
-                    pointStrokeColor = "rgba(60,141,188,1)",
-                    pointHighlightFill = "#fff",
-                    pointHighlightStroke = "rgba(60,141,188,1)",
-                    data = new List<int>()
-                    {
-                        28, 48, 40, 19, 86, 27, 90
-                    }
-                },
-            };
+                int count = _context.PurchaseOrder.Where(x => x.poDate.Year.Equals(i.Year) && x.poDate.Month.Equals(i.Month)).Count();
+                poCounts.Add(count);
+            }
+            po.data = poCounts;
+
+
+            BarDataItem so = new BarDataItem();
+            so.label = "Sales Order";
+            so.fillColor = "rgba(60,141,188,0.9)";
+            so.strokeColor = "rgba(60,141,188,0.8)";
+            so.pointColor = "#3b8bba";
+            so.pointStrokeColor = "rgba(60,141,188,1)";
+            so.pointHighlightFill = "#fff";
+            so.pointHighlightStroke = "rgba(60,141,188,1)";
+            List<int> soCounts = new List<int>();
+            for (DateTime i = from.Date; i < to.Date; i = i.AddMonths(1))
+            {
+                int count = _context.SalesOrder.Where(x => x.soDate.Year.Equals(i.Year) && x.soDate.Month.Equals(i.Month)).Count();
+                soCounts.Add(count);
+            }
+            so.data = soCounts;
+
+            List<BarDataItem> datasets = new List<BarDataItem>();
+
+            datasets.Add(po);
+            datasets.Add(so);
 
             BarData barData = new BarData();
             barData.labels = labels;
