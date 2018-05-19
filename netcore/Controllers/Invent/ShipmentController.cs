@@ -30,6 +30,7 @@ namespace netcore.Controllers.Invent
             Shipment obj = await _context.Shipment
                 .Include(x => x.customer)
                 .Include(x => x.salesOrder)
+                    .ThenInclude(x => x.branch)
                 .Include(x => x.shipmentLine).ThenInclude(x => x.product)
                 .SingleOrDefaultAsync(x => x.shipmentId.Equals(id));
             return View(obj);
@@ -40,6 +41,7 @@ namespace netcore.Controllers.Invent
             Shipment obj = await _context.Shipment
                 .Include(x => x.customer)
                 .Include(x => x.salesOrder)
+                    .ThenInclude(x => x.branch)
                 .Include(x => x.shipmentLine).ThenInclude(x => x.product)
                 .SingleOrDefaultAsync(x => x.shipmentId.Equals(id));
             return View(obj);

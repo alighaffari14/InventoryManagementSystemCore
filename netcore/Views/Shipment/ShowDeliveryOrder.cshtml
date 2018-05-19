@@ -35,22 +35,24 @@
         <!-- info row -->
         <div class="row invoice-info">
             <div class="col-sm-4 invoice-col">
-                Customer
+                From
+                <address>
+                    <strong>@Model.salesOrder.branch.branchName</strong><br>
+                    @Model.salesOrder.branch.street1<br>
+                    @Model.salesOrder.branch.street2<br>
+                    @Model.salesOrder.branch.city<br>
+                    attn: @Model.salesOrder.picInternal
+                </address>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 invoice-col">
+                To Customer / Delivery Address
                 <address>
                     <strong>@Model.customer.customerName</strong><br>
                     @Model.customer.street1<br>
                     @Model.customer.street2<br>
                     @Model.customer.city<br>
-                    
-                </address>
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
-                Delivery Address
-                <address>
-                    <strong>@Model.salesOrder.deliveryAddress</strong><br>
-                    attn: @Model.salesOrder.picCustomer<br>
-                    <br>
+                    attn: @Model.salesOrder.picCustomer
                 </address>
             </div>
             <!-- /.col -->
