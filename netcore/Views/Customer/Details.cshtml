@@ -157,9 +157,10 @@
                     {
                         "data": "customerLineId",
                         "render": function (data) {
-                            var btnEdit = "<a class='btn btn-default btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
+                            var btnEdit = "<a class='btn btn-primary btn-xs' onclick=ShowPopup('/" + entity + "/Create/" + data + "')><i class='fa fa-pencil'></i></a>";
                             var btnDelete = "<a class='btn btn-danger btn-xs' style='margin-left:2px' onclick=Delete('" + data + "')><i class='fa fa-trash'></i></a>";
-                            return btnEdit + btnDelete;
+                           
+                            return "<div class='tools pull-right'>" + btnEdit + btnDelete + "</div>";
                         }
                     }
                 ],
