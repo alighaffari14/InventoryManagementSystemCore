@@ -30,7 +30,13 @@ namespace netcore.Controllers.Invent
             PurchaseOrder obj = await _context.PurchaseOrder
                 .Include(x => x.vendor)
                 .Include(x => x.purchaseOrderLine).ThenInclude(x => x.product)
+                .Include(x => x.branch)
                 .SingleOrDefaultAsync(x => x.purchaseOrderId.Equals(id));
+
+            obj.totalOrderAmount = obj.purchaseOrderLine.Sum(x => x.totalAmount);
+            obj.totalDiscountAmount = obj.purchaseOrderLine.Sum(x => x.discountAmount);
+            _context.Update(obj);
+
             return View(obj);
         }
 
@@ -39,6 +45,7 @@ namespace netcore.Controllers.Invent
             PurchaseOrder obj = await _context.PurchaseOrder
                 .Include(x => x.vendor)
                 .Include(x => x.purchaseOrderLine).ThenInclude(x => x.product)
+                .Include(x => x.branch)
                 .SingleOrDefaultAsync(x => x.purchaseOrderId.Equals(id));
             return View(obj);
         }
@@ -61,6 +68,7 @@ namespace netcore.Controllers.Invent
             var purchaseOrder = await _context.PurchaseOrder
                     .Include(x => x.purchaseOrderLine)
                     .Include(p => p.vendor)
+                    .Include(x => x.branch)
                         .SingleOrDefaultAsync(m => m.purchaseOrderId == id);
             if (purchaseOrder == null)
             {
@@ -81,6 +89,8 @@ namespace netcore.Controllers.Invent
         {
             PurchaseOrder po = new PurchaseOrder();
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName");
+            Branch defaultBranch = _context.Branch.Where(x => x.isDefaultBranch.Equals(true)).FirstOrDefault();
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", defaultBranch != null ? defaultBranch.branchId : null);
             return View(po);
         }
 
@@ -92,7 +102,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("purchaseOrderId,purchaseOrderNumber,top,poDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,vendorId,picInternal,picVendor,purchaseOrderStatus,totalDiscountAmount,totalOrderAmount,purchaseReceiveNumber,HasChild,createdAt")] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> Create([Bind("purchaseOrderId,purchaseOrderNumber,top,poDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,vendorId,branchId,picInternal,picVendor,purchaseOrderStatus,totalDiscountAmount,totalOrderAmount,purchaseReceiveNumber,HasChild,createdAt")] PurchaseOrder purchaseOrder)
         {
             if (ModelState.IsValid)
             {
@@ -100,6 +110,7 @@ namespace netcore.Controllers.Invent
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = purchaseOrder.purchaseOrderId });
             }
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", purchaseOrder.branchId);
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }
@@ -122,7 +133,7 @@ namespace netcore.Controllers.Invent
             purchaseOrder.totalDiscountAmount = purchaseOrder.purchaseOrderLine.Sum(x => x.discountAmount);
             _context.Update(purchaseOrder);
             await _context.SaveChangesAsync();
-
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", purchaseOrder.branchId);
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }
@@ -132,7 +143,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("purchaseOrderId,purchaseOrderNumber,top,poDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,vendorId,picInternal,picVendor,purchaseOrderStatus,totalDiscountAmount,totalOrderAmount,purchaseReceiveNumber,HasChild,createdAt")] PurchaseOrder purchaseOrder)
+        public async Task<IActionResult> Edit(string id, [Bind("purchaseOrderId,purchaseOrderNumber,top,poDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,vendorId,branchId,picInternal,picVendor,purchaseOrderStatus,totalDiscountAmount,totalOrderAmount,purchaseReceiveNumber,HasChild,createdAt")] PurchaseOrder purchaseOrder)
         {
             if (id != purchaseOrder.purchaseOrderId)
             {
@@ -159,6 +170,7 @@ namespace netcore.Controllers.Invent
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", purchaseOrder.branchId);
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
             return View(purchaseOrder);
         }

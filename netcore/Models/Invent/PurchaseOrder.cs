@@ -54,6 +54,15 @@ namespace netcore.Models.Invent
         public string description { get; set; }
 
         [StringLength(38)]
+        [Required]
+        [Display(Name = "Branch Id")]
+        public string branchId { get; set; }
+
+        [Display(Name = "Branch")]
+        public Branch branch { get; set; }
+
+        [StringLength(38)]
+        [Required]
         [Display(Name = "Vendor Id")]
         public string vendorId { get; set; }
 

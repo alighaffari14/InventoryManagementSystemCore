@@ -11,6 +11,7 @@ namespace netcore.Models.Invent
         public Branch()
         {
             this.createdAt = DateTime.UtcNow;
+            this.isDefaultBranch = false;
         }
 
         [StringLength(38)]

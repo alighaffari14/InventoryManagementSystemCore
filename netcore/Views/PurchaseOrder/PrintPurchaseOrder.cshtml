@@ -40,15 +40,17 @@
                 <div class="col-sm-4 invoice-col">
                     Delivery Address
                     <address>
-                        <strong>@Model.picInternal</strong><br>
+                        <strong>@Model.branch.branchName</strong><br>
+                        @Model.branch.street1<br>
+                        @Model.branch.street2<br>
+                        @Model.branch.city<br>
+                        attn: @Model.picInternal
                         @Model.deliveryAddress<br>
-                        <br>
                     </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>PO @Model.purchaseOrderNumber</b><br>
-                    <br>
+                    <b>PO Number:</b> @Model.purchaseOrderNumber<br>
                     <b>PO Date:</b> @Model.poDate.ToString("dd-MMM-yyyy")<br>
                     <b>Delivery Date:</b> @Model.deliveryDate.ToString("dd-MMM-yyyy")<br>
 
