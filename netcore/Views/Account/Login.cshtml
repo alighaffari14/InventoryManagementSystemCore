@@ -11,11 +11,12 @@
 }
 
 <div class="login-box">
-    <div class="login-logo">
-        <a href="@netcore.MVC.Pages.HomeIndex.Url"><b>IN</b>VENTORY</a>
-    </div>
+    
     <!-- /.login-logo -->
     <div class="login-box-body">
+        <div class="login-logo">
+            <a href="@netcore.MVC.Pages.HomeIndex.Url"><b>IN</b>VENTORY</a>
+        </div>
         <p class="login-box-msg">Sign in to start your session</p>
         <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <div class="form-group has-feedback">
@@ -58,6 +59,9 @@
             <!-- /.social-auth-links -->
             <a asp-action="ForgotPassword">I forgot my password</a><br>
             <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="text-center">Register a new membership</a>
+            <p class="pull-right">
+                <span style="font-style:italic;"><small>*Demo => Email: super@admin.com Password: 123456</small></span>
+            </p>
         </form>
 
 
