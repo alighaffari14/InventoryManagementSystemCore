@@ -6,6 +6,8 @@
 
     ApplicationUser appUser = await UserManager.GetUserAsync(User);
     string controller = (string)ViewContext.RouteData.Values["controller"];
+    string listTitle = ViewData["ListTitle"] as string;
+    string entityIcon = ViewData["EntityIcon"] as string;
 }
 <html>
 <head>
@@ -34,7 +36,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-md-3">
-                        <a asp-action="Create" class="btn btn-primary btn-block margin-bottom"><i class="fa fa-plus"></i> <span>New @controller</span></a>
+                        <a asp-action="Create" class="btn btn-primary btn-block margin-bottom"><i class="@entityIcon"></i> <span>New @controller</span></a>
 
                         <div class="box box-solid">
                             <div class="box-header with-border">
@@ -79,7 +81,7 @@
                     <div class="col-md-9">
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">@controller List</h3>
+                                <h3 class="box-title"><i class="@entityIcon"></i> <span>@listTitle</span></h3>
                                 <div class="box-tools pull-right">
                                     <div class="has-feedback">
                                         <input type="text" id="mainSearch" class="form-control input-sm" placeholder="Search...">
