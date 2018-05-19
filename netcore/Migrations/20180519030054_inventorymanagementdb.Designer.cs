@@ -12,8 +12,8 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180516150306_initialdb")]
-    partial class initialdb
+    [Migration("20180519030054_inventorymanagementdb")]
+    partial class inventorymanagementdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

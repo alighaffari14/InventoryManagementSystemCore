@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace netcore.Migrations
 {
-    public partial class initialdb : Migration
+    public partial class inventorymanagementdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
