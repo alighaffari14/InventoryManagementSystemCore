@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using netcore.Data;
 
 namespace netcore.Controllers.Api
 {
@@ -11,20 +12,38 @@ namespace netcore.Controllers.Api
     [Route("api/Dashboard")]
     public class DashboardController : Controller
     {
+
+        private readonly ApplicationDbContext _context;
+
+        public DashboardController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet("GetPieData")]
         public IActionResult GetPieData()
         {
-            List<PieData> pieDate = new List<PieData>()
+            var productTypes = Enum.GetValues(typeof(Models.Invent.ProductType));
+            List<PieData> pieDatas = new List<PieData>();
+            List<string> colors = new List<string>()
             {
-                new PieData{value = 70, color = "#f56954", highlight = "#f56954", label = "Chrome1"},
-                new PieData{value = 80, color = "#00a65a", highlight = "#00a65a", label = "Chrome2"},
-                new PieData{value = 90, color = "#f39c12", highlight = "#f39c12", label = "Chrome3"},
-                new PieData{value = 20, color = "#00c0ef", highlight = "#00c0ef", label = "Chrome4"},
-                new PieData{value = 50, color = "#3c8dbc", highlight = "#3c8dbc", label = "Chrome5"},
-                new PieData{value = 200, color = "#d2d6de", highlight = "#d2d6de", label = "Chrome6"}
+                "#f56954", "#00a65a", "#f39c12", "#00c0ef", "#3c8dbc", "#d2d6de"
             };
 
-            return Json(pieDate);
+            int i = 0;
+            foreach (var item in productTypes)
+            {
+                int count = _context.Product.Where(x => x.productType.Equals(item)).Count();
+                PieData pieData = new PieData();
+                pieData.value = count;
+                pieData.label = item.ToString();
+                pieData.color = colors[i];
+                pieDatas.Add(pieData);
+                i++;
+                if (i > colors.Count - 1) i = 0;
+            }
+
+            return Json(pieDatas);
         }
 
         [HttpGet("GetBarData")]
