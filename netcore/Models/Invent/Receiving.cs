@@ -60,6 +60,7 @@ namespace netcore.Models.Invent
         public Branch branch { get; set; }
 
         [StringLength(38)]
+        [Required]
         [Display(Name = "Warehouse Id")]
         public string warehouseId { get; set; }
 

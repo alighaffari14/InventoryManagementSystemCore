@@ -43,6 +43,7 @@ namespace netcore.Controllers.Invent
             var salesOrder = await _context.SalesOrder
                     .Include(x => x.salesOrderLine)
                     .Include(s => s.customer)
+                    .Include(x => x.branch)
                         .SingleOrDefaultAsync(m => m.salesOrderId == id);
             if (salesOrder == null)
             {
@@ -62,6 +63,8 @@ namespace netcore.Controllers.Invent
         public IActionResult Create()
         {
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName");
+            Branch defaultBranch = _context.Branch.Where(x => x.isDefaultBranch.Equals(true)).FirstOrDefault();
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", defaultBranch != null ? defaultBranch.branchId : null);
             SalesOrder so = new SalesOrder();
             return View(so);
         }
@@ -72,7 +75,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("salesOrderId,salesOrderNumber,top,soDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,customerId,picInternal,picCustomer,salesOrderStatus,totalDiscountAmount,totalOrderAmount,salesShipmentNumber,HasChild,createdAt")] SalesOrder salesOrder)
+        public async Task<IActionResult> Create([Bind("salesOrderId,salesOrderNumber,top,soDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,customerId,branchId,picInternal,picCustomer,salesOrderStatus,totalDiscountAmount,totalOrderAmount,salesShipmentNumber,HasChild,createdAt")] SalesOrder salesOrder)
         {
             if (ModelState.IsValid)
             {
@@ -80,6 +83,7 @@ namespace netcore.Controllers.Invent
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Details), new { id = salesOrder.salesOrderId });
             }
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", salesOrder.branchId);
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
             return View(salesOrder);
         }
@@ -102,7 +106,7 @@ namespace netcore.Controllers.Invent
             salesOrder.totalDiscountAmount = salesOrder.salesOrderLine.Sum(x => x.discountAmount);
             _context.Update(salesOrder);
             await _context.SaveChangesAsync();
-
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", salesOrder.branchId);
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
             return View(salesOrder);
         }
@@ -112,7 +116,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("salesOrderId,salesOrderNumber,top,soDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,customerId,picInternal,picCustomer,salesOrderStatus,totalDiscountAmount,totalOrderAmount,salesShipmentNumber,HasChild,createdAt")] SalesOrder salesOrder)
+        public async Task<IActionResult> Edit(string id, [Bind("salesOrderId,salesOrderNumber,top,soDate,deliveryDate,deliveryAddress,referenceNumberInternal,referenceNumberExternal,description,customerId,branchId,picInternal,picCustomer,salesOrderStatus,totalDiscountAmount,totalOrderAmount,salesShipmentNumber,HasChild,createdAt")] SalesOrder salesOrder)
         {
             if (id != salesOrder.salesOrderId)
             {
@@ -139,6 +143,7 @@ namespace netcore.Controllers.Invent
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", salesOrder.branchId);
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
             return View(salesOrder);
         }
