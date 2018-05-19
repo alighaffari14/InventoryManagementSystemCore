@@ -26,6 +26,9 @@ namespace netcore.Models.Invent
         [Display(Name = "Branch Description")]
         public string description { get; set; }
 
+        [Display(Name = "Is Default Branch ?")]
+        public bool isDefaultBranch { get; set; } = false;
+
         //IBaseAddress
         [Display(Name = "Street Address 1")]
         [Required]

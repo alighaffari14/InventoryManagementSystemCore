@@ -19,7 +19,14 @@
                     <span asp-validation-for="branchName" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="isDefaultBranch" class="control-label"></label>
+                    <div class="checkbox">
+                        <input asp-for="isDefaultBranch" /> &nbsp; Yes.
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label asp-for="description" class="control-label"></label>
@@ -69,15 +76,34 @@
 </div>
 
 
+@section Styles{
+
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/adminlte/plugins/iCheck/all.css" />
+
+}
 
 
 
 
 
+@section Scripts {
+    <!-- iCheck -->
+    <script src="~/adminlte/plugins/iCheck/icheck.min.js"></script>
 
-            @section Scripts {
-                 @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-            }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' /* optional */
+            });
+        });
+    </script>
+
+}
 
 
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace netcore.Migrations
 {
-    public partial class inventorymanagementdb : Migration
+    public partial class inventoryinitialdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -83,6 +83,7 @@ namespace netcore.Migrations
                     country = table.Column<string>(maxLength: 30, nullable: true),
                     createdAt = table.Column<DateTime>(nullable: false),
                     description = table.Column<string>(maxLength: 50, nullable: true),
+                    isDefaultBranch = table.Column<bool>(nullable: false),
                     province = table.Column<string>(maxLength: 30, nullable: true),
                     street1 = table.Column<string>(maxLength: 50, nullable: false),
                     street2 = table.Column<string>(maxLength: 50, nullable: true)

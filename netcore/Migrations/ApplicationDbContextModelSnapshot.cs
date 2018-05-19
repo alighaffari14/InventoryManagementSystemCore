@@ -251,6 +251,8 @@ namespace netcore.Migrations
                     b.Property<string>("description")
                         .HasMaxLength(50);
 
+                    b.Property<bool>("isDefaultBranch");
+
                     b.Property<string>("province")
                         .HasMaxLength(30);
 

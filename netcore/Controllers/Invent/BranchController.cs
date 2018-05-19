@@ -64,7 +64,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("branchId,branchName,description,street1,street2,city,province,country,createdAt")] Branch branch)
+        public async Task<IActionResult> Create([Bind("branchId,branchName,description,street1,street2,city,province,country,createdAt,isDefaultBranch")] Branch branch)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("branchId,branchName,description,street1,street2,city,province,country,createdAt")] Branch branch)
+        public async Task<IActionResult> Edit(string id, [Bind("branchId,branchName,description,street1,street2,city,province,country,createdAt,isDefaultBranch")] Branch branch)
         {
             if (id != branch.branchId)
             {
@@ -109,6 +109,16 @@ namespace netcore.Controllers.Invent
                 {
                     _context.Update(branch);
                     await _context.SaveChangesAsync();
+
+                    if (branch.isDefaultBranch)
+                    {
+                        List<Branch> others = await _context.Branch.Where(x => !x.branchId.Equals(branch.branchId)).ToListAsync();
+                        foreach (var item in others)
+                        {
+                            item.isDefaultBranch = false;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

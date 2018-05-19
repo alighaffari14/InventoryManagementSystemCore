@@ -12,8 +12,8 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180519030054_inventorymanagementdb")]
-    partial class inventorymanagementdb
+    [Migration("20180519120202_inventoryinitialdb")]
+    partial class inventoryinitialdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -251,6 +251,8 @@ namespace netcore.Migrations
 
                     b.Property<string>("description")
                         .HasMaxLength(50);
+
+                    b.Property<bool>("isDefaultBranch");
 
                     b.Property<string>("province")
                         .HasMaxLength(30);
