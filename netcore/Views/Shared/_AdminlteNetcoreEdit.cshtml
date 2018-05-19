@@ -6,6 +6,7 @@
 
     ApplicationUser appUser = await UserManager.GetUserAsync(User);
     string controller = (string)ViewContext.RouteData.Values["controller"];
+    string entityIcon = ViewData["EntityIcon"] as string;
 }
 <html>
 <head>
@@ -32,7 +33,7 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        Edit @controller
+                        <i class="@entityIcon"></i> Edit @controller
                     </h1>
                 </section>
                 <!-- Main content -->
