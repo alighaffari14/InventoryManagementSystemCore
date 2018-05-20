@@ -97,6 +97,11 @@ namespace netcore.Controllers.Invent
                     return View(transferOut);
                 }
 
+                TransferOrder to = await _context.TransferOrder.Where(x => x.transferOrderId.Equals(transferOut.transferOrderId)).FirstOrDefaultAsync();
+                transferOut.warehouseIdFrom = to.warehouseIdFrom;
+                transferOut.warehouseIdTo = to.warehouseIdTo;
+
+
                 transferOut.warehouseFrom = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOut.warehouseIdFrom));
                 transferOut.branchFrom = transferOut.warehouseFrom.branch;
                 transferOut.warehouseTo = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOut.warehouseIdTo));
