@@ -92,7 +92,7 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
-                                
+
                                 <div class="table-responsive mailbox-messages">
                                     @RenderBody()
                                     <!-- /.table -->
@@ -101,10 +101,15 @@
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer no-padding">
-                                
+
                             </div>
                         </div>
-                        <!-- /. box -->
+                        <div class="callout callout-info" style="margin-bottom: 0!important;">
+                            <h4><i class="fa fa-info"></i> Info:</h4>
+                            <p>
+                                @ViewBag.IndexInfo
+                            </p>
+                        </div>
                     </div>
                     <!-- /.col -->
                 </div>

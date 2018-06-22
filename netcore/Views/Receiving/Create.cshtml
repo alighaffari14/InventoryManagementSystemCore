@@ -39,7 +39,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="receivingDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="receivingDate" value="@Model.receivingDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="receivingDate" class="text-danger"></span>
                 </div>

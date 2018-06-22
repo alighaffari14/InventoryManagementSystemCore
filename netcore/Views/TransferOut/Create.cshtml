@@ -27,7 +27,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="transferOutDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="transferOutDate" value="@Model.transferOutDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="transferOutDate" class="text-danger"></span>
                 </div>

@@ -59,7 +59,7 @@ namespace netcore.Controllers.Invent
         public IActionResult Create()
         {
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
-            ViewData["purchaseOrderId"] = new SelectList(_context.PurchaseOrder, "purchaseOrderId", "purchaseOrderNumber");
+            ViewData["purchaseOrderId"] = new SelectList(_context.PurchaseOrder.Where(x => x.purchaseOrderStatus == PurchaseOrderStatus.Open).ToList(), "purchaseOrderId", "purchaseOrderNumber");
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName");
             ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             Receiving rcv = new Receiving();
@@ -78,7 +78,7 @@ namespace netcore.Controllers.Invent
         {
             if (ModelState.IsValid)
             {
-                //check purchase order
+                //check receiving
                 Receiving check = await _context.Receiving.SingleOrDefaultAsync(x => x.purchaseOrderId.Equals(receiving.purchaseOrderId));
                 if (check != null)
                 {
@@ -97,6 +97,11 @@ namespace netcore.Controllers.Invent
                 receiving.vendor = receiving.purchaseOrder.vendor;
 
                 _context.Add(receiving);
+
+                //change status of purchase order to completed
+                receiving.purchaseOrder.purchaseOrderStatus = PurchaseOrderStatus.Completed;
+                _context.PurchaseOrder.Update(receiving.purchaseOrder);
+
                 await _context.SaveChangesAsync();
 
                 //auto create receiving line, full receive

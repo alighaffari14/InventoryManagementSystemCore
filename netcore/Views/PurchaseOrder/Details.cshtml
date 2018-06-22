@@ -163,7 +163,12 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","PurchaseOrderLine", new { masterid = Model.purchaseOrderId })')"><i class="fa fa-plus"></i> Add New PurchaseOrderLine</a>
+                            @if (Model.purchaseOrderStatus != netcore.Models.Invent.PurchaseOrderStatus.Completed)
+                            {
+                                <a class="btn btn-success" style="margin-bottom:10px" onclick="ShowPopup('@Url.Action("Create","PurchaseOrderLine", new { masterid = Model.purchaseOrderId })')"><i class="fa fa-plus"></i> Add New PurchaseOrderLine</a>
+
+                            }
+                            
                         </div>
                     </div>
                 </div>

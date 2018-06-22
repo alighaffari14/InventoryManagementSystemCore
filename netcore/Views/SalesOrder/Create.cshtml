@@ -43,7 +43,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="soDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="soDate" value="@Model.soDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="soDate" class="text-danger"></span>
                 </div>
@@ -55,7 +55,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="deliveryDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="deliveryDate" value="@Model.deliveryDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="deliveryDate" class="text-danger"></span>
                 </div>

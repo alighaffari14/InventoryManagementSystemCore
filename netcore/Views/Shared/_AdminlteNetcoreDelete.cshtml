@@ -8,6 +8,11 @@
     string controller = (string)ViewContext.RouteData.Values["controller"];
     string id = (string)ViewContext.RouteData.Values["id"];
     string entityIcon = ViewData["EntityIcon"] as string;
+    bool isCanDeleted = true;
+    if (ViewData["IsCanDeleted"] != null && (bool)ViewData["IsCanDeleted"] != true)
+    {
+        isCanDeleted = false;
+    }
 }
 <html>
 <head>
@@ -51,7 +56,12 @@
                                 <div class="form-group">
                                     <form asp-action="Delete">
                                         <input type="hidden" asp-for="@id" />
-                                        <input type="submit" value="Delete" class="btn btn-danger" />
+                                        @if (isCanDeleted)
+                                        {
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+
+                                        }
+                                        
                                         <a asp-action="Index" class="btn btn-default">Back to List</a>
                                     </form>
                                 </div>

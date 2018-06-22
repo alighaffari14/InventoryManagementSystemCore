@@ -208,9 +208,12 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var purchaseOrder = await _context.PurchaseOrder.SingleOrDefaultAsync(m => m.purchaseOrderId == id);
+            var purchaseOrder = await _context.PurchaseOrder
+                .Include(x => x.purchaseOrderLine)
+                .SingleOrDefaultAsync(m => m.purchaseOrderId == id);
             try
             {
+                _context.PurchaseOrderLine.RemoveRange(purchaseOrder.purchaseOrderLine);
                 _context.PurchaseOrder.Remove(purchaseOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
