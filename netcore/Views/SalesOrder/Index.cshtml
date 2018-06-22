@@ -67,11 +67,11 @@
             <tr>
                 <td>
                     <div class="tools">
-                        <a asp-action="Edit" asp-route-id="@item.salesOrderId"><i class="fa fa-pencil"></i></a> 
-                        <a asp-action="Details" asp-route-id="@item.salesOrderId"><i class="fa fa-list"></i></a> 
-                        <a asp-action="Delete" asp-route-id="@item.salesOrderId"><i class="fa fa-trash text-red"></i></a>
+                        <a asp-action="Edit" asp-route-id="@item.salesOrderId" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.salesOrderId" class="btn btn-primary btn-xs"><i class="fa fa-list"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.salesOrderId" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
                     </div>
-                    
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.salesOrderNumber)
@@ -80,7 +80,7 @@
                     @Html.DisplayFor(modelItem => item.top)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.soDate)
+                    @item.soDate.ToString("dd-MMM-yyyy")
                 </td>
                 <td class="hidden">
                     @Html.DisplayFor(modelItem => item.deliveryDate)
@@ -104,7 +104,27 @@
                     @Html.DisplayFor(modelItem => item.picCustomer)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.salesOrderStatus)
+                    @if (item.salesOrderStatus == netcore.Models.Invent.SalesOrderStatus.Completed)
+                    {
+                        <span class="label label-success">
+                            @Html.DisplayFor(modelItem => item.salesOrderStatus)
+                        </span>
+
+                    }
+                    @if (item.salesOrderStatus == netcore.Models.Invent.SalesOrderStatus.Open)
+                    {
+                        <span class="label label-primary">
+                            @Html.DisplayFor(modelItem => item.salesOrderStatus)
+                        </span>
+
+                    }
+                    @if (item.salesOrderStatus == netcore.Models.Invent.SalesOrderStatus.Draft)
+                    {
+                        <span class="label label-warning">
+                            @Html.DisplayFor(modelItem => item.salesOrderStatus)
+                        </span>
+
+                    }
                 </td>
                 <td class="hidden">
                     @Html.DisplayFor(modelItem => item.totalDiscountAmount)

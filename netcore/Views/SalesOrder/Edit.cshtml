@@ -4,18 +4,22 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_AdminlteNetcoreEdit.cshtml";
     ViewData["EntityIcon"] = "fa fa-cart-plus";
+    ViewData["EditInfo"] = " SO have three status: 1. Draft (Unconfirmed SO, not ready for shipment), 2. Open (Confirmed SO, ready for shipment) and 3. Completed (Closed SO, already ship the order). Change status from [Draft] to [Open] to confirm the order. [Completed] status is auto set when SO used in Product Shipment / Delivery order.";
+
 }
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div class="row">
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="salesOrderId" />
+        <input type="hidden" asp-for="salesOrderNumber" />
+
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label asp-for="salesOrderNumber" class="control-label"></label>
-                    <input asp-for="salesOrderNumber" class="form-control" />
+                    <input asp-for="salesOrderNumber" class="form-control" disabled />
                     <span asp-validation-for="salesOrderNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -42,7 +46,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="soDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="soDate" value="@Model.soDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="soDate" class="text-danger"></span>
                 </div>
@@ -54,7 +58,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input asp-for="deliveryDate" class="form-control pull-right datepicker" type="text" />
+                        <input asp-for="deliveryDate" value="@Model.deliveryDate.ToString("MM/dd/yyyy")" class="form-control pull-right datepicker" type="text" />
                     </div>
                     <span asp-validation-for="deliveryDate" class="text-danger"></span>
                 </div>

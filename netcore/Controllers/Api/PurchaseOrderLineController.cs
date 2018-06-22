@@ -41,6 +41,13 @@ namespace netcore.Controllers.Api
                 return BadRequest(ModelState);
             }
 
+            PurchaseOrder purchaseOrder = await _context.PurchaseOrder.Where(x => x.purchaseOrderId.Equals(purchaseOrderLine.purchaseOrderId)).FirstOrDefaultAsync();
+
+            if (purchaseOrder.purchaseOrderStatus == PurchaseOrderStatus.Completed)
+            {
+                return Json(new { success = false, message = "Error. Can not edit [Completed] order" });
+            }
+
             purchaseOrderLine.totalAmount = (decimal)purchaseOrderLine.qty * purchaseOrderLine.price;
 
             if (purchaseOrderLine.purchaseOrderLineId == string.Empty)
@@ -69,10 +76,18 @@ namespace netcore.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var purchaseOrderLine = await _context.PurchaseOrderLine.SingleOrDefaultAsync(m => m.purchaseOrderLineId == id);
+            var purchaseOrderLine = await _context.PurchaseOrderLine
+                .Include(x => x.purchaseOrder)
+                .SingleOrDefaultAsync(m => m.purchaseOrderLineId == id);
+
             if (purchaseOrderLine == null)
             {
                 return NotFound();
+            }
+
+            if (purchaseOrderLine.purchaseOrder.purchaseOrderStatus == PurchaseOrderStatus.Completed)
+            {
+                return Json(new { success = false, message = "Error. Can not delete [Completed] order" });
             }
 
             _context.PurchaseOrderLine.Remove(purchaseOrderLine);

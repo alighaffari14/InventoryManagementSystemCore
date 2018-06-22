@@ -257,7 +257,9 @@
                             ShowMessage(data.message);
                             dataTable.ajax.reload();
                         } else {
+                            popup.modal('hide');
                             ShowMessageError(data.message);
+                            dataTable.ajax.reload();
                         }
                     }
                 });

@@ -5,6 +5,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
     ViewData["EntityIcon"] = "fa fa-cart-plus";
+    ViewData["CreateInfo"] = "Sales Order (SO) is a confirmation document sent to your customer before delivering the goods (shipment). There are three status of SO: 1. Draft (Unconfirmed SO, not ready for shipment), 2. Open (Confirmed SO, ready for shipment) and 3. Completed (Closed SO, already shiped the products).";
 }
 
 
@@ -12,11 +13,14 @@
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="salesOrderId" />
+        <input type="hidden" asp-for="salesOrderNumber" />
+        <input type="hidden" asp-for="salesOrderStatus" />
+
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label asp-for="salesOrderNumber" class="control-label"></label>
-                    <input asp-for="salesOrderNumber" class="form-control" />
+                    <input asp-for="salesOrderNumber" class="form-control" disabled/>
                     <span asp-validation-for="salesOrderNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -71,7 +75,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="salesOrderStatus" class="control-label"></label>
-                    <select asp-for="salesOrderStatus" class="form-control select2" asp-items="Html.GetEnumSelectList<netcore.Models.Invent.SalesOrderStatus>()"></select>
+                    <select asp-for="salesOrderStatus" class="form-control select2" asp-items="Html.GetEnumSelectList<netcore.Models.Invent.SalesOrderStatus>()" disabled></select>
                     <span asp-validation-for="salesOrderStatus" class="text-danger"></span>
                 </div>
             </div>

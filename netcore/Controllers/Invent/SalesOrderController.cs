@@ -108,6 +108,8 @@ namespace netcore.Controllers.Invent
             await _context.SaveChangesAsync();
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", salesOrder.branchId);
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName", salesOrder.customerId);
+            TempData["SalesOrderStatus"] = salesOrder.salesOrderStatus;
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             return View(salesOrder);
         }
 
@@ -121,6 +123,18 @@ namespace netcore.Controllers.Invent
             if (id != salesOrder.salesOrderId)
             {
                 return NotFound();
+            }
+
+            if ((SalesOrderStatus)TempData["SalesOrderStatus"] == SalesOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit [Completed] order.";
+                return RedirectToAction(nameof(Edit), new { id = salesOrder.salesOrderId});
+            }
+
+            if (salesOrder.salesOrderStatus== SalesOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit status to [Completed].";
+                return RedirectToAction(nameof(Edit), new { id = salesOrder.salesOrderId});
             }
 
             if (ModelState.IsValid)
@@ -181,9 +195,12 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var salesOrder = await _context.SalesOrder.SingleOrDefaultAsync(m => m.salesOrderId == id);
+            var salesOrder = await _context.SalesOrder
+                .Include(x => x.salesOrderLine)
+                .SingleOrDefaultAsync(m => m.salesOrderId == id);
             try
             {
+                _context.SalesOrderLine.RemoveRange(salesOrder.salesOrderLine);
                 _context.SalesOrder.Remove(salesOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

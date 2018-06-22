@@ -252,7 +252,9 @@
                             ShowMessage(data.message);
                             dataTable.ajax.reload();
                         } else {
+                            popup.modal('hide');
                             ShowMessageError(data.message);
+                            dataTable.ajax.reload();
                         }
                     }
                 });
@@ -280,6 +282,7 @@
                             dataTable.ajax.reload();
                         } else {
                             ShowMessageError(data.message);
+                            dataTable.ajax.reload();
                         }
                     }
                 });

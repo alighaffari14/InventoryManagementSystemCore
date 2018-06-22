@@ -82,7 +82,7 @@ namespace netcore.Controllers.Invent
         {
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName");
-            ViewData["salesOrderId"] = new SelectList(_context.SalesOrder, "salesOrderId", "salesOrderNumber");
+            ViewData["salesOrderId"] = new SelectList(_context.SalesOrder.Where(x => x.salesOrderStatus == SalesOrderStatus.Open), "salesOrderId", "salesOrderNumber");
             ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             Shipment shipment = new Shipment();
             return View(shipment);
@@ -101,7 +101,9 @@ namespace netcore.Controllers.Invent
             if (ModelState.IsValid)
             {
                 //check sales order
-                Shipment check = await _context.Shipment.SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
+                Shipment check = await _context.Shipment
+                    .Include(x => x.salesOrder)
+                    .SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
                 if (check != null)
                 {
                     ViewData["StatusMessage"] = "Error. Sales order already shipped. " + check.shipmentNumber;
@@ -117,6 +119,10 @@ namespace netcore.Controllers.Invent
                 shipment.branch = shipment.warehouse.branch;
                 shipment.salesOrder = await _context.SalesOrder.Include(x => x.customer).SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
                 shipment.customer = shipment.salesOrder.customer;
+
+                //change status of salesorder
+                shipment.salesOrder.salesOrderStatus = SalesOrderStatus.Completed;
+                _context.Update(shipment.salesOrder);
 
                 _context.Add(shipment);
                 await _context.SaveChangesAsync();
@@ -235,10 +241,18 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var shipment = await _context.Shipment.Include(x => x.shipmentLine).SingleOrDefaultAsync(m => m.shipmentId == id);
+            var shipment = await _context.Shipment
+                .Include(x => x.salesOrder)
+                .Include(x => x.shipmentLine)
+                .SingleOrDefaultAsync(m => m.shipmentId == id);
             try
             {
+                _context.ShipmentLine.RemoveRange(shipment.shipmentLine);
                 _context.Shipment.Remove(shipment);
+
+                //rollback status to open
+                shipment.salesOrder.salesOrderStatus = SalesOrderStatus.Open;
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -5,6 +5,8 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
     ViewData["EntityIcon"] = "fa fa-file-text";
+    ViewData["CreateInfo"] = "Purchase Order (PO) is a commercial document issued by your company as a buyer to your vendor as a products seller." +
+            " There are three status of PO: 1. Draft (Unconfirmed PO, not ready to receive), 2. Open (Confirmed PO, ready to receive) and 3. Completed (Closed PO, already receive the products).";
 }
 
 
@@ -12,12 +14,14 @@
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="purchaseOrderId" />
-        
+        <input type="hidden" asp-for="purchaseOrderNumber" />
+        <input type="hidden" asp-for="purchaseOrderStatus" />
+
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
                     <label asp-for="purchaseOrderNumber" class="control-label"></label>
-                    <input asp-for="purchaseOrderNumber" class="form-control" />
+                    <input asp-for="purchaseOrderNumber" class="form-control" disabled />
                     <span asp-validation-for="purchaseOrderNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -72,7 +76,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="purchaseOrderStatus" class="control-label"></label>
-                    <select asp-for="purchaseOrderStatus" class="form-control select2" asp-items="Html.GetEnumSelectList<netcore.Models.Invent.PurchaseOrderStatus>()"></select>
+                    <select asp-for="purchaseOrderStatus" class="form-control select2" asp-items="Html.GetEnumSelectList<netcore.Models.Invent.PurchaseOrderStatus>()" disabled></select>
                     <span asp-validation-for="purchaseOrderStatus" class="text-danger"></span>
                 </div>
             </div>
@@ -84,7 +88,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group">
             <label asp-for="deliveryAddress" class="control-label"></label>
             <input asp-for="deliveryAddress" class="form-control" />

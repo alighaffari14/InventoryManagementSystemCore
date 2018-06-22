@@ -79,6 +79,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-md-9">
+                        
                         <div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title"><i class="@entityIcon text-primary"></i> <span>@listTitle</span></h3>
@@ -92,7 +93,13 @@
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
-
+                                <div class="mailbox-controls">
+                                    <div class="text-center">
+                                        <button type="button" id="btn-export-excel" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i></button>
+                                        <button type="button" id="btn-export-pdf" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i></button>
+                                        <button type="button" id="btn-export-csv" class="btn btn-primary btn-sm"><i class="fa fa-file-text-o"></i></button>
+                                    </div>
+                                </div>
                                 <div class="table-responsive mailbox-messages">
                                     @RenderBody()
                                     <!-- /.table -->
@@ -134,11 +141,37 @@
                 "info": false,
                 "searching": true,
                 "dom": 'lrtip',
-                "scrollX": false
+                "scrollX": false,
+                "buttons": [
+                            { 
+                                extend: 'csv',
+                                filename: '@controller-csv'
+                            },
+                            { 
+                                extend: 'pdf',      
+                                filename: '@controller-pdf'
+                            },
+                            { 
+                                extend: 'excel',
+                                filename: '@controller-excel'
+                            }
+                        ]
             });
 
             $('#mainSearch').keyup(function () {
                 mainTable.search($(this).val()).draw();
+            })
+
+            $("#btn-export-csv").on("click", function() {
+                mainTable.button( '.buttons-csv' ).trigger();
+            })
+
+            $("#btn-export-excel").on("click", function() {
+                mainTable.button( '.buttons-excel' ).trigger();
+            })
+
+            $("#btn-export-pdf").on("click", function() {
+                mainTable.button( '.buttons-pdf' ).trigger();
             })
 
         });

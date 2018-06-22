@@ -135,6 +135,8 @@ namespace netcore.Controllers.Invent
             await _context.SaveChangesAsync();
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName", purchaseOrder.branchId);
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName", purchaseOrder.vendorId);
+            TempData["PurchaseOrderStatus"] = purchaseOrder.purchaseOrderStatus;
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             return View(purchaseOrder);
         }
 
@@ -148,6 +150,19 @@ namespace netcore.Controllers.Invent
             if (id != purchaseOrder.purchaseOrderId)
             {
                 return NotFound();
+            }
+            
+
+            if ((PurchaseOrderStatus)TempData["PurchaseOrderStatus"] == PurchaseOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit [Completed] order.";
+                return RedirectToAction(nameof(Edit), new { id = purchaseOrder.purchaseOrderId });
+            }
+
+            if (purchaseOrder.purchaseOrderStatus == PurchaseOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit status to [Completed].";
+                return RedirectToAction(nameof(Edit), new { id = purchaseOrder.purchaseOrderId });
             }
 
             if (ModelState.IsValid)
