@@ -25,6 +25,18 @@ namespace netcore.Controllers.Invent
             _context = context;
         }
 
+        public IActionResult GetWarehouseByOrder(string purchaseOrderId)
+        {
+            PurchaseOrder po = _context.PurchaseOrder
+                .Include(x => x.branch)
+                .Where(x => x.purchaseOrderId.Equals(purchaseOrderId)).FirstOrDefault();
+
+            List<Warehouse> warehouseList = _context.Warehouse.Where(x => x.branchId.Equals(po.branch.branchId)).ToList();
+            warehouseList.Insert(0, new Warehouse { warehouseId = "0", warehouseName = "Select" });
+
+            return Json(new SelectList(warehouseList, "warehouseId", "warehouseName"));
+        }
+
         // GET: Receiving
         public async Task<IActionResult> Index()
         {
@@ -58,8 +70,11 @@ namespace netcore.Controllers.Invent
         // GET: Receiving/Create
         public IActionResult Create()
         {
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
-            ViewData["purchaseOrderId"] = new SelectList(_context.PurchaseOrder.Where(x => x.purchaseOrderStatus == PurchaseOrderStatus.Open).ToList(), "purchaseOrderId", "purchaseOrderNumber");
+            List<PurchaseOrder> poList = _context.PurchaseOrder.Where(x => x.purchaseOrderStatus == PurchaseOrderStatus.Open).ToList();
+            poList.Insert(0, new PurchaseOrder { purchaseOrderId = "0", purchaseOrderNumber = "Select" });
+            ViewData["purchaseOrderId"] = new SelectList(poList, "purchaseOrderId", "purchaseOrderNumber");
             ViewData["vendorId"] = new SelectList(_context.Vendor, "vendorId", "vendorName");
             ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             Receiving rcv = new Receiving();
@@ -76,6 +91,12 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("receivingId,purchaseOrderId,receivingNumber,receivingDate,vendorId,vendorDO,vendorInvoice,branchId,warehouseId,HasChild,createdAt")] Receiving receiving)
         {
+            if (receiving.purchaseOrderId == "0" || receiving.warehouseId == "0")
+            {
+                TempData["StatusMessage"] = "Error. Purchase order or warehouse is not valid. Please select valid purchase order and warehouse";
+                return RedirectToAction(nameof(Create));
+            }
+
             if (ModelState.IsValid)
             {
                 //check receiving

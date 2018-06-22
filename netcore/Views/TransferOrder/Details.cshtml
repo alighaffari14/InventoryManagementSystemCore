@@ -4,6 +4,7 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_AdminlteNetcoreDetails.cshtml";
     ViewData["EntityIcon"] = "fa fa-recycle";
+    ViewData["DetailInfo"] = "If the transfer process already running (goods issue and goods receive), products can not be edited, deleted or added.";
 }
 
 
@@ -123,7 +124,16 @@
         <!-- /.box -->
     </div>
     <div class="col-md-3">
+        @if (!String.IsNullOrEmpty(ViewBag.DetailInfo))
+        {
+            <div class="callout callout-info" style="margin-bottom: 0!important;">
+                <h4><i class="fa fa-info"></i> Info:</h4>
+                <p>
+                    @ViewBag.DetailInfo
+                </p>
+            </div>
 
+        }
     </div>
 </div>
 
@@ -202,7 +212,9 @@
                             ShowMessage(data.message);
                             dataTable.ajax.reload();
                         } else {
+                            popup.modal('hide');
                             ShowMessageError(data.message);
+                            dataTable.ajax.reload();
                         }
                     }
                 });
@@ -230,6 +242,7 @@
                             dataTable.ajax.reload();
                         } else {
                             ShowMessageError(data.message);
+                            dataTable.ajax.reload();
                         }
                     }
                 });

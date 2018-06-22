@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.transferOrderNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.transferOrderDate)
+                @Html.DisplayNameFor(model => model.transferOrderStatus)
             </th>
             <th class="hidden">
                 @Html.DisplayNameFor(model => model.description)
@@ -56,7 +56,27 @@
                     @Html.DisplayFor(modelItem => item.transferOrderNumber)
                 </td>
                 <td>
-                    @item.transferOrderDate.Date.ToString("dd-MMM-yyyy")
+                    @if (item.transferOrderStatus == netcore.Models.Invent.TransferOrderStatus.Completed)
+                    {
+                        <span class="label label-success">
+                            @Html.DisplayFor(modelItem => item.transferOrderStatus)
+                        </span>
+
+                    }
+                    @if (item.transferOrderStatus == netcore.Models.Invent.TransferOrderStatus.Open)
+                    {
+                        <span class="label label-primary">
+                            @Html.DisplayFor(modelItem => item.transferOrderStatus)
+                        </span>
+
+                    }
+                    @if (item.transferOrderStatus == netcore.Models.Invent.TransferOrderStatus.Draft)
+                    {
+                        <span class="label label-warning">
+                            @Html.DisplayFor(modelItem => item.transferOrderStatus)
+                        </span>
+
+                    }
                 </td>
                 <td class="hidden">
                     @Html.DisplayFor(modelItem => item.description)
@@ -68,13 +88,17 @@
                     @Html.DisplayFor(modelItem => item.branchIdFrom)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.isIssued)
                     @Html.DisplayFor(modelItem => item.warehouseFrom.warehouseName)
+
                 </td>
                 <td class="hidden">
                     @Html.DisplayFor(modelItem => item.branchIdTo)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.isReceived)
                     @Html.DisplayFor(modelItem => item.warehouseTo.warehouseName)
+
                 </td>
 
             </tr>

@@ -13,6 +13,9 @@ namespace netcore.Models.Invent
             this.createdAt = DateTime.UtcNow;
             this.transferOrderNumber = DateTime.UtcNow.Date.ToString("yyyyMMdd") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper() + "#TO";
             this.transferOrderDate = DateTime.UtcNow;
+            this.transferOrderStatus = TransferOrderStatus.Draft;
+            this.isIssued = false;
+            this.isReceived = false;
         }
 
         [StringLength(38)]
@@ -65,6 +68,15 @@ namespace netcore.Models.Invent
 
         [Display(Name = "To Warehouse")]
         public Warehouse warehouseTo { get; set; }
+
+        [Display(Name = "Transfer Order Status")]
+        public TransferOrderStatus transferOrderStatus { get; set; }
+
+        [Display(Name = "Is Issued")]
+        public bool isIssued { get; set; }
+
+        [Display(Name = "Is Received")]
+        public bool isReceived { get; set; }
 
         [Display(Name = "Transfer Order Lines")]
         public List<TransferOrderLine> transferOrderLine { get; set; } = new List<TransferOrderLine>();

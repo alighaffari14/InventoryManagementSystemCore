@@ -64,6 +64,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferOrder/Create
         public IActionResult Create()
         {
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
@@ -80,8 +81,14 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("transferOrderId,transferOrderNumber,transferOrderDate,description,picName,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOrder transferOrder)
+        public async Task<IActionResult> Create([Bind("transferOrderId,transferOrderStatus,transferOrderNumber,transferOrderDate,description,picName,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOrder transferOrder)
         {
+            if (transferOrder.warehouseIdFrom == transferOrder.warehouseIdTo)
+            {
+                TempData["StatusMessage"] = "Error. Warehouse from and to are the same. Transfer order only working if from and to warehouse are different";
+                return RedirectToAction(nameof(Create));
+            }
+
             if (ModelState.IsValid)
             {
                 transferOrder.warehouseFrom = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOrder.warehouseIdFrom));
@@ -115,6 +122,8 @@ namespace netcore.Controllers.Invent
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdTo"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
+            TempData["TransferOrderStatus"] = transferOrder.transferOrderStatus;
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             return View(transferOrder);
         }
 
@@ -123,11 +132,30 @@ namespace netcore.Controllers.Invent
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("transferOrderId,transferOrderNumber,transferOrderDate,description,picName,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOrder transferOrder)
+        public async Task<IActionResult> Edit(string id, [Bind("transferOrderId,isIssued,isReceived,transferOrderStatus,transferOrderNumber,transferOrderDate,description,picName,branchIdFrom,warehouseIdFrom,branchIdTo,warehouseIdTo,HasChild,createdAt")] TransferOrder transferOrder)
         {
             if (id != transferOrder.transferOrderId)
             {
                 return NotFound();
+            }
+
+            if ((TransferOrderStatus)TempData["TransferOrderStatus"] == TransferOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit [Completed] order.";
+                return RedirectToAction(nameof(Edit), new { id = transferOrder.transferOrderId });
+            }
+
+            if (transferOrder.transferOrderStatus == TransferOrderStatus.Completed)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit status to [Completed].";
+                return RedirectToAction(nameof(Edit), new { id = transferOrder.transferOrderId });
+            }
+
+            if (transferOrder.isIssued == true
+                || transferOrder.isReceived == true)
+            {
+                TempData["StatusMessage"] = "Error. Can not edit [Open] order that already process the goods issue or goods receive.";
+                return RedirectToAction(nameof(Edit), new { id = transferOrder.transferOrderId });
             }
 
             if (ModelState.IsValid)
@@ -189,9 +217,12 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var transferOrder = await _context.TransferOrder.SingleOrDefaultAsync(m => m.transferOrderId == id);
+            var transferOrder = await _context.TransferOrder
+                .Include(x => x.transferOrderLine)
+                .SingleOrDefaultAsync(m => m.transferOrderId == id);
             try
             {
+                _context.TransferOrderLine.RemoveRange(transferOrder.transferOrderLine);
                 _context.TransferOrder.Remove(transferOrder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

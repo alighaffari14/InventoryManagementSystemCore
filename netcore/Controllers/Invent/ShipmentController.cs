@@ -25,6 +25,19 @@ namespace netcore.Controllers.Invent
             _context = context;
         }
 
+       
+        public IActionResult GetWarehouseByOrder(string salesOrderId)
+        {
+            SalesOrder so = _context.SalesOrder
+                .Include(x => x.branch)
+                .Where(x => x.salesOrderId.Equals(salesOrderId)).FirstOrDefault();
+
+            List<Warehouse> warehouseList = _context.Warehouse.Where(x => x.branchId.Equals(so.branch.branchId)).ToList();
+            warehouseList.Insert(0, new Warehouse { warehouseId = "0", warehouseName = "Select" });
+
+            return Json(new SelectList(warehouseList, "warehouseId", "warehouseName"));
+        }
+
         public async Task<IActionResult> ShowDeliveryOrder(string id)
         {
             Shipment obj = await _context.Shipment
@@ -80,9 +93,12 @@ namespace netcore.Controllers.Invent
         // GET: Shipment/Create
         public IActionResult Create()
         {
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             ViewData["branchId"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["customerId"] = new SelectList(_context.Customer, "customerId", "customerName");
-            ViewData["salesOrderId"] = new SelectList(_context.SalesOrder.Where(x => x.salesOrderStatus == SalesOrderStatus.Open), "salesOrderId", "salesOrderNumber");
+            List<SalesOrder> soList = _context.SalesOrder.Where(x => x.salesOrderStatus == SalesOrderStatus.Open).ToList();
+            soList.Insert(0, new SalesOrder { salesOrderId = "0", salesOrderNumber = "Select" });
+            ViewData["salesOrderId"] = new SelectList(soList, "salesOrderId", "salesOrderNumber");
             ViewData["warehouseId"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             Shipment shipment = new Shipment();
             return View(shipment);
@@ -98,6 +114,12 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("shipmentId,salesOrderId,shipmentNumber,shipmentDate,customerId,customerPO,invoice,branchId,warehouseId,expeditionType,expeditionMode,HasChild,createdAt")] Shipment shipment)
         {
+            if (shipment.salesOrderId == "0" || shipment.warehouseId == "0")
+            {
+                TempData["StatusMessage"] = "Error. Sales order or warehouse is not valid. Please select valid sales order and warehouse";
+                return RedirectToAction(nameof(Create));
+            }
+
             if (ModelState.IsValid)
             {
                 //check sales order

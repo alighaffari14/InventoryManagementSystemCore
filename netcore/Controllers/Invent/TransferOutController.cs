@@ -59,7 +59,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferOut/Create
         public IActionResult Create()
         {
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder.Where(x => x.transferOrderStatus == TransferOrderStatus.Open && x.isIssued == false).ToList(), "transferOrderId", "transferOrderNumber");
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
@@ -106,7 +106,9 @@ namespace netcore.Controllers.Invent
                 transferOut.branchFrom = transferOut.warehouseFrom.branch;
                 transferOut.warehouseTo = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferOut.warehouseIdTo));
                 transferOut.branchTo = transferOut.warehouseTo.branch;
-                
+
+                to.isIssued = true;
+
                 _context.Add(transferOut);
                 await _context.SaveChangesAsync();
 
@@ -229,10 +231,22 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var transferOut = await _context.TransferOut.Include(x => x.transferOutLine).SingleOrDefaultAsync(m => m.transferOutId == id);
+            var transferOut = await _context.TransferOut
+                .Include(x => x.transferOutLine)
+                .Include(x => x.transferOrder)
+                .SingleOrDefaultAsync(m => m.transferOutId == id);
+
+            if (transferOut.transferOrder.isReceived == true)
+            {
+                ViewData["StatusMessage"] = "Error. Please delete Goods Receive first.";
+                return View(transferOut);
+            }
+
             try
             {
+                _context.TransferOutLine.RemoveRange(transferOut.transferOutLine);
                 _context.TransferOut.Remove(transferOut);
+                transferOut.transferOrder.isIssued = false;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

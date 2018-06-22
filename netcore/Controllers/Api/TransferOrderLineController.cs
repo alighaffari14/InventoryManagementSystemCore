@@ -41,6 +41,23 @@ namespace netcore.Controllers.Api
                 return BadRequest(ModelState);
             }
 
+            TransferOrder transferOrder = await _context.TransferOrder.Where(x => x.transferOrderId.Equals(transferOrderLine.transferOrderId)).FirstOrDefaultAsync();
+
+            if (transferOrder.transferOrderStatus == TransferOrderStatus.Completed)
+            {
+                return Json(new { success = false, message = "Error. Can not edit [Completed] order" });
+            }
+
+            if (transferOrder.isIssued == true)
+            {
+                return Json(new { success = false, message = "Error. Can not edit [Open] order that already process the goods issue" });
+            }
+
+            if (transferOrder.isReceived == true)
+            {
+                return Json(new { success = false, message = "Error. Can not edit [Open] order that already process the goods receive" });
+            }
+
             if (transferOrderLine.transferOrderLineId == string.Empty)
             {
                 transferOrderLine.transferOrderLineId = Guid.NewGuid().ToString();
@@ -67,10 +84,19 @@ namespace netcore.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var transferOrderLine = await _context.TransferOrderLine.SingleOrDefaultAsync(m => m.transferOrderLineId == id);
+            var transferOrderLine = await _context.TransferOrderLine
+                .Include(x => x.transferOrder)
+                .SingleOrDefaultAsync(m => m.transferOrderLineId == id);
             if (transferOrderLine == null)
             {
                 return NotFound();
+            }
+
+            if (transferOrderLine.transferOrder.transferOrderStatus == TransferOrderStatus.Completed
+                || transferOrderLine.transferOrder.isIssued == true
+                || transferOrderLine.transferOrder.isReceived == true)
+            {
+                return Json(new { success = false, message = "Error. Can not delete [Completed] order or [Open] order that already process the goods issue or goods receive" });
             }
 
             _context.TransferOrderLine.Remove(transferOrderLine);

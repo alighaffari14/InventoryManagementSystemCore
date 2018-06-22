@@ -5,18 +5,21 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
     ViewData["EntityIcon"] = "fa fa-recycle";
+    ViewData["CreateInfo"] = "Transfer Order (TO) is a process of transfering products from one warehouse to another warehouse. From and To Warehouse should be different";
 }
 
-
+@Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)
 <div class="row">
     <div class="col-md-12">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="transferOrderId" />
+        <input type="hidden" asp-for="transferOrderStatus" />
+        <input type="hidden" asp-for="transferOrderNumber" />
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="transferOrderNumber" class="control-label"></label>
-                    <input asp-for="transferOrderNumber" class="form-control" />
+                    <input asp-for="transferOrderNumber" class="form-control" disabled/>
                     <span asp-validation-for="transferOrderNumber" class="text-danger"></span>
                 </div>
             </div>
@@ -78,7 +81,13 @@
                     <span asp-validation-for="picName" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="transferOrderStatus" class="control-label"></label>
+                    <select asp-for="transferOrderStatus" class="form-control select2" asp-items="Html.GetEnumSelectList<netcore.Models.Invent.TransferOrderStatus>()" disabled></select>
+                    <span asp-validation-for="transferOrderStatus" class="text-danger"></span>
+                </div>
+            </div>
         </div>
 
 

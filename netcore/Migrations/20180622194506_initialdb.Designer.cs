@@ -12,7 +12,7 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180519141904_initialdb")]
+    [Migration("20180622194506_initialdb")]
     partial class initialdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -881,6 +881,10 @@ namespace netcore.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<bool>("isIssued");
+
+                    b.Property<bool>("isReceived");
+
                     b.Property<string>("picName")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -890,6 +894,8 @@ namespace netcore.Migrations
                     b.Property<string>("transferOrderNumber")
                         .IsRequired()
                         .HasMaxLength(20);
+
+                    b.Property<int>("transferOrderStatus");
 
                     b.Property<string>("warehouseFromwarehouseId");
 

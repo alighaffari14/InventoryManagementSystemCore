@@ -59,7 +59,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferIn/Create
         public IActionResult Create()
         {
-            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder, "transferOrderId", "transferOrderNumber");
+            ViewData["transferOrderId"] = new SelectList(_context.TransferOrder.Where(x => x.transferOrderStatus == TransferOrderStatus.Open && x.isIssued == true).ToList(), "transferOrderId", "transferOrderNumber");
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
             ViewData["branchIdTo"] = new SelectList(_context.Branch, "branchId", "branchName");
@@ -106,6 +106,9 @@ namespace netcore.Controllers.Invent
                 transferIn.warehouseTo = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(transferIn.warehouseIdTo));
                 transferIn.branchTo = transferIn.warehouseTo.branch;
 
+
+                to.isReceived = true;
+                to.transferOrderStatus = TransferOrderStatus.Completed;
 
                 _context.Add(transferIn);
                 await _context.SaveChangesAsync();
@@ -228,10 +231,16 @@ namespace netcore.Controllers.Invent
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var transferIn = await _context.TransferIn.Include(x => x.transferInLine).SingleOrDefaultAsync(m => m.transferInId == id);
+            var transferIn = await _context.TransferIn
+                .Include(x => x.transferInLine)
+                .Include(x => x.transferOrder)
+                .SingleOrDefaultAsync(m => m.transferInId == id);
             try
             {
+                _context.TransferInLine.RemoveRange(transferIn.transferInLine);
                 _context.TransferIn.Remove(transferIn);
+                transferIn.transferOrder.transferOrderStatus = TransferOrderStatus.Open;
+                transferIn.transferOrder.isReceived = false;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

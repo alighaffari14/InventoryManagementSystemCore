@@ -50,8 +50,8 @@ namespace netcore.Controllers.Api
         public IActionResult GetBarData()
         {
             List<string> labels = new List<string>();
-            DateTime from = DateTime.UtcNow.AddMonths(-6);
-            DateTime to = DateTime.UtcNow;
+            DateTime from = DateTime.UtcNow.AddMonths(-5);
+            DateTime to = DateTime.UtcNow.AddMonths(1);
             for (DateTime i = from.Date; i < to.Date; i = i.AddMonths(1))
             {
                 labels.Add(i.ToString("MMMM-yy"));
