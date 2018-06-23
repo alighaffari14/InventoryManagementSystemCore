@@ -37,6 +37,28 @@ namespace netcore.Controllers.Invent
             return Json(new SelectList(warehouseList, "warehouseId", "warehouseName"));
         }
 
+        public async Task<IActionResult> ShowGSRN(string id)
+        {
+            Receiving obj = await _context.Receiving
+                .Include(x => x.vendor)
+                .Include(x => x.purchaseOrder)
+                    .ThenInclude(x => x.branch)
+                .Include(x => x.receivingLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.receivingId.Equals(id));
+            return View(obj);
+        }
+
+        public async Task<IActionResult> PrintGSRN(string id)
+        {
+            Receiving obj = await _context.Receiving
+                .Include(x => x.vendor)
+                .Include(x => x.purchaseOrder)
+                    .ThenInclude(x => x.branch)
+                .Include(x => x.receivingLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.receivingId.Equals(id));
+            return View(obj);
+        }
+
         // GET: Receiving
         public async Task<IActionResult> Index()
         {

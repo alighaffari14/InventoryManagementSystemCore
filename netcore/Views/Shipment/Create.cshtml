@@ -5,7 +5,7 @@
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminlteNetcoreCreate.cshtml";
     ViewData["EntityIcon"] = "fa fa-plane";
-    ViewData["CreateInfo"] = "Shipment is a process of delivering the order to your customer.";
+    ViewData["CreateInfo"] = "Shipment is a process of delivering the order to your customer. Only [Open] sales order will be available to select for shipment.";
 }
 
 @Html.Partial("_StatusMessage", (string)ViewBag.StatusMessage)

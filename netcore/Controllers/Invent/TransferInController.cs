@@ -25,6 +25,31 @@ namespace netcore.Controllers.Invent
             _context = context;
         }
 
+        public async Task<IActionResult> ShowTransferIn(string id)
+        {
+            TransferIn obj = await _context.TransferIn
+                .Include(x => x.transferOrder)
+                .Include(x => x.warehouseFrom)
+                .Include(x => x.warehouseTo)
+                .Include(x => x.transferInLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.transferInId.Equals(id));
+
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> PrintTransferIn(string id)
+        {
+            TransferIn obj = await _context.TransferIn
+                .Include(x => x.transferOrder)
+                .Include(x => x.warehouseFrom)
+                .Include(x => x.warehouseTo)
+                .Include(x => x.transferInLine).ThenInclude(x => x.product)
+                .SingleOrDefaultAsync(x => x.transferInId.Equals(id));
+
+            return View(obj);
+        }
+
         // GET: TransferIn
         public async Task<IActionResult> Index()
         {

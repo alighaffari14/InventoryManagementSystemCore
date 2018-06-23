@@ -25,6 +25,31 @@ namespace netcore.Controllers.Invent
             _context = context;
         }
 
+        public async Task<IActionResult> ShowSalesOrder(string id)
+        {
+            SalesOrder obj = await _context.SalesOrder
+                .Include(x => x.customer)
+                .Include(x => x.salesOrderLine).ThenInclude(x => x.product)
+                .Include(x => x.branch)
+                .SingleOrDefaultAsync(x => x.salesOrderId.Equals(id));
+
+            obj.totalOrderAmount = obj.salesOrderLine.Sum(x => x.totalAmount);
+            obj.totalDiscountAmount = obj.salesOrderLine.Sum(x => x.discountAmount);
+            _context.Update(obj);
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> PrintSalesOrder(string id)
+        {
+            SalesOrder obj = await _context.SalesOrder
+                .Include(x => x.customer)
+                .Include(x => x.salesOrderLine).ThenInclude(x => x.product)
+                .Include(x => x.branch)
+                .SingleOrDefaultAsync(x => x.salesOrderId.Equals(id));
+            return View(obj);
+        }
+
         // GET: SalesOrder
         public async Task<IActionResult> Index()
         {
