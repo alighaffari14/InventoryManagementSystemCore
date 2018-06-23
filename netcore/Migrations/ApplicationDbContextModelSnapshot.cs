@@ -190,6 +190,8 @@ namespace netcore.Migrations
 
                     b.Property<bool>("ShipmentRole");
 
+                    b.Property<bool>("StockRole");
+
                     b.Property<bool>("TransferInLineRole");
 
                     b.Property<bool>("TransferInRole");

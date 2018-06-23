@@ -28,7 +28,7 @@ namespace netcore.Controllers.Invent
         // GET: Branch
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Branch.ToListAsync());
+            return View(await _context.Branch.OrderByDescending(x => x.createdAt).ToListAsync());
         }
 
         // GET: Branch/Details/5

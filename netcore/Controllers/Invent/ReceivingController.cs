@@ -62,7 +62,7 @@ namespace netcore.Controllers.Invent
         // GET: Receiving
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Receiving.Include(r => r.branch).Include(r => r.purchaseOrder).Include(r => r.vendor).Include(r => r.warehouse);
+            var applicationDbContext = _context.Receiving.OrderByDescending(x => x.createdAt).Include(r => r.branch).Include(r => r.purchaseOrder).Include(r => r.vendor).Include(r => r.warehouse);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -158,6 +158,8 @@ namespace netcore.Controllers.Invent
                     line.qty = item.qty;
                     line.qtyReceive = item.qty;
                     line.qtyInventory = line.qtyReceive * 1;
+                    line.branchId = receiving.branchId;
+                    line.warehouseId = receiving.warehouseId;
 
                     _context.ReceivingLine.Add(line);
                     await _context.SaveChangesAsync();

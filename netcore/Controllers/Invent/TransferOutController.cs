@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 using netcore.Data;
 using netcore.Models.Invent;
+using netcore.Services;
 
 namespace netcore.Controllers.Invent
 {
@@ -19,10 +20,12 @@ namespace netcore.Controllers.Invent
     public class TransferOutController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INetcoreService _netcoreService;
 
-        public TransferOutController(ApplicationDbContext context)
+        public TransferOutController(ApplicationDbContext context, INetcoreService netcoreService)
         {
             _context = context;
+            _netcoreService = netcoreService;
         }
 
         public async Task<IActionResult> ShowTransferOut(string id)
@@ -53,7 +56,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferOut
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TransferOut.Include(t => t.transferOrder);
+            var applicationDbContext = _context.TransferOut.OrderByDescending(x => x.createdAt).Include(t => t.transferOrder);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -84,6 +87,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferOut/Create
         public IActionResult Create()
         {
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
             ViewData["transferOrderId"] = new SelectList(_context.TransferOrder.Where(x => x.transferOrderStatus == TransferOrderStatus.Open && x.isIssued == false).ToList(), "transferOrderId", "transferOrderNumber");
             ViewData["branchIdFrom"] = new SelectList(_context.Branch, "branchId", "branchName");
             ViewData["warehouseIdFrom"] = new SelectList(_context.Warehouse, "warehouseId", "warehouseName");
@@ -107,7 +111,9 @@ namespace netcore.Controllers.Invent
             {
 
                 //check transfer order
-                TransferOut check = await _context.TransferOut.SingleOrDefaultAsync(x => x.transferOrderId.Equals(transferOut.transferOrderId));
+                TransferOut check = await _context.TransferOut
+                    .Include(x => x.transferOrder)
+                    .SingleOrDefaultAsync(x => x.transferOrderId.Equals(transferOut.transferOrderId));
                 if (check != null)
                 {
                     ViewData["StatusMessage"] = "Error. Transfer order already issued. " + check.transferOutNumber;
@@ -120,6 +126,37 @@ namespace netcore.Controllers.Invent
                     
 
                     return View(transferOut);
+                }
+
+                //check stock
+                bool isStockOK = true;
+                string productList = "";
+                List<TransferOrderLine> stocklines = new List<TransferOrderLine>();
+                stocklines = _context.TransferOrderLine
+                    .Include(x => x.transferOrder)
+                    .Include(x => x.product)
+                    .Where(x => x.transferOrderId.Equals(transferOut.transferOrderId)).ToList();
+                foreach (var item in stocklines)
+                {
+                    VMStock stock = _netcoreService.GetStockByProductAndWarehouse(item.productId, item.transferOrder.warehouseIdFrom);
+                    if (stock != null)
+                    {
+                        if (stock.QtyOnhand < item.qty)
+                        {
+                            isStockOK = false;
+                            productList = productList + " [" + item.product.productCode + "] ";
+                        }
+                    }
+                    else
+                    {
+                        isStockOK = false;
+                    }
+                }
+
+                if (!isStockOK)
+                {
+                    TempData["StatusMessage"] = "Error. Stock quantity problem, please check your on hand stock. " + productList;
+                    return RedirectToAction(nameof(Create));
                 }
 
                 TransferOrder to = await _context.TransferOrder.Where(x => x.transferOrderId.Equals(transferOut.transferOrderId)).FirstOrDefaultAsync();
@@ -148,6 +185,7 @@ namespace netcore.Controllers.Invent
                     line.product = item.product;
                     line.qty = item.qty;
                     line.qtyInventory = line.qty * -1;
+                    
 
                     _context.TransferOutLine.Add(line);
                     await _context.SaveChangesAsync();

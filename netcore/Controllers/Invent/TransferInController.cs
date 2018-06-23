@@ -53,7 +53,7 @@ namespace netcore.Controllers.Invent
         // GET: TransferIn
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TransferIn.Include(t => t.transferOrder);
+            var applicationDbContext = _context.TransferIn.OrderByDescending(x => x.createdAt).Include(t => t.transferOrder);
             return View(await applicationDbContext.ToListAsync());
         }
 

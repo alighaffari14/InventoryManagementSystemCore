@@ -51,7 +51,7 @@ namespace netcore.Controllers.Invent
         public async Task<IActionResult> Index()
         {
             List<TransferOrder> lists = new List<TransferOrder>();
-            lists = await _context.TransferOrder
+            lists = await _context.TransferOrder.OrderByDescending(x => x.createdAt)
                 .Include(x => x.branchFrom)
                 .Include(x => x.branchTo)
                 .Include(x => x.warehouseFrom)

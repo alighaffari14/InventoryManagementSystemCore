@@ -54,6 +54,7 @@ namespace netcore.Migrations
                     SecurityStamp = table.Column<string>(nullable: true),
                     ShipmentLineRole = table.Column<bool>(nullable: false),
                     ShipmentRole = table.Column<bool>(nullable: false),
+                    StockRole = table.Column<bool>(nullable: false),
                     TransferInLineRole = table.Column<bool>(nullable: false),
                     TransferInRole = table.Column<bool>(nullable: false),
                     TransferOrderLineRole = table.Column<bool>(nullable: false),

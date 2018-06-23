@@ -53,7 +53,7 @@ namespace netcore.Controllers.Invent
         // GET: PurchaseOrder
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.PurchaseOrder.Include(p => p.vendor);
+            var applicationDbContext = _context.PurchaseOrder.OrderByDescending(x => x.createdAt).Include(p => p.vendor);
             return View(await applicationDbContext.ToListAsync());
         }
 

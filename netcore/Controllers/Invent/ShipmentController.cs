@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 using netcore.Data;
 using netcore.Models.Invent;
+using netcore.Services;
 
 namespace netcore.Controllers.Invent
 {
@@ -19,10 +20,12 @@ namespace netcore.Controllers.Invent
     public class ShipmentController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly INetcoreService _netcoreService;
 
-        public ShipmentController(ApplicationDbContext context)
+        public ShipmentController(ApplicationDbContext context, INetcoreService netcoreService)
         {
             _context = context;
+            _netcoreService = netcoreService;
         }
 
        
@@ -63,7 +66,7 @@ namespace netcore.Controllers.Invent
         // GET: Shipment
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Shipment.Include(s => s.branch).Include(s => s.customer).Include(s => s.salesOrder).Include(s => s.warehouse);
+            var applicationDbContext = _context.Shipment.OrderByDescending(x => x.createdAt).Include(s => s.branch).Include(s => s.customer).Include(s => s.salesOrder).Include(s => s.warehouse);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -137,6 +140,37 @@ namespace netcore.Controllers.Invent
 
                     return View(shipment);
                 }
+
+                //check stock
+                bool isStockOK = true;
+                string productList = "";
+                List<SalesOrderLine> stocklines = new List<SalesOrderLine>();
+                stocklines = _context.SalesOrderLine
+                    .Include(x => x.product)
+                    .Where(x => x.salesOrderId.Equals(shipment.salesOrderId)).ToList();
+                foreach (var item in stocklines)
+                {
+                    VMStock stock = _netcoreService.GetStockByProductAndWarehouse(item.productId, shipment.warehouseId);
+                    if (stock != null)
+                    {
+                        if (stock.QtyOnhand < item.qty)
+                        {
+                            isStockOK = false;
+                            productList = productList + " ["+item.product.productCode+"] ";
+                        }
+                    }
+                    else
+                    {
+                        isStockOK = false;
+                    }
+                }
+
+                if (!isStockOK)
+                {
+                    TempData["StatusMessage"] = "Error. Stock quantity problem, please check your on hand stock. " + productList;
+                    return RedirectToAction(nameof(Create));
+                }
+
                 shipment.warehouse = await _context.Warehouse.Include(x => x.branch).SingleOrDefaultAsync(x => x.warehouseId.Equals(shipment.warehouseId));
                 shipment.branch = shipment.warehouse.branch;
                 shipment.salesOrder = await _context.SalesOrder.Include(x => x.customer).SingleOrDefaultAsync(x => x.salesOrderId.Equals(shipment.salesOrderId));
@@ -160,6 +194,8 @@ namespace netcore.Controllers.Invent
                     line.qty = item.qty;
                     line.qtyShipment = item.qty;
                     line.qtyInventory = line.qtyShipment * -1;
+                    line.branchId = shipment.branchId;
+                    line.warehouseId = shipment.warehouseId;
 
                     _context.ShipmentLine.Add(line);
                     await _context.SaveChangesAsync();

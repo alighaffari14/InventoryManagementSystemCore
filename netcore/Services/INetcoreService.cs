@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using netcore.Models;
+using netcore.Models.Invent;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,5 +33,9 @@ namespace netcore.Services
         Task UpdateRoles(ApplicationUser appUser, ApplicationUser currentUserLogin);
 
         Task CreateDefaultSuperAdmin();
+
+        VMStock GetStockByProductAndWarehouse(string productId, string warehouseId);
+
+        List<VMStock> GetStockPerWarehouse();
     }
 }

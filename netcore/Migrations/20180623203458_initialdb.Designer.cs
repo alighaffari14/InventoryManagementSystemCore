@@ -12,7 +12,7 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180622194506_initialdb")]
+    [Migration("20180623203458_initialdb")]
     partial class initialdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,6 +190,8 @@ namespace netcore.Migrations
                     b.Property<bool>("ShipmentLineRole");
 
                     b.Property<bool>("ShipmentRole");
+
+                    b.Property<bool>("StockRole");
 
                     b.Property<bool>("TransferInLineRole");
 

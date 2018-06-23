@@ -53,7 +53,7 @@ namespace netcore.Controllers.Invent
         // GET: SalesOrder
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.SalesOrder.Include(s => s.customer);
+            var applicationDbContext = _context.SalesOrder.OrderByDescending(x => x.createdAt).Include(s => s.customer);
             return View(await applicationDbContext.ToListAsync());
         }
 
