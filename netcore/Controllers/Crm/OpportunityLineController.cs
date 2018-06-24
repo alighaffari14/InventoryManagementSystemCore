@@ -28,167 +28,167 @@ namespace netcore.Controllers.Crm
         // GET: OpportunityLine
         public async Task<IActionResult> Index()
         {
-                    var applicationDbContext = _context.OpportunityLine.Include(o => o.activity).Include(o => o.opportunity);
-                    return View(await applicationDbContext.ToListAsync());
-        }        
-
-    // GET: OpportunityLine/Details/5
-    public async Task<IActionResult> Details(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            var applicationDbContext = _context.OpportunityLine.Include(o => o.activity).Include(o => o.opportunity);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        var opportunityLine = await _context.OpportunityLine
-                .Include(o => o.activity)
-                .Include(o => o.opportunity)
-                    .SingleOrDefaultAsync(m => m.opportunityLineId == id);
-        if (opportunityLine == null)
+        // GET: OpportunityLine/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            return NotFound();
-        }
-
-        return View(opportunityLine);
-    }
-
-
-    // GET: OpportunityLine/Create
-    public IActionResult Create(string masterid, string id)
-    {
-        var check = _context.OpportunityLine.SingleOrDefault(m => m.opportunityLineId == id);
-        var selected = _context.Opportunity.SingleOrDefault(m => m.opportunityId == masterid);
-            ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityId");
-            ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityId");
-        if (check == null)
-        {
-            OpportunityLine objline = new OpportunityLine();
-            objline.opportunity = selected;
-            objline.opportunityId = masterid;
-            return View(objline);
-        }
-        else
-        {
-            return View(check);
-        }
-    }
-
-
-
-
-    // POST: OpportunityLine/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("opportunityLineId,opportunityId,activityId,startDate,endDate,description,createdAt")] OpportunityLine opportunityLine)
-    {
-        if (ModelState.IsValid)
-        {
-            _context.Add(opportunityLine);
-            await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-        }
-                ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityId", opportunityLine.activityId);
-                ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityId", opportunityLine.opportunityId);
-        return View(opportunityLine);
-    }
-
-    // GET: OpportunityLine/Edit/5
-    public async Task<IActionResult> Edit(string id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var opportunityLine = await _context.OpportunityLine.SingleOrDefaultAsync(m => m.opportunityLineId == id);
-        if (opportunityLine == null)
-        {
-            return NotFound();
-        }
-                ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityId", opportunityLine.activityId);
-                ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityId", opportunityLine.opportunityId);
-        return View(opportunityLine);
-    }
-
-    // POST: OpportunityLine/Edit/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(string id, [Bind("opportunityLineId,opportunityId,activityId,startDate,endDate,description,createdAt")] OpportunityLine opportunityLine)
-    {
-        if (id != opportunityLine.opportunityLineId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
-            try
+            if (id == null)
             {
-                _context.Update(opportunityLine);
+                return NotFound();
+            }
+
+            var opportunityLine = await _context.OpportunityLine
+                    .Include(o => o.activity)
+                    .Include(o => o.opportunity)
+                        .SingleOrDefaultAsync(m => m.opportunityLineId == id);
+            if (opportunityLine == null)
+            {
+                return NotFound();
+            }
+
+            return View(opportunityLine);
+        }
+
+
+        // GET: OpportunityLine/Create
+        public IActionResult Create(string masterid, string id)
+        {
+            var check = _context.OpportunityLine.SingleOrDefault(m => m.opportunityLineId == id);
+            var selected = _context.Opportunity.SingleOrDefault(m => m.opportunityId == masterid);
+            ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityName");
+            ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityName");
+            if (check == null)
+            {
+                OpportunityLine objline = new OpportunityLine();
+                objline.opportunity = selected;
+                objline.opportunityId = masterid;
+                return View(objline);
+            }
+            else
+            {
+                return View(check);
+            }
+        }
+
+
+
+
+        // POST: OpportunityLine/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("opportunityLineId,opportunityId,activityId,startDate,endDate,description,createdAt")] OpportunityLine opportunityLine)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(opportunityLine);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
+            ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityName", opportunityLine.activityId);
+            ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityName", opportunityLine.opportunityId);
+            return View(opportunityLine);
+        }
+
+        // GET: OpportunityLine/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
             {
-                if (!OpportunityLineExists(opportunityLine.opportunityLineId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-        return RedirectToAction(nameof(Index));
-        }
-                ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityId", opportunityLine.activityId);
-                ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityId", opportunityLine.opportunityId);
-        return View(opportunityLine);
-    }
 
-    // GET: OpportunityLine/Delete/5
-    public async Task<IActionResult> Delete(string id)
-    {
-        if (id == null)
+            var opportunityLine = await _context.OpportunityLine.SingleOrDefaultAsync(m => m.opportunityLineId == id);
+            if (opportunityLine == null)
+            {
+                return NotFound();
+            }
+            ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityName", opportunityLine.activityId);
+            ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityName", opportunityLine.opportunityId);
+            return View(opportunityLine);
+        }
+
+        // POST: OpportunityLine/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("opportunityLineId,opportunityId,activityId,startDate,endDate,description,createdAt")] OpportunityLine opportunityLine)
         {
-            return NotFound();
+            if (id != opportunityLine.opportunityLineId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(opportunityLine);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OpportunityLineExists(opportunityLine.opportunityLineId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["activityId"] = new SelectList(_context.Activity, "activityId", "activityName", opportunityLine.activityId);
+            ViewData["opportunityId"] = new SelectList(_context.Opportunity, "opportunityId", "opportunityName", opportunityLine.opportunityId);
+            return View(opportunityLine);
         }
 
-        var opportunityLine = await _context.OpportunityLine
-                .Include(o => o.activity)
-                .Include(o => o.opportunity)
-                .SingleOrDefaultAsync(m => m.opportunityLineId == id);
-        if (opportunityLine == null)
+        // GET: OpportunityLine/Delete/5
+        public async Task<IActionResult> Delete(string id)
         {
-            return NotFound();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var opportunityLine = await _context.OpportunityLine
+                    .Include(o => o.activity)
+                    .Include(o => o.opportunity)
+                    .SingleOrDefaultAsync(m => m.opportunityLineId == id);
+            if (opportunityLine == null)
+            {
+                return NotFound();
+            }
+
+            return View(opportunityLine);
         }
 
-        return View(opportunityLine);
-    }
 
 
 
-
-    // POST: OpportunityLine/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(string id)
-    {
-        var opportunityLine = await _context.OpportunityLine.SingleOrDefaultAsync(m => m.opportunityLineId == id);
+        // POST: OpportunityLine/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var opportunityLine = await _context.OpportunityLine.SingleOrDefaultAsync(m => m.opportunityLineId == id);
             _context.OpportunityLine.Remove(opportunityLine);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-    private bool OpportunityLineExists(string id)
-    {
-        return _context.OpportunityLine.Any(e => e.opportunityLineId == id);
-    }
+        private bool OpportunityLineExists(string id)
+        {
+            return _context.OpportunityLine.Any(e => e.opportunityLineId == id);
+        }
 
-  }
+    }
 }
 
 
@@ -197,25 +197,25 @@ namespace netcore.Controllers.Crm
 
 namespace netcore.MVC
 {
-  public static partial class Pages
-  {
-      public static class OpportunityLine
-      {
-          public const string Controller = "OpportunityLine";
-          public const string Action = "Index";
-          public const string Role = "OpportunityLine";
-          public const string Url = "/OpportunityLine/Index";
-          public const string Name = "OpportunityLine";
-      }
-  }
+    public static partial class Pages
+    {
+        public static class OpportunityLine
+        {
+            public const string Controller = "OpportunityLine";
+            public const string Action = "Index";
+            public const string Role = "OpportunityLine";
+            public const string Url = "/OpportunityLine/Index";
+            public const string Name = "OpportunityLine";
+        }
+    }
 }
 namespace netcore.Models
 {
-  public partial class ApplicationUser
-  {
-      [Display(Name = "OpportunityLine")]
-      public bool OpportunityLineRole { get; set; } = false;
-  }
+    public partial class ApplicationUser
+    {
+        [Display(Name = "OpportunityLine")]
+        public bool OpportunityLineRole { get; set; } = false;
+    }
 }
 
 

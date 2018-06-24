@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 using netcore.Data;
 using netcore.Models.Crm;
+using netcore.Models.Invent;
 
 namespace netcore.Controllers.Crm
 {
@@ -65,8 +66,6 @@ namespace netcore.Controllers.Crm
         }
 
 
-
-
         // POST: Lead/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -115,10 +114,21 @@ namespace netcore.Controllers.Crm
                 return NotFound();
             }
 
+
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (!lead.isQualified)
+                    {
+                        lead.isConverted = false;
+                    }
+                    if (!String.IsNullOrEmpty(lead.customerId))
+                    {
+                        lead.isConverted = true;
+                        lead.isQualified = true;
+                    }
                     _context.Update(lead);
                     await _context.SaveChangesAsync();
                 }
@@ -133,8 +143,33 @@ namespace netcore.Controllers.Crm
                         throw;
                     }
                 }
+
+
+                //convert to customer, only if customerId is still empty and already qualified
+                if (lead.isQualified && lead.isConverted && String.IsNullOrEmpty(lead.customerId))
+                {
+                    Customer cust = new Customer();
+                    cust.city = lead.city;
+                    cust.country = lead.country;
+                    cust.customerName = lead.leadName;
+                    cust.description = lead.description;
+                    cust.province = lead.province;
+                    cust.street1 = lead.street1;
+                    cust.street2 = lead.street2;
+
+                    _context.Customer.Add(cust);
+                    _context.SaveChanges();
+
+                    lead.customerId = cust.customerId;
+                    _context.Update(lead);
+                    _context.SaveChanges();
+                }
+
+
                 return RedirectToAction(nameof(Index));
             }
+
+            
             ViewData["accountExecutiveId"] = new SelectList(_context.AccountExecutive, "accountExecutiveId", "accountExecutiveName", lead.accountExecutiveId);
             ViewData["channelId"] = new SelectList(_context.Channel, "channelId", "channelName", lead.channelId);
             return View(lead);
@@ -175,6 +210,12 @@ namespace netcore.Controllers.Crm
             var lead = await _context.Lead
                 .Include(x => x.leadLine)
                 .SingleOrDefaultAsync(m => m.leadId == id);
+
+            if (lead.isConverted)
+            {
+                TempData["StatusMessage"] = "Error. Converted lead can not be deleted";
+                return RedirectToAction(nameof(Delete), new { id = lead.leadId });
+            }
 
             try
             {

@@ -12,7 +12,7 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="leadId" />
         <input type="hidden" asp-for="customerId" />
-        <input type="hidden" asp-for="isConverted" />
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -96,7 +96,7 @@
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
-                            <input asp-for="isConverted" disabled /> @Html.DisplayNameFor(model => model.isConverted)
+                            <input asp-for="isConverted" /> @Html.DisplayNameFor(model => model.isConverted)
                         </label>
                     </div>
                 </div>

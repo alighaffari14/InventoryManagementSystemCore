@@ -23,7 +23,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="systemUserId" class="control-label"></label>
-                    <input asp-for="systemUserId" class="form-control" />
+                    <select asp-for="systemUserId" class="form-control select2" asp-items="ViewBag.systemUserId"></select>
                     <span asp-validation-for="systemUserId" class="text-danger"></span>
                 </div>
             </div>

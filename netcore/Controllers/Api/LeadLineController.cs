@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetLeadLine(string masterid)
         {
-            return Json(new { data = _context.LeadLine.Where(x => x.leadId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.LeadLine.Include(x => x.activity).Where(x => x.leadId.Equals(masterid)).ToList() });
         }
 
         // POST: api/LeadLine

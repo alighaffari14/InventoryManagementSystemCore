@@ -53,6 +53,8 @@ namespace netcore.Controllers.Crm
         // GET: AccountExecutive/Create
         public IActionResult Create()
         {
+            ViewData["systemUserId"] = new SelectList(_context.ApplicationUser, "Id", "Email");
+
             return View();
         }
 
@@ -88,6 +90,7 @@ namespace netcore.Controllers.Crm
             {
                 return NotFound();
             }
+            ViewData["systemUserId"] = new SelectList(_context.ApplicationUser, "Id", "Email", accountExecutive.systemUserId);
             return View(accountExecutive);
         }
 

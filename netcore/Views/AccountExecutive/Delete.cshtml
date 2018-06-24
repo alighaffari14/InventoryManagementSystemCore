@@ -1,5 +1,5 @@
 ﻿@model netcore.Models.Crm.AccountExecutive
-@inject netcore.Data.ApplicationDbContext _context;
+@inject netcore.Data.ApplicationDbContext _context
 
 @{
     ViewData["Title"] = "Delete";
@@ -77,7 +77,7 @@
             @Html.DisplayNameFor(model => model.systemUserId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.systemUserId)
+            @_context.ApplicationUser.Where(x => x.Id.Equals(Model.systemUserId)).FirstOrDefault().Email
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.createdAt)

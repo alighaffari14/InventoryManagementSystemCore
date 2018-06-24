@@ -28,7 +28,7 @@ namespace netcore.Controllers.Api
         [Authorize]
         public IActionResult GetOpportunityLine(string masterid)
         {
-            return Json(new { data = _context.OpportunityLine.Where(x => x.opportunityId.Equals(masterid)).ToList() });
+            return Json(new { data = _context.OpportunityLine.Include(x => x.activity).Where(x => x.opportunityId.Equals(masterid)).ToList() });
         }
 
         // POST: api/OpportunityLine
