@@ -136,9 +136,15 @@ namespace netcore.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<bool>("AccountExecutiveRole");
+
+                    b.Property<bool>("ActivityRole");
+
                     b.Property<bool>("ApplicationUserRole");
 
                     b.Property<bool>("BranchRole");
+
+                    b.Property<bool>("ChannelRole");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -154,6 +160,10 @@ namespace netcore.Migrations
 
                     b.Property<bool>("HomeRole");
 
+                    b.Property<bool>("LeadLineRole");
+
+                    b.Property<bool>("LeadRole");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -163,6 +173,10 @@ namespace netcore.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
+
+                    b.Property<bool>("OpportunityLineRole");
+
+                    b.Property<bool>("OpportunityRole");
 
                     b.Property<string>("PasswordHash");
 
@@ -175,6 +189,8 @@ namespace netcore.Migrations
                     b.Property<bool>("PurchaseOrderLineRole");
 
                     b.Property<bool>("PurchaseOrderRole");
+
+                    b.Property<bool>("RatingRole");
 
                     b.Property<bool>("ReceivingLineRole");
 
@@ -189,6 +205,8 @@ namespace netcore.Migrations
                     b.Property<bool>("ShipmentLineRole");
 
                     b.Property<bool>("ShipmentRole");
+
+                    b.Property<bool>("StageRole");
 
                     b.Property<bool>("StockRole");
 
@@ -230,6 +248,308 @@ namespace netcore.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.AccountExecutive", b =>
+                {
+                    b.Property<string>("accountExecutiveId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("accountExecutiveName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("city")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("country")
+                        .HasMaxLength(30);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("email")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("phone")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("province")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("street1")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("street2")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("systemUserId")
+                        .HasMaxLength(38);
+
+                    b.HasKey("accountExecutiveId");
+
+                    b.ToTable("AccountExecutive");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Activity", b =>
+                {
+                    b.Property<string>("activityId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("activityName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("colorHex")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.HasKey("activityId");
+
+                    b.ToTable("Activity");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Channel", b =>
+                {
+                    b.Property<string>("channelId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("channelName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("colorHex")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.HasKey("channelId");
+
+                    b.ToTable("Channel");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Lead", b =>
+                {
+                    b.Property<string>("leadId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("HasChild");
+
+                    b.Property<string>("accountExecutiveId")
+                        .HasMaxLength(38);
+
+                    b.Property<string>("channelId")
+                        .HasMaxLength(38);
+
+                    b.Property<string>("city")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("country")
+                        .HasMaxLength(30);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("customerId")
+                        .HasMaxLength(38);
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.Property<bool>("isConverted");
+
+                    b.Property<bool>("isQualified");
+
+                    b.Property<string>("leadName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("province")
+                        .HasMaxLength(30);
+
+                    b.Property<string>("street1")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("street2")
+                        .HasMaxLength(50);
+
+                    b.HasKey("leadId");
+
+                    b.HasIndex("accountExecutiveId");
+
+                    b.HasIndex("channelId");
+
+                    b.ToTable("Lead");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.LeadLine", b =>
+                {
+                    b.Property<string>("leadLineId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("activityId")
+                        .HasMaxLength(38);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime>("endDate");
+
+                    b.Property<string>("leadId")
+                        .HasMaxLength(38);
+
+                    b.Property<DateTime>("startDate");
+
+                    b.HasKey("leadLineId");
+
+                    b.HasIndex("activityId");
+
+                    b.HasIndex("leadId");
+
+                    b.ToTable("LeadLine");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Opportunity", b =>
+                {
+                    b.Property<string>("opportunityId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("HasChild");
+
+                    b.Property<string>("accountExecutiveId")
+                        .HasMaxLength(38);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("customerId")
+                        .HasMaxLength(38);
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("estimatedClosingDate");
+
+                    b.Property<decimal>("estimatedRevenue");
+
+                    b.Property<string>("opportunityName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("probability");
+
+                    b.Property<string>("ratingId")
+                        .HasMaxLength(38);
+
+                    b.Property<string>("stageId")
+                        .HasMaxLength(38);
+
+                    b.HasKey("opportunityId");
+
+                    b.HasIndex("accountExecutiveId");
+
+                    b.HasIndex("customerId");
+
+                    b.HasIndex("ratingId");
+
+                    b.HasIndex("stageId");
+
+                    b.ToTable("Opportunity");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.OpportunityLine", b =>
+                {
+                    b.Property<string>("opportunityLineId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("activityId")
+                        .HasMaxLength(38);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime>("endDate");
+
+                    b.Property<string>("opportunityId")
+                        .HasMaxLength(38);
+
+                    b.Property<DateTime>("startDate");
+
+                    b.HasKey("opportunityLineId");
+
+                    b.HasIndex("activityId");
+
+                    b.HasIndex("opportunityId");
+
+                    b.ToTable("OpportunityLine");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Rating", b =>
+                {
+                    b.Property<string>("ratingId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("colorHex")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ratingName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("ratingId");
+
+                    b.ToTable("Rating");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Stage", b =>
+                {
+                    b.Property<string>("stageId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(38);
+
+                    b.Property<string>("colorHex")
+                        .HasMaxLength(10);
+
+                    b.Property<DateTime>("createdAt");
+
+                    b.Property<string>("description")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("stageName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("stageId");
+
+                    b.ToTable("Stage");
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.Branch", b =>
@@ -1211,6 +1531,58 @@ namespace netcore.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Lead", b =>
+                {
+                    b.HasOne("netcore.Models.Crm.AccountExecutive", "accountExecutive")
+                        .WithMany()
+                        .HasForeignKey("accountExecutiveId");
+
+                    b.HasOne("netcore.Models.Crm.Channel", "channel")
+                        .WithMany()
+                        .HasForeignKey("channelId");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.LeadLine", b =>
+                {
+                    b.HasOne("netcore.Models.Crm.Activity", "activity")
+                        .WithMany()
+                        .HasForeignKey("activityId");
+
+                    b.HasOne("netcore.Models.Crm.Lead", "lead")
+                        .WithMany("leadLine")
+                        .HasForeignKey("leadId");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.Opportunity", b =>
+                {
+                    b.HasOne("netcore.Models.Crm.AccountExecutive", "accountExecutive")
+                        .WithMany()
+                        .HasForeignKey("accountExecutiveId");
+
+                    b.HasOne("netcore.Models.Invent.Customer", "customer")
+                        .WithMany()
+                        .HasForeignKey("customerId");
+
+                    b.HasOne("netcore.Models.Crm.Rating", "rating")
+                        .WithMany()
+                        .HasForeignKey("ratingId");
+
+                    b.HasOne("netcore.Models.Crm.Stage", "stage")
+                        .WithMany()
+                        .HasForeignKey("stageId");
+                });
+
+            modelBuilder.Entity("netcore.Models.Crm.OpportunityLine", b =>
+                {
+                    b.HasOne("netcore.Models.Crm.Activity", "activity")
+                        .WithMany()
+                        .HasForeignKey("activityId");
+
+                    b.HasOne("netcore.Models.Crm.Opportunity", "opportunity")
+                        .WithMany("opportunityLine")
+                        .HasForeignKey("opportunityId");
                 });
 
             modelBuilder.Entity("netcore.Models.Invent.CustomerLine", b =>

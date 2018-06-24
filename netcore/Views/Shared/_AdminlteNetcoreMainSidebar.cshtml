@@ -30,7 +30,7 @@
             <ul class="sidebar-menu" data-widget="tree">
 
 
-                <li class="header">INVENTORY MANAGEMENT</li>
+                <li class="header">Dashboard</li>
                 @if (appUser.HomeRole)
                 {
                     <li class="@Html.IsSelected(controller: "Home")">
@@ -39,6 +39,73 @@
                         </a>
                     </li>
                 }
+
+                <li class="header">CRM</li>
+
+                @if (appUser.RatingRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Rating")">
+                        <a href="@Url.Action("Index", "Rating")">
+                            <i class="fa fa-star"></i> <span>Rating</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.ActivityRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Activity")">
+                        <a href="@Url.Action("Index", "Activity")">
+                            <i class="fa fa-bars"></i> <span>Activity</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.ChannelRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Channel")">
+                        <a href="@Url.Action("Index", "Channel")">
+                            <i class="fa fa-th"></i> <span>Channel</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.StageRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Stage")">
+                        <a href="@Url.Action("Index", "Stage")">
+                            <i class="fa fa-list-ol"></i> <span>Stage</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.AccountExecutiveRole)
+                {
+                    <li class="@Html.IsSelected(controller: "AccountExecutive")">
+                        <a href="@Url.Action("Index", "AccountExecutive")">
+                            <i class="fa fa-user"></i> <span>AccountExecutive</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.LeadRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Lead")">
+                        <a href="@Url.Action("Index", "Lead")">
+                            <i class="fa fa-street-view"></i> <span>Lead</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.OpportunityRole)
+                {
+                    <li class="@Html.IsSelected(controller: "Opportunity")">
+                        <a href="@Url.Action("Index", "Opportunity")">
+                            <i class="fa fa-dollar"></i> <span>Opportunity</span>
+                        </a>
+                    </li>
+                }
+
+                <li class="header">INVENTORY MANAGEMENT</li>
 
                 @if (appUser.BranchRole)
                 {

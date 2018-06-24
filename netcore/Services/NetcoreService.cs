@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using netcore.Data;
 using netcore.Models;
+using netcore.Models.Crm;
 using netcore.Models.Invent;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -276,6 +277,62 @@ namespace netcore.Services
             }
 
             return result;
+        }
+
+        public async Task InitCRM()
+        {
+            try
+            {
+                //create activity
+                List<Activity> activities = new List<Activity>()
+                {
+                    new Activity{activityName = "Phone", description = "Phone", colorHex = "#f56954"},
+                    new Activity{activityName = "Email", description = "Email", colorHex = "#f39c12"},
+                    new Activity{activityName = "Meeting", description = "Meeting", colorHex = "#00a65a"},
+                    new Activity{activityName = "Demo", description = "Demo", colorHex = "#00c0ef"}
+                };
+
+                _context.Activity.AddRange(activities);
+
+                //create rating
+                List<Rating> ratings = new List<Rating>()
+                {
+                    new Rating{ratingName = "Hot", description = "Hot", colorHex = "#f56954"},
+                    new Rating{ratingName = "Cold", description = "Cold", colorHex = "#f39c12"},
+                    new Rating{ratingName = "Warm", description = "Warm", colorHex = "#00a65a"}
+                };
+
+                _context.Rating.AddRange(ratings);
+
+                //create channel
+                List<Channel> channels = new List<Channel>()
+                {
+                    new Channel{channelName = "Web", description = "Web", colorHex = "#f56954"},
+                    new Channel{channelName = "Facebook Pixels", description = "Facebook Pixels", colorHex = "#f39c12"},
+                    new Channel{channelName = "Third Party", description = "Third Party", colorHex = "#00a65a"}
+                };
+
+                _context.Channel.AddRange(channels);
+
+                //create stage
+                List<Stage> stages = new List<Stage>()
+                {
+                    new Stage{stageName = "Qualification", description = "Qualification", colorHex = "#f56954"},
+                    new Stage{stageName = "Discovery", description = "Discovery", colorHex = "#f39c12"},
+                    new Stage{stageName = "Evaluation", description = "Evaluation", colorHex = "#00a65a"},
+                    new Stage{stageName = "Deal", description = "Deal", colorHex = "#00c0ef"},
+                    new Stage{stageName = "No Deal", description = "No Deal", colorHex = "#001F3F"}
+                };
+
+                _context.Stage.AddRange(stages);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 

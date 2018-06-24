@@ -37,5 +37,7 @@ namespace netcore.Services
         VMStock GetStockByProductAndWarehouse(string productId, string warehouseId);
 
         List<VMStock> GetStockPerWarehouse();
+
+        Task InitCRM();
     }
 }

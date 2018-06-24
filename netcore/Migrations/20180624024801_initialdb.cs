@@ -10,6 +10,43 @@ namespace netcore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AccountExecutive",
+                columns: table => new
+                {
+                    accountExecutiveId = table.Column<string>(maxLength: 38, nullable: false),
+                    accountExecutiveName = table.Column<string>(maxLength: 50, nullable: false),
+                    city = table.Column<string>(maxLength: 30, nullable: true),
+                    country = table.Column<string>(maxLength: 30, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    email = table.Column<string>(maxLength: 50, nullable: true),
+                    phone = table.Column<string>(maxLength: 50, nullable: true),
+                    province = table.Column<string>(maxLength: 30, nullable: true),
+                    street1 = table.Column<string>(maxLength: 50, nullable: false),
+                    street2 = table.Column<string>(maxLength: 50, nullable: true),
+                    systemUserId = table.Column<string>(maxLength: 38, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AccountExecutive", x => x.accountExecutiveId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Activity",
+                columns: table => new
+                {
+                    activityId = table.Column<string>(maxLength: 38, nullable: false),
+                    activityName = table.Column<string>(maxLength: 50, nullable: false),
+                    colorHex = table.Column<string>(maxLength: 10, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activity", x => x.activityId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -29,24 +66,32 @@ namespace netcore.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    AccountExecutiveRole = table.Column<bool>(nullable: false),
+                    ActivityRole = table.Column<bool>(nullable: false),
                     ApplicationUserRole = table.Column<bool>(nullable: false),
                     BranchRole = table.Column<bool>(nullable: false),
+                    ChannelRole = table.Column<bool>(nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     CustomerLineRole = table.Column<bool>(nullable: false),
                     CustomerRole = table.Column<bool>(nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     HomeRole = table.Column<bool>(nullable: false),
+                    LeadLineRole = table.Column<bool>(nullable: false),
+                    LeadRole = table.Column<bool>(nullable: false),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    OpportunityLineRole = table.Column<bool>(nullable: false),
+                    OpportunityRole = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     ProductRole = table.Column<bool>(nullable: false),
                     PurchaseOrderLineRole = table.Column<bool>(nullable: false),
                     PurchaseOrderRole = table.Column<bool>(nullable: false),
+                    RatingRole = table.Column<bool>(nullable: false),
                     ReceivingLineRole = table.Column<bool>(nullable: false),
                     ReceivingRole = table.Column<bool>(nullable: false),
                     SalesOrderLineRole = table.Column<bool>(nullable: false),
@@ -54,6 +99,7 @@ namespace netcore.Migrations
                     SecurityStamp = table.Column<string>(nullable: true),
                     ShipmentLineRole = table.Column<bool>(nullable: false),
                     ShipmentRole = table.Column<bool>(nullable: false),
+                    StageRole = table.Column<bool>(nullable: false),
                     StockRole = table.Column<bool>(nullable: false),
                     TransferInLineRole = table.Column<bool>(nullable: false),
                     TransferInRole = table.Column<bool>(nullable: false),
@@ -95,6 +141,21 @@ namespace netcore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Channel",
+                columns: table => new
+                {
+                    channelId = table.Column<string>(maxLength: 38, nullable: false),
+                    channelName = table.Column<string>(maxLength: 50, nullable: false),
+                    colorHex = table.Column<string>(maxLength: 10, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Channel", x => x.channelId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Customer",
                 columns: table => new
                 {
@@ -132,6 +193,36 @@ namespace netcore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.productId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rating",
+                columns: table => new
+                {
+                    ratingId = table.Column<string>(maxLength: 38, nullable: false),
+                    colorHex = table.Column<string>(maxLength: 10, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    ratingName = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rating", x => x.ratingId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stage",
+                columns: table => new
+                {
+                    stageId = table.Column<string>(maxLength: 38, nullable: false),
+                    colorHex = table.Column<string>(maxLength: 10, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    stageName = table.Column<string>(maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stage", x => x.stageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,6 +379,43 @@ namespace netcore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Lead",
+                columns: table => new
+                {
+                    leadId = table.Column<string>(maxLength: 38, nullable: false),
+                    HasChild = table.Column<string>(nullable: true),
+                    accountExecutiveId = table.Column<string>(maxLength: 38, nullable: true),
+                    channelId = table.Column<string>(maxLength: 38, nullable: true),
+                    city = table.Column<string>(maxLength: 30, nullable: true),
+                    country = table.Column<string>(maxLength: 30, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    customerId = table.Column<string>(maxLength: 38, nullable: true),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    isConverted = table.Column<bool>(nullable: false),
+                    isQualified = table.Column<bool>(nullable: false),
+                    leadName = table.Column<string>(maxLength: 50, nullable: false),
+                    province = table.Column<string>(maxLength: 30, nullable: true),
+                    street1 = table.Column<string>(maxLength: 50, nullable: false),
+                    street2 = table.Column<string>(maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lead", x => x.leadId);
+                    table.ForeignKey(
+                        name: "FK_Lead_AccountExecutive_accountExecutiveId",
+                        column: x => x.accountExecutiveId,
+                        principalTable: "AccountExecutive",
+                        principalColumn: "accountExecutiveId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Lead_Channel_channelId",
+                        column: x => x.channelId,
+                        principalTable: "Channel",
+                        principalColumn: "channelId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerLine",
                 columns: table => new
                 {
@@ -357,6 +485,52 @@ namespace netcore.Migrations
                         principalTable: "Customer",
                         principalColumn: "customerId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Opportunity",
+                columns: table => new
+                {
+                    opportunityId = table.Column<string>(maxLength: 38, nullable: false),
+                    HasChild = table.Column<string>(nullable: true),
+                    accountExecutiveId = table.Column<string>(maxLength: 38, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    customerId = table.Column<string>(maxLength: 38, nullable: true),
+                    description = table.Column<string>(maxLength: 50, nullable: true),
+                    estimatedClosingDate = table.Column<DateTime>(nullable: false),
+                    estimatedRevenue = table.Column<decimal>(nullable: false),
+                    opportunityName = table.Column<string>(maxLength: 50, nullable: false),
+                    probability = table.Column<int>(nullable: false),
+                    ratingId = table.Column<string>(maxLength: 38, nullable: true),
+                    stageId = table.Column<string>(maxLength: 38, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Opportunity", x => x.opportunityId);
+                    table.ForeignKey(
+                        name: "FK_Opportunity_AccountExecutive_accountExecutiveId",
+                        column: x => x.accountExecutiveId,
+                        principalTable: "AccountExecutive",
+                        principalColumn: "accountExecutiveId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Opportunity_Customer_customerId",
+                        column: x => x.customerId,
+                        principalTable: "Customer",
+                        principalColumn: "customerId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Opportunity_Rating_ratingId",
+                        column: x => x.ratingId,
+                        principalTable: "Rating",
+                        principalColumn: "ratingId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Opportunity_Stage_stageId",
+                        column: x => x.stageId,
+                        principalTable: "Stage",
+                        principalColumn: "stageId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -484,6 +658,35 @@ namespace netcore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LeadLine",
+                columns: table => new
+                {
+                    leadLineId = table.Column<string>(maxLength: 38, nullable: false),
+                    activityId = table.Column<string>(maxLength: 38, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 200, nullable: false),
+                    endDate = table.Column<DateTime>(nullable: false),
+                    leadId = table.Column<string>(maxLength: 38, nullable: true),
+                    startDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeadLine", x => x.leadLineId);
+                    table.ForeignKey(
+                        name: "FK_LeadLine_Activity_activityId",
+                        column: x => x.activityId,
+                        principalTable: "Activity",
+                        principalColumn: "activityId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LeadLine_Lead_leadId",
+                        column: x => x.leadId,
+                        principalTable: "Lead",
+                        principalColumn: "leadId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SalesOrderLine",
                 columns: table => new
                 {
@@ -558,6 +761,35 @@ namespace netcore.Migrations
                         principalTable: "Warehouse",
                         principalColumn: "warehouseId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OpportunityLine",
+                columns: table => new
+                {
+                    opportunityLineId = table.Column<string>(maxLength: 38, nullable: false),
+                    activityId = table.Column<string>(maxLength: 38, nullable: true),
+                    createdAt = table.Column<DateTime>(nullable: false),
+                    description = table.Column<string>(maxLength: 200, nullable: false),
+                    endDate = table.Column<DateTime>(nullable: false),
+                    opportunityId = table.Column<string>(maxLength: 38, nullable: true),
+                    startDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OpportunityLine", x => x.opportunityLineId);
+                    table.ForeignKey(
+                        name: "FK_OpportunityLine_Activity_activityId",
+                        column: x => x.activityId,
+                        principalTable: "Activity",
+                        principalColumn: "activityId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OpportunityLine_Opportunity_opportunityId",
+                        column: x => x.opportunityId,
+                        principalTable: "Opportunity",
+                        principalColumn: "opportunityId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -959,6 +1191,56 @@ namespace netcore.Migrations
                 column: "customerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Lead_accountExecutiveId",
+                table: "Lead",
+                column: "accountExecutiveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lead_channelId",
+                table: "Lead",
+                column: "channelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeadLine_activityId",
+                table: "LeadLine",
+                column: "activityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeadLine_leadId",
+                table: "LeadLine",
+                column: "leadId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opportunity_accountExecutiveId",
+                table: "Opportunity",
+                column: "accountExecutiveId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opportunity_customerId",
+                table: "Opportunity",
+                column: "customerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opportunity_ratingId",
+                table: "Opportunity",
+                column: "ratingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Opportunity_stageId",
+                table: "Opportunity",
+                column: "stageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpportunityLine_activityId",
+                table: "OpportunityLine",
+                column: "activityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OpportunityLine_opportunityId",
+                table: "OpportunityLine",
+                column: "opportunityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrder_branchId",
                 table: "PurchaseOrder",
                 column: "branchId");
@@ -1210,6 +1492,12 @@ namespace netcore.Migrations
                 name: "CustomerLine");
 
             migrationBuilder.DropTable(
+                name: "LeadLine");
+
+            migrationBuilder.DropTable(
+                name: "OpportunityLine");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrderLine");
 
             migrationBuilder.DropTable(
@@ -1240,6 +1528,15 @@ namespace netcore.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Lead");
+
+            migrationBuilder.DropTable(
+                name: "Activity");
+
+            migrationBuilder.DropTable(
+                name: "Opportunity");
+
+            migrationBuilder.DropTable(
                 name: "Receiving");
 
             migrationBuilder.DropTable(
@@ -1253,6 +1550,18 @@ namespace netcore.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransferOut");
+
+            migrationBuilder.DropTable(
+                name: "Channel");
+
+            migrationBuilder.DropTable(
+                name: "AccountExecutive");
+
+            migrationBuilder.DropTable(
+                name: "Rating");
+
+            migrationBuilder.DropTable(
+                name: "Stage");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrder");

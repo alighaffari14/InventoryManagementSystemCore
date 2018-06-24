@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using netcore.Models;
 using netcore.Models.Invent;
+using netcore.Models.Crm;
 
 namespace netcore.Data
 {
@@ -67,6 +68,24 @@ namespace netcore.Data
         public DbSet<netcore.Models.Invent.TransferIn> TransferIn { get; set; }
 
         public DbSet<netcore.Models.Invent.TransferInLine> TransferInLine { get; set; }
+
+        public DbSet<netcore.Models.Crm.Rating> Rating { get; set; }
+
+        public DbSet<netcore.Models.Crm.Activity> Activity { get; set; }
+
+        public DbSet<netcore.Models.Crm.Channel> Channel { get; set; }
+
+        public DbSet<netcore.Models.Crm.Stage> Stage { get; set; }
+
+        public DbSet<netcore.Models.Crm.AccountExecutive> AccountExecutive { get; set; }
+
+        public DbSet<netcore.Models.Crm.Lead> Lead { get; set; }
+
+        public DbSet<netcore.Models.Crm.LeadLine> LeadLine { get; set; }
+
+        public DbSet<netcore.Models.Crm.Opportunity> Opportunity { get; set; }
+
+        public DbSet<netcore.Models.Crm.OpportunityLine> OpportunityLine { get; set; }
         
     }
 }
