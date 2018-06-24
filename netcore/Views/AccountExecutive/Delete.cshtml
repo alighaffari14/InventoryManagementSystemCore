@@ -12,6 +12,12 @@
     {
         ViewData["IsCanDeleted"] = true;
     }
+    var sysUser = "";
+    var ApplicationUser = _context.ApplicationUser.Where(x => x.Id.Equals(Model.systemUserId)).FirstOrDefault();
+    if (ApplicationUser != null)
+    {
+        sysUser = ApplicationUser.Email;
+    }
 }
 
 
@@ -77,7 +83,7 @@
             @Html.DisplayNameFor(model => model.systemUserId)
         </dt>
         <dd>
-            @_context.ApplicationUser.Where(x => x.Id.Equals(Model.systemUserId)).FirstOrDefault().Email
+            @sysUser
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.createdAt)

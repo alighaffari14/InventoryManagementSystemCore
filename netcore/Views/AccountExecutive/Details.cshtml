@@ -4,6 +4,12 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_AdminlteNetcoreDetails.cshtml";
     ViewData["EntityIcon"] = "fa fa-user";
+    var sysUser = "";
+    var ApplicationUser = _context.ApplicationUser.Where(x => x.Id.Equals(Model.systemUserId)).FirstOrDefault();
+    if (ApplicationUser != null)
+    {
+        sysUser = ApplicationUser.Email;
+    }
 }
 
 
@@ -73,7 +79,7 @@
                             @Html.DisplayNameFor(model => model.systemUserId)
                         </dt>
                         <dd>
-                            @_context.ApplicationUser.Where(x => x.Id.Equals(Model.systemUserId)).FirstOrDefault().Email
+                            @sysUser
                         </dd>
                         <dt>
                             @Html.DisplayNameFor(model => model.createdAt)
