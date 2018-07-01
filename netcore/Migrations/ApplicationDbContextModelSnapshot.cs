@@ -153,6 +153,8 @@ namespace netcore.Migrations
 
                     b.Property<bool>("CustomerRole");
 
+                    b.Property<bool>("DashboardRole");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 

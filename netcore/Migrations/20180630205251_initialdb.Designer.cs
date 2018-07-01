@@ -12,7 +12,7 @@ using System;
 namespace netcore.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180624024801_initialdb")]
+    [Migration("20180630205251_initialdb")]
     partial class initialdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,6 +153,8 @@ namespace netcore.Migrations
                     b.Property<bool>("CustomerLineRole");
 
                     b.Property<bool>("CustomerRole");
+
+                    b.Property<bool>("DashboardRole");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);

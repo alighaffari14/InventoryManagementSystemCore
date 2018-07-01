@@ -33,9 +33,18 @@
                 <li class="header">Dashboard</li>
                 @if (appUser.HomeRole)
                 {
+                    <li class="@Html.IsSelected(controller: "Dashboard")">
+                        <a href="@Url.Action("Index", "Dashboard")">
+                            <i class="fa fa-bar-chart"></i> <span>CRM</span>
+                        </a>
+                    </li>
+                }
+
+                @if (appUser.HomeRole)
+                {
                     <li class="@Html.IsSelected(controller: "Home")">
                         <a href="@Url.Action("Index", "Home")">
-                            <i class="fa fa-bar-chart"></i> <span>Home</span>
+                            <i class="fa fa-bar-chart"></i> <span>Inventory</span>
                         </a>
                     </li>
                 }

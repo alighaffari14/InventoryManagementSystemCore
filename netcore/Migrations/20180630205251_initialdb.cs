@@ -74,6 +74,7 @@ namespace netcore.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     CustomerLineRole = table.Column<bool>(nullable: false),
                     CustomerRole = table.Column<bool>(nullable: false),
+                    DashboardRole = table.Column<bool>(nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     HomeRole = table.Column<bool>(nullable: false),
