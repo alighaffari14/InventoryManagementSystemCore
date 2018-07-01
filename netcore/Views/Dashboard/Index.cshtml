@@ -40,13 +40,19 @@
         stageWidgets.Add(vm);
     }
 
-    List<Opportunity> opportunities = _context.Opportunity.ToList();
+    List<Opportunity> opportunities = new List<Opportunity>();
+    opportunities = _context.Opportunity.ToList();
     decimal les = opportunities.Where(x => x.probability < 50).Sum(x => x.estimatedRevenue);
     decimal mor = opportunities.Where(x => x.probability >= 50).Sum(x => x.estimatedRevenue);
     decimal tot = les + mor;
 
-    int percles = Convert.ToInt32(decimal.Divide(les, tot) * 100);
-    int percmor = Convert.ToInt32(decimal.Divide(mor, tot) * 100);
+    int percles = 0;
+    int percmor = 0;
+    if (tot != 0m)
+    {
+        percles = Convert.ToInt32(decimal.Divide(les, tot) * 100);
+        percmor = Convert.ToInt32(decimal.Divide(mor, tot) * 100);
+    }
 
     List<Opportunity> oppGrid = new List<Opportunity>();
     oppGrid = opportunities.OrderByDescending(x => x.createdAt).Take(15).ToList();
